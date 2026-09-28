@@ -18,6 +18,10 @@
 
 网站托管在 **Vercel**：静态页面来自构建产物 `dist/`，AI 助手的后端是 Vercel Function [`api/chat.js`](api/chat.js)。配置见 [`vercel.json`](vercel.json)：构建命令为 `npm run verify && npm test && npm run build`。`vercel.json` 不指定函数区域，函数跟随 Vercel 项目设置 **Settings → Functions → Function Region**（目前为新加坡 `sin1`）。注意：香港 `hkg1` 节点实测连不上 AMD 接口，换区域后应在网站上实际提问一次确认 AI 正常。推送到 `main` 后，Vercel 会自动构建并更新线上网站，因此维护者应在本地检查通过后再按用户要求推送。GitHub Pages 已停用；[`.github/workflows/pages.yml`](.github/workflows/pages.yml) 现在只在推送和 PR 时运行校验、测试与构建，不再发布。世界银行数据每季度检查一次，ABS 更新可手动触发；数据变更只生成候选分支，审阅并合并后才会发布。
 
+## 访问统计
+
+Vercel Web Analytics 已通过中英文页面共用的第一方统计脚本接入，用于汇总访客和页面浏览数据；AI 对话内容不作为自定义事件发送。统计脚本仅由 Vercel 线上部署提供，本地预览不会产生线上统计数据。详见 [Vercel Web Analytics 隐私说明](https://vercel.com/docs/analytics/privacy-policy)。
+
 ## 本地运行
 
 需要 Node.js 20 或更新版本；运行页面不需要安装 npm 依赖。构建会从仓库内的中英文词条生成中文首页与英文 `/en/` 页面，不调用在线翻译服务。
@@ -236,6 +240,10 @@ GitHub Actions 的 **Update World Bank data** 每年 1、4、7、10 月检查一
 - ABS 网站说明其网页材料通常采用 [Creative Commons Attribution 4.0 International（CC BY 4.0）](https://www.abs.gov.au/privacy-and-legals)，但徽标、微观数据、第三方内容等例外材料以及具体发布产品标注的专门条款不在该通用许可内。`data/sources/` 中保留官方 CPI/WPI 工作簿；仓库中的数据和由其整理出的图表不属于 Apache-2.0 代码许可。重用时请遵循对应 ABS 来源的许可与署名要求。引用本站整理的图表或衍生数据时，请采用署名 **Based on Australian Bureau of Statistics data**（基于澳大利亚统计局数据）。
 
 ## 更新记录
+
+### 2026-09-28 · 接入 Vercel Web Analytics
+
+- 在中英文静态页面加入 Vercel 第一方访问统计脚本，记录汇总的访客和页面浏览数据；不发送 AI 对话自定义事件。无需新增 npm 依赖。
 
 ### 2026-09-28 · 数据更新任务
 

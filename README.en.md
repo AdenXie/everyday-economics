@@ -16,6 +16,10 @@ The Chinese and English pages are separate static pages. The site has no account
 
 Visit [econ.adenxie.com.cn](https://econ.adenxie.com.cn/) or the [English page](https://econ.adenxie.com.cn/en/). The site is hosted on **Vercel**: static pages come from the `dist/` build output, and the AI assistant runs as the Vercel Function [`api/chat.js`](api/chat.js). [`vercel.json`](vercel.json) sets the build command (`npm run verify && npm test && npm run build`). It does not pin a function region, so the function follows the Vercel project setting **Settings → Functions → Function Region** (currently Singapore, `sin1`). Note that the Hong Kong `hkg1` region could not reach the AMD endpoint in testing; after changing region, ask the assistant a question on the live site to confirm it still works. Vercel builds and deploys every push to `main`, so maintainers should validate locally and push only when the user requests it. GitHub Pages is turned off; [`.github/workflows/pages.yml`](.github/workflows/pages.yml) now only runs the checks, tests and build on pushes and pull requests and no longer publishes. The data snapshot is not refreshed on a schedule.
 
+## Visit analytics
+
+Vercel Web Analytics is integrated through a first-party script shared by the Chinese and English pages. It aggregates visitors and page views; AI conversation content is not sent as a custom event. Vercel serves the analytics script in deployed environments, so local preview does not produce live analytics data. See the [Vercel Web Analytics privacy guide](https://vercel.com/docs/analytics/privacy-policy).
+
 ## Run locally
 
 Node.js 20 or newer is required. Serving the site does not require npm dependencies. Build the Chinese home page and English page at /en/, then start the local server:
@@ -215,6 +219,10 @@ World Bank WDI data are generally available under [CC BY 4.0](https://www.worldb
 The ABS states that website material is generally available under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://www.abs.gov.au/privacy-and-legals), with exceptions including the Coat of Arms, ABS logo, microdata, third-party material, and material protected by trademarks, as well as any product-specific terms. The official CPI and WPI workbooks in data/sources/ and the derived snapshot are separate from the project’s Apache-2.0 code license. Reusers should follow the applicable ABS terms and retain attribution. For attribution of the transformed data used in this storyboard, use: “Based on Australian Bureau of Statistics data.”
 
 ## Changelog
+
+### 28 September 2026 · Vercel Web Analytics
+
+- Added Vercel's first-party analytics script to both static language pages for aggregate visitors and page views. No AI conversation custom events or npm dependency were added.
 
 ### 28 September 2026 · Data update workflows
 
