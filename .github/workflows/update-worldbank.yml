@@ -1,0 +1,60 @@
+name: Update World Bank data
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Quarterly UTC check; a manual run remains available if GitHub delays a schedule.
+    - cron: '17 6 1 1,4,7,10 *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-worldbank-data
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Fetch and validate both WDI indicators
+        run: npm run refresh:worldbank
+      - name: Check for changed observations
+        id: changes
+        shell: bash
+        run: |
+          if [[ -n "$(git status --porcelain -- data/)" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No World Bank values changed." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Rebuild snapshot, update bilingual notes, and validate
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          npm run extract:worldbank
+          node tools/record_data_refresh.mjs worldbank
+          npm run verify
+          npm test
+          npm run build
+      - name: Publish candidate branch for review
+        if: steps.changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          branch=data/worldbank-update
+          if git ls-remote --exit-code origin "refs/heads/$branch" >/dev/null; then
+            echo "A World Bank candidate branch already exists. Review or remove it before rerunning." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add data/worldbank-manifest.json data/worldbank.json data/sources/worldbank-*.json README.md README.en.md
+          git commit -m "Update World Bank CPI and nominal GDP candidate data"
+          git push --set-upstream origin "$branch"
+          echo "World Bank candidate: [review changes](https://github.com/$GITHUB_REPOSITORY/compare/main...$branch?expand=1)" >> "$GITHUB_STEP_SUMMARY"

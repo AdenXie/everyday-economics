@@ -1,0 +1,77 @@
+name: Update ABS data
+
+on:
+  workflow_dispatch:
+    inputs:
+      cpi_page:
+        description: Optional official CPI release page; leave blank for latest
+        required: false
+        type: string
+      wpi_page:
+        description: Optional official WPI release page; leave blank for latest
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-abs-data
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - run: python -m pip install openpyxl==3.1.5
+      - name: Read and validate official ABS workbooks
+        env:
+          CPI_PAGE: ${{ inputs.cpi_page }}
+          WPI_PAGE: ${{ inputs.wpi_page }}
+        shell: bash
+        run: |
+          args=()
+          if [[ -n "$CPI_PAGE" ]]; then args+=(--cpi-page "$CPI_PAGE"); fi
+          if [[ -n "$WPI_PAGE" ]]; then args+=(--wpi-page "$WPI_PAGE"); fi
+          python tools/refresh_abs.py "${args[@]}"
+      - name: Check for changed observations
+        id: changes
+        shell: bash
+        run: |
+          if [[ -n "$(git status --porcelain -- data/)" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No ABS observations changed." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Update bilingual data notes and validate
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          node tools/record_data_refresh.mjs abs
+          npm run verify
+          npm test
+          npm run build
+      - name: Publish candidate branch for review
+        if: steps.changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          branch=data/abs-update
+          if git ls-remote --exit-code origin "refs/heads/$branch" >/dev/null; then
+            echo "An ABS candidate branch already exists. Review or remove it before rerunning." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add data/source-manifest.json data/quarterly.json data/sources/abs-*.xlsx README.md README.en.md
+          git commit -m "Update ABS CPI and WPI candidate data"
+          git push --set-upstream origin "$branch"
+          echo "ABS data candidate: [review changes](https://github.com/$GITHUB_REPOSITORY/compare/main...$branch?expand=1)" >> "$GITHUB_STEP_SUMMARY"

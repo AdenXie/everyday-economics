@@ -6,6 +6,8 @@
     "build": "node tools/build.mjs",
     "dev": "node tools/serve.mjs",
     "verify": "node tools/verify-data.mjs",
+    "refresh:abs": "python tools/refresh_abs.py",
+    "refresh:worldbank": "node tools/refresh_worldbank.mjs",
     "extract:worldbank": "node tools/extract_worldbank.mjs",
     "test": "node --test"
   }

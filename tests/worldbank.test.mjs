@@ -26,11 +26,9 @@ test("CPI-deflated change is a ratio, not the percentage-point gap", () => {
 });
 
 test("comparison marks countries without data for the whole window", () => {
-  const rows = compareCountries(snapshot.countries, 1980, 2025);
+  const rows = compareCountries(snapshot.countries, 1980, snapshot.commonLastYear);
   const china = rows.find((row) => row.iso3 === "CHN");
-  const usa = rows.find((row) => row.iso3 === "USA");
   assert.equal(china.available, false);
-  assert.equal(usa.available, false);
   assert.equal(rows.find((row) => row.iso3 === "KOR").available, true);
   assert.ok(compareCountries(snapshot.countries, snapshot.commonFirstYear, snapshot.commonLastYear).every((row) => row.available));
 });

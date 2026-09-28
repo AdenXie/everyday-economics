@@ -16,7 +16,7 @@
 
 网站地址：[econ.adenxie.com.cn](https://econ.adenxie.com.cn/)；英文版位于 [/en/](https://econ.adenxie.com.cn/en/)。
 
-网站托管在 **Vercel**：静态页面来自构建产物 `dist/`，AI 助手的后端是 Vercel Function [`api/chat.js`](api/chat.js)。配置见 [`vercel.json`](vercel.json)：构建命令为 `npm run verify && npm test && npm run build`。`vercel.json` 不指定函数区域，函数跟随 Vercel 项目设置 **Settings → Functions → Function Region**（目前为新加坡 `sin1`）。注意：香港 `hkg1` 节点实测连不上 AMD 接口，换区域后应在网站上实际提问一次确认 AI 正常。推送到 `main` 后，Vercel 会自动构建并更新线上网站，因此维护者应在本地检查通过后再按用户要求推送。GitHub Pages 已停用；[`.github/workflows/pages.yml`](.github/workflows/pages.yml) 现在只在推送和 PR 时运行校验、测试与构建，不再发布。数据本身没有定时刷新。
+网站托管在 **Vercel**：静态页面来自构建产物 `dist/`，AI 助手的后端是 Vercel Function [`api/chat.js`](api/chat.js)。配置见 [`vercel.json`](vercel.json)：构建命令为 `npm run verify && npm test && npm run build`。`vercel.json` 不指定函数区域，函数跟随 Vercel 项目设置 **Settings → Functions → Function Region**（目前为新加坡 `sin1`）。注意：香港 `hkg1` 节点实测连不上 AMD 接口，换区域后应在网站上实际提问一次确认 AI 正常。推送到 `main` 后，Vercel 会自动构建并更新线上网站，因此维护者应在本地检查通过后再按用户要求推送。GitHub Pages 已停用；[`.github/workflows/pages.yml`](.github/workflows/pages.yml) 现在只在推送和 PR 时运行校验、测试与构建，不再发布。世界银行数据每季度检查一次，ABS 更新可手动触发；数据变更只生成候选分支，审阅并合并后才会发布。
 
 ## 本地运行
 
@@ -48,11 +48,12 @@ npm run dev
 
 ## 澳洲 ABS 快照代表什么
 
-- 快照整理于 **2026-09-28**；CPI 与 WPI 能配对的最新季度都是 **2026 Q2**。快照不是实时数据。
-- 数据覆盖 **1997 Q3—2026 Q2，共 116 个连续季度**。这是两条原始序列的共同区间；CPI 本身还有更早的历史。
-- CPI：ABS *Consumer Price Index, Australia, June 2026*，Table 17，`All groups CPI; Australia; Original`，Series ID **A2325846C**。全国 CPI 为八个首府城市加权平均；此表最后一期指数为 **102.31**。
-- WPI：ABS *Wage Price Index, Australia, June 2026*，Table 1，`Total hourly rates of pay excluding bonuses; Australia; Private and Public; All industries; Original`，Series ID **A2603609J**。最后一期原始指数为 **161.2**；同一表中 **161.7 是季节调整后的数值，本故事板没有采用**。
-- 两份 ABS 原始工作簿保存在 [`data/sources`](data/sources/)，来源信息、发布日期、系列 ID 和 SHA-256 值记录在 [`data/source-manifest.json`](data/source-manifest.json)。浏览器读取的小型快照在 [`data/quarterly.json`](data/quarterly.json)。
+<!-- abs-data-status:start -->
+- 快照整理于 **2026-09-28**，覆盖 **1997-Q3—2026-Q2，116 个连续配对季度**；不是实时数据。
+- CPI：[ABS Consumer Price Index, Australia, June 2026](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia/jun-2026)，Table 17，全国所有类别原始序列 **A2325846C**；最后一期指数 **102.31**。
+- WPI：[ABS Wage Price Index, Australia, June 2026](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia/jun-2026)，Table 1，全国私营与公共部门合计、所有行业、不含奖金的原始序列 **A2603609J**；最后一期指数 **161.2**。
+- 官方工作簿保存在 [data/sources](data/sources/)；发布日期与 SHA-256 见 [data/source-manifest.json](data/source-manifest.json)，网页快照见 [data/quarterly.json](data/quarterly.json)。
+<!-- abs-data-status:end -->
 
 ## 计算方式与边界
 
@@ -71,11 +72,13 @@ ABS 从 2025 年 12 月的 CPI 发布起，将季度 CPI 重设为 **2025 年 9 
 
 官方来源：
 
-- [ABS CPI，June 2026](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia/jun-2026) · [CPI 方法](https://www.abs.gov.au/methodologies/consumer-price-index-australia-methodology/jul-2026)
-- [ABS WPI，June 2026](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia/jun-2026) · [WPI 方法](https://www.abs.gov.au/methodologies/wage-price-index-australia-methodology/jun-2026)
+- [CPI 发布页](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia) · [CPI 方法](https://www.abs.gov.au/methodologies/consumer-price-index-australia-methodology/jul-2026)
+- [WPI 发布页](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia) · [WPI 方法](https://www.abs.gov.au/methodologies/wage-price-index-australia-methodology/jun-2026)
 - [ABS Data API 指南](https://www.abs.gov.au/statistics/application-programming-interfaces-apis/data-api-user-guide)：该 API 标注为 beta，且可能晚于 ABS 发布页更新。本版以官方发布的时间序列工作簿为准，避免将滞后 API 数据称作最新数据。
 
 ## 以后如何更新 ABS 快照
+
+在 GitHub Actions 手动运行 **Update ABS data**，会读取 ABS 官方最新 CPI Table 17 和 WPI Table 1，核对原始系列与连续季度。只有数值变化时才生成 `data/abs-update` 候选分支；审阅来源和变动后再合并。若 ABS 改变工作簿结构或系列定义，任务会失败并要求人工核实。以下步骤也可在本地执行：
 
 1. 从对应 ABS 发布页下载最新一期 CPI Table 17 与 WPI Table 1，保留原文件到 `data/sources/`。
 2. 在 `data/source-manifest.json` 更新两张表的发布日期、发布页 URL、系列 ID、系列描述、工作簿路径、SHA-256 和快照整理日期。仍选择全国 CPI 原始序列，以及全国、私营与公共部门合计、所有行业、不含奖金的 WPI 原始序列。
@@ -95,27 +98,31 @@ ABS 从 2025 年 12 月的 CPI 发布起，将季度 CPI 重设为 **2025 年 9 
    npm run build
    ```
 
-如果新版 ABS 工作簿更改了 sheet 布局或系列 ID，先对照发布页和工作簿 `Index` 页，再修改提取器及明确的校验值；不要仅因为提取成功就沿用旧口径。仓库没有定时数据刷新任务；推送到 `main` 会触发网站构建和发布。
+如果新版 ABS 工作簿更改了 sheet 布局或系列 ID，先对照发布页和工作簿 `Index` 页，再修改提取器及明确的校验值；不要仅因为提取成功就沿用旧口径。推送到 `main` 会触发网站构建和发布。
 
 ## 世界银行六个经济体（年度）
 
 ### 数据来源
 
-- 快照整理于 **2026-09-28**，取自世界银行 World Development Indicators（WDI）API；两个指标在 WDI 中的最后更新日期都是 **2026-07-13**。快照不是实时数据。
+<!-- worldbank-data-status:start -->
+- 快照整理于 **2026-09-28**，取自世界银行 WDI；CPI 最后更新于 **2026-07-13**，名义人均 GDP 最后更新于 **2026-07-13**。快照不是实时数据。
+<!-- worldbank-data-status:end -->
 - **CPI**：[`FP.CPI.TOTL`](https://data.worldbank.org/indicator/FP.CPI.TOTL)，Consumer price index (2010 = 100)，年度平均；世界银行注明原始来源为 IMF 国际金融统计（IFS）。
 - **名义人均 GDP**：[`NY.GDP.PCAP.CN`](https://data.worldbank.org/indicator/NY.GDP.PCAP.CN)，GDP per capita (current LCU)，本币现价、未扣除物价。
 - 经济体：澳大利亚（AUS）、美国（USA）、韩国（KOR）、日本（JPN）、新加坡（SGP）、中国（CHN，中国大陆）。
 
+<!-- worldbank-coverage:start -->
 | 经济体 | 两项都有数据的年份 | 说明 |
 |---|---|---|
 | 澳大利亚 | 1960—2025 | |
-| 美国 | 1960—2024 | 世界银行尚未发布 2025 年美国 CPI |
+| 美国 | 1960—2024 | |
 | 韩国 | 1960—2025 | |
 | 日本 | 1960—2025 | |
 | 新加坡 | 1960—2025 | |
-| 中国 | 1986—2025 | 世界银行的中国 CPI 从 1986 年开始 |
+| 中国 | 1986—2025 | |
 
-六个经济体都有数据的共同区间是 **1986—2024**。对比页默认显示 2000—2024 年；选到某个经济体没有覆盖的年份时，该行会标为“数据不完整”，不会拿不同区间硬比。
+六个经济体都有配对数据的共同区间是 **1986—2024**。对比页默认显示 2000—2024 年；超出某经济体覆盖范围的年份会标为“数据不完整”。
+<!-- worldbank-coverage:end -->
 
 ### 文件与校验
 
@@ -146,6 +153,8 @@ CPI 指数化金额 = 100 本币 × 终点 CPI ÷ 起点 CPI
 - **年度 CPI 与 ABS 季度 CPI 不同**：世界银行 CPI 是全年平均，以 2010 年为 100；澳洲页上方的 ABS 季度指数以 2025 年 9 月为 100。两者口径不同，数值不会完全一致。
 
 ### 以后如何更新世界银行快照
+
+GitHub Actions 的 **Update World Bank data** 每年 1、4、7、10 月检查一次，也可随时手动运行。它读取两项 WDI 指标；只有数值变化才生成 `data/worldbank-update` 候选分支。审阅后合并到 `main` 才会更新网站。定时任务可能延迟或漏跑，手动入口会一直保留。本地可运行 `npm run refresh:worldbank`，如有变化再运行 `npm run extract:worldbank` 和下方三项检查。
 
 1. 用浏览器打开以下两个地址（本仓库的命令行环境可能无法直接访问 API）：
    - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN/indicator/FP.CPI.TOTL?format=json&per_page=1000&date=1960:2025`
@@ -227,6 +236,11 @@ CPI 指数化金额 = 100 本币 × 终点 CPI ÷ 起点 CPI
 - ABS 网站说明其网页材料通常采用 [Creative Commons Attribution 4.0 International（CC BY 4.0）](https://www.abs.gov.au/privacy-and-legals)，但徽标、微观数据、第三方内容等例外材料以及具体发布产品标注的专门条款不在该通用许可内。`data/sources/` 中保留官方 CPI/WPI 工作簿；仓库中的数据和由其整理出的图表不属于 Apache-2.0 代码许可。重用时请遵循对应 ABS 来源的许可与署名要求。引用本站整理的图表或衍生数据时，请采用署名 **Based on Australian Bureau of Statistics data**（基于澳大利亚统计局数据）。
 
 ## 更新记录
+
+### 2026-09-28 · 数据更新任务
+
+- 增加 ABS 手动更新和世界银行季度检查两个 GitHub Actions 任务。数据有变化时先生成候选分支，通过来源与构建检查后由维护者审阅合并；不会直接修改线上网站。
+- 数据快照说明和中英文更新记录可随候选分支自动更新；修正写死的最新季度与美国年份说明，使后续新数据可通过校验。
 
 ### 2026-09-28 · 模型改为由 Vercel 环境变量配置
 

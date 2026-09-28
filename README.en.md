@@ -42,16 +42,17 @@ The manually maintained Chinese catalog is data/messages.zh.json. Its English co
 
 ## Australian ABS snapshot
 
-This snapshot was prepared on 28 September 2026. The latest quarter currently shared by both series is 2026 Q2. It covers 116 consecutive quarters, from 1997 Q3 to 2026 Q2. This is a dated snapshot, not a live feed.
-
-- CPI: Australian Bureau of Statistics (ABS), Consumer Price Index, Australia, June 2026, Table 17, “All groups CPI; Australia; Original,” series A2325846C. The national CPI is a weighted average of the eight capital cities. The table’s final index value is 102.31.
-- WPI: ABS, Wage Price Index, Australia, June 2026, Table 1, “Total hourly rates of pay excluding bonuses; Australia; Private and Public; All industries; Original,” series A2603609J. The final original index is 161.2. The 161.7 value in the same table is seasonally adjusted and is not used here.
-- The official source workbooks are retained in data/sources/. Publication details, series IDs, workbook paths, and SHA-256 hashes are recorded in data/source-manifest.json. The compact snapshot used by the browser is data/quarterly.json.
+<!-- abs-data-status:start -->
+This snapshot was prepared on **2026-09-28**. It covers **116 consecutive paired quarters, 1997-Q3–2026-Q2**. It is a dated snapshot, not a live feed.
+- CPI: [ABS Consumer Price Index, Australia, June 2026](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia/jun-2026), Table 17, original national all-groups series **A2325846C**; final index **102.31**.
+- WPI: [ABS Wage Price Index, Australia, June 2026](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia/jun-2026), Table 1, original Australia private and public, all industries, excluding bonuses series **A2603609J**; final index **161.2**.
+- Official workbooks are retained in [data/sources](data/sources/). Their release details and SHA-256 hashes are in [data/source-manifest.json](data/source-manifest.json); the browser snapshot is [data/quarterly.json](data/quarterly.json).
+<!-- abs-data-status:end -->
 
 Official publications and methods:
 
-- [ABS CPI, June 2026](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia/jun-2026) · [CPI methodology](https://www.abs.gov.au/methodologies/consumer-price-index-australia-methodology/jul-2026)
-- [ABS WPI, June 2026](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia/jun-2026) · [WPI methodology](https://www.abs.gov.au/methodologies/wage-price-index-australia-methodology/jun-2026)
+- [CPI releases](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia) · [CPI methodology](https://www.abs.gov.au/methodologies/consumer-price-index-australia-methodology/jul-2026)
+- [WPI releases](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia) · [WPI methodology](https://www.abs.gov.au/methodologies/wage-price-index-australia-methodology/jun-2026)
 - [ABS Data API guide](https://www.abs.gov.au/statistics/application-programming-interfaces-apis/data-api-user-guide): the API is marked beta and can lag behind ABS release pages. This snapshot uses the official release workbooks.
 
 ## Calculation and interpretation
@@ -69,6 +70,8 @@ Starting with the December 2025 release, ABS rebased quarterly CPI to September 
 
 ## Refresh the ABS snapshot
 
+Run **Update ABS data** in GitHub Actions to read the latest official CPI Table 17 and WPI Table 1 workbooks and validate the original series and continuous paired quarters. Only changed values produce a `data/abs-update` candidate branch. Review the sources and changes before merging. If ABS changes the workbook layout or series definition, the workflow fails for manual investigation. The steps below also work locally:
+
 1. Download the latest CPI Table 17 and WPI Table 1 workbooks from the corresponding ABS release pages and retain the original files in data/sources/.
 2. Update data/source-manifest.json with the release dates, page URLs, series IDs and descriptions, workbook paths, SHA-256 hashes, and snapshot date. Keep the national original CPI series and the national original WPI series for private and public sectors combined, all industries, excluding bonuses.
 3. With Python and openpyxl installed, run:
@@ -82,27 +85,31 @@ Starting with the December 2025 release, ABS rebased quarterly CPI to September 
        npm test
        npm run build
 
-If ABS changes a workbook layout or series ID, compare the release page and workbook Index sheet before changing the extractor or its explicit checks. Do not keep an old series definition simply because extraction succeeds. The repository has no scheduled data refresh; a push to `main` builds and publishes the website.
+If ABS changes a workbook layout or series ID, compare the release page and workbook Index sheet before changing the extractor or its explicit checks. Do not keep an old series definition simply because extraction succeeds. A push to `main` builds and publishes the website.
 
 ## World Bank: six economies (annual)
 
 ### Sources
 
-- Prepared on **28 September 2026** from the World Bank World Development Indicators (WDI) API. Both indicators were last updated in WDI on **13 July 2026**. This is a dated snapshot, not a live feed.
+<!-- worldbank-data-status:start -->
+- Prepared on **2026-09-28** from World Bank WDI. WDI last updated CPI on **2026-07-13** and nominal GDP per capita on **2026-07-13**. This is a dated snapshot, not a live feed.
+<!-- worldbank-data-status:end -->
 - **CPI**: [`FP.CPI.TOTL`](https://data.worldbank.org/indicator/FP.CPI.TOTL), Consumer price index (2010 = 100), annual average; the World Bank cites the IMF International Financial Statistics as the original source.
 - **Nominal GDP per capita**: [`NY.GDP.PCAP.CN`](https://data.worldbank.org/indicator/NY.GDP.PCAP.CN), GDP per capita (current LCU), in current local currency and not adjusted for inflation.
 - Economies: Australia (AUS), United States (USA), South Korea (KOR), Japan (JPN), Singapore (SGP), China (CHN, mainland).
 
+<!-- worldbank-coverage:start -->
 | Economy | Years with both series | Note |
 |---|---|---|
 | Australia | 1960–2025 | |
-| United States | 1960–2024 | The World Bank has not yet published 2025 US CPI |
+| United States | 1960–2024 | |
 | South Korea | 1960–2025 | |
 | Japan | 1960–2025 | |
 | Singapore | 1960–2025 | |
-| China | 1986–2025 | World Bank CPI for China starts in 1986 |
+| China | 1986–2025 | |
 
-All six economies have data for **1986–2024**. The comparison opens on 2000–2024. If a chosen period falls outside an economy's coverage, its row is marked incomplete rather than compared over a different period.
+All six economies have paired data for **1986–2024**. The comparison opens on 2000–2024. Years outside an economy's coverage are marked incomplete.
+<!-- worldbank-coverage:end -->
 
 ### Files and checks
 
@@ -131,6 +138,8 @@ For a selected start and end year:
 - **Annual CPI differs from ABS quarterly CPI**: World Bank CPI is an annual average with 2010 = 100; the ABS quarterly index on the Australia tab uses September 2025 = 100. They will not match exactly.
 
 ### Refresh the World Bank snapshot
+
+The **Update World Bank data** GitHub Action checks the two WDI indicators in January, April, July, and October, and can also run manually. Changed values create a `data/worldbank-update` candidate branch. Review and merge it into `main` to update the site. Scheduled runs can be delayed or missed; the manual entry remains available. Locally, run `npm run refresh:worldbank`, then `npm run extract:worldbank` and the three checks below if data changed.
 
 1. Open both URLs in a browser (the repository's command-line environment may not reach the API directly):
    - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN/indicator/FP.CPI.TOTL?format=json&per_page=1000&date=1960:2025`
@@ -206,6 +215,11 @@ World Bank WDI data are generally available under [CC BY 4.0](https://www.worldb
 The ABS states that website material is generally available under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://www.abs.gov.au/privacy-and-legals), with exceptions including the Coat of Arms, ABS logo, microdata, third-party material, and material protected by trademarks, as well as any product-specific terms. The official CPI and WPI workbooks in data/sources/ and the derived snapshot are separate from the project’s Apache-2.0 code license. Reusers should follow the applicable ABS terms and retain attribution. For attribution of the transformed data used in this storyboard, use: “Based on Australian Bureau of Statistics data.”
 
 ## Changelog
+
+### 28 September 2026 · Data update workflows
+
+- Added a manual ABS update and a quarterly World Bank check in GitHub Actions. Changed data produces a candidate branch after source and build checks; a maintainer reviews and merges it before the live site changes.
+- Snapshot descriptions and bilingual changelogs update with candidate data. Removed fixed latest-quarter and US-year assumptions that would block later releases.
 
 ### 28 September 2026 · Model set by a Vercel environment variable
 

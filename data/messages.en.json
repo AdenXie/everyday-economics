@@ -124,7 +124,7 @@
   "world.noteIndex": "Reading this economy",
   "world.noteTitle": "What to keep in mind here",
   "world.note.AUS": "Above are the ABS quarterly CPI and WPI; this section uses World Bank annual data. Annual CPI is a yearly average, so it will not match any single ABS quarter exactly. GDP per capita is not a wage measure either, so it answers a different question from the WPI above.",
-  "world.note.USA": "At the time of this snapshot the World Bank has published US CPI only up to 2024, so the US years end in 2024.",
+  "world.note.USA": "The selectable US years cover only years with both CPI and nominal GDP per capita. If one series is updated later, the range ends at their latest shared year.",
   "world.note.KOR": "Korean data begin in 1960. Over long spans both lines rise many times over and flatten the recent decades, so a shorter period is easier to read.",
   "world.note.JPN": "Japan's CPI was mostly flat or slightly falling from the late 1990s to the early 2010s, and nominal GDP per capita actually fell over that period. Try 1997 to 2012.",
   "world.note.SGP": "Singapore's GDP includes large profits earned locally by foreign-owned firms, so GDP per capita can sit well above what residents actually receive. Read it as output per person.",

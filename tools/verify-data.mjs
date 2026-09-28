@@ -1,23 +1,36 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { calculateWindow } from "../src/analysis.js";
 
 const snapshot = JSON.parse(await readFile(new URL("../data/quarterly.json", import.meta.url), "utf8"));
+const manifest = JSON.parse(await readFile(new URL("../data/source-manifest.json", import.meta.url), "utf8"));
 const rows = snapshot.observations;
 
-assert.equal(snapshot.snapshotDate, "2026-09-28", "snapshot preparation date must be explicit");
+assert.equal(snapshot.snapshotDate, manifest.preparedOn, "snapshot date must match the source manifest");
 assert.equal(snapshot.firstQuarter, "1997-Q3");
-assert.equal(snapshot.latestQuarter, "2026-Q2");
-assert.equal(snapshot.observationCount, 116);
+assert.ok(snapshot.observationCount >= 116, "the verified historical range must be retained");
 assert.equal(rows.length, snapshot.observationCount);
+assert.equal(snapshot.latestQuarter, rows.at(-1).period);
 assert.equal(snapshot.series.cpi.seriesId, "A2325846C");
 assert.equal(snapshot.series.wpi.seriesId, "A2603609J");
+assert.equal(manifest.cpi.indexSeriesId, "A2325846C");
+assert.equal(manifest.wpi.indexSeriesId, "A2603609J");
 assert.equal(snapshot.series.cpi.seriesType, "Original");
 assert.equal(snapshot.series.wpi.seriesType, "Original");
+assert.equal(snapshot.series.cpi.sourceWorkbook, manifest.cpi.workbook);
+assert.equal(snapshot.series.wpi.sourceWorkbook, manifest.wpi.workbook);
 assert.match(snapshot.series.wpi.scope, /excluding bonuses/);
-assert.equal(rows.at(-1).period, "2026-Q2");
-assert.equal(rows.at(-1).cpiIndex, 102.31);
-assert.equal(rows.at(-1).wpiIndex, 161.2);
+
+for (const key of ["cpi", "wpi"]) {
+  const source = manifest[key];
+  const workbook = await readFile(new URL(`../${source.workbook}`, import.meta.url));
+  const digest = createHash("sha256").update(workbook).digest("hex").toUpperCase();
+  assert.equal(digest, source.sha256, `${key} workbook must match its recorded SHA-256`);
+  assert.equal(snapshot.series[key].sourceSha256, source.sha256);
+  assert.equal(snapshot.series[key].releaseDate, source.releaseDate);
+  assert.equal(snapshot.series[key].pageUrl, source.pageUrl);
+}
 
 const uniquePeriods = new Set(rows.map((row) => row.period));
 assert.equal(uniquePeriods.size, rows.length, "quarter labels must be unique");
