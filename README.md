@@ -154,7 +154,7 @@ CPI 指数化金额 = 100 本币 × 终点 CPI ÷ 起点 CPI
 
 ### 以后如何更新世界银行快照
 
-GitHub Actions 的 **Update World Bank data** 每年 1、4、7、10 月检查一次，也可随时手动运行。它读取两项 WDI 指标；只有数值变化才生成 `data/worldbank-update` 候选分支。审阅后合并到 `main` 才会更新网站。定时任务可能延迟或漏跑，手动入口会一直保留。本地可运行 `npm run refresh:worldbank`，如有变化再运行 `npm run extract:worldbank` 和下方三项检查。
+GitHub Actions 的 **Update World Bank data** 每年 1、4、7、10 月检查一次，也可手动运行。它读取两项 WDI 指标；只有数值变化才生成 `data/worldbank-update` 候选分支。审阅后合并到 `main` 才会更新网站。GitHub 的定时任务可能延迟或漏跑；公开仓库连续 60 天无活动时也可能被停用，届时需在 Actions 中重新启用并手动运行。本地可运行 `npm run refresh:worldbank`，如有变化再运行 `npm run extract:worldbank` 和下方三项检查。
 
 1. 用浏览器打开以下两个地址（本仓库的命令行环境可能无法直接访问 API）：
    - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN/indicator/FP.CPI.TOTL?format=json&per_page=1000&date=1960:2025`
@@ -239,7 +239,7 @@ GitHub Actions 的 **Update World Bank data** 每年 1、4、7、10 月检查一
 
 ### 2026-09-28 · 数据更新任务
 
-- 增加 ABS 手动更新和世界银行季度检查两个 GitHub Actions 任务。数据有变化时先生成候选分支，通过来源与构建检查后由维护者审阅合并；不会直接修改线上网站。
+- 增加 ABS 手动更新和世界银行季度检查两个 GitHub Actions 任务。数据有变化时先生成候选分支，通过来源与构建检查后由维护者审阅合并；不会直接修改线上网站。记录 GitHub 长期无活动时会停用定时任务的限制。
 - 数据快照说明和中英文更新记录可随候选分支自动更新；修正写死的最新季度与美国年份说明，使后续新数据可通过校验。
 
 ### 2026-09-28 · 模型改为由 Vercel 环境变量配置

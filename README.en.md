@@ -139,7 +139,7 @@ For a selected start and end year:
 
 ### Refresh the World Bank snapshot
 
-The **Update World Bank data** GitHub Action checks the two WDI indicators in January, April, July, and October, and can also run manually. Changed values create a `data/worldbank-update` candidate branch. Review and merge it into `main` to update the site. Scheduled runs can be delayed or missed; the manual entry remains available. Locally, run `npm run refresh:worldbank`, then `npm run extract:worldbank` and the three checks below if data changed.
+The **Update World Bank data** GitHub Action checks the two WDI indicators in January, April, July, and October, and can also run manually. Changed values create a `data/worldbank-update` candidate branch. Review and merge it into `main` to update the site. GitHub may delay or miss scheduled runs, and may disable the schedule after 60 days without public-repository activity. If disabled, re-enable the workflow in Actions and run it manually. Locally, run `npm run refresh:worldbank`, then `npm run extract:worldbank` and the three checks below if data changed.
 
 1. Open both URLs in a browser (the repository's command-line environment may not reach the API directly):
    - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN/indicator/FP.CPI.TOTL?format=json&per_page=1000&date=1960:2025`
@@ -218,7 +218,7 @@ The ABS states that website material is generally available under the [Creative 
 
 ### 28 September 2026 · Data update workflows
 
-- Added a manual ABS update and a quarterly World Bank check in GitHub Actions. Changed data produces a candidate branch after source and build checks; a maintainer reviews and merges it before the live site changes.
+- Added a manual ABS update and a quarterly World Bank check in GitHub Actions. Changed data produces a candidate branch after source and build checks; a maintainer reviews and merges it before the live site changes. Documented GitHub's inactivity limit for scheduled workflows.
 - Snapshot descriptions and bilingual changelogs update with candidate data. Removed fixed latest-quarter and US-year assumptions that would block later releases.
 
 ### 28 September 2026 · Model set by a Vercel environment variable
