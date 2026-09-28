@@ -16,7 +16,7 @@
 
 网站地址：[econ.adenxie.com.cn](https://econ.adenxie.com.cn/)；英文版位于 [/en/](https://econ.adenxie.com.cn/en/)。
 
-网站托管在 **Vercel**：静态页面来自构建产物 `dist/`，AI 助手的后端是 Vercel Function [`api/chat.js`](api/chat.js)。配置见 [`vercel.json`](vercel.json)：构建命令为 `npm run verify && npm test && npm run build`，函数运行在香港区域（`hkg1`），离 AMD 的接口较近。推送到 `main` 后，Vercel 会自动构建并更新线上网站，因此维护者应在本地检查通过后再按用户要求推送。仓库里原有的 [GitHub Pages 工作流](.github/workflows/pages.yml) 仍会在推送时校验、测试并发布到 GitHub Pages；域名切换到 Vercel 后，应按下方“部署到 Vercel”第 4 步停用 Pages，并把该工作流改为只做检查。数据本身没有定时刷新。
+网站托管在 **Vercel**：静态页面来自构建产物 `dist/`，AI 助手的后端是 Vercel Function [`api/chat.js`](api/chat.js)。配置见 [`vercel.json`](vercel.json)：构建命令为 `npm run verify && npm test && npm run build`。`vercel.json` 不指定函数区域，函数跟随 Vercel 项目设置 **Settings → Functions → Function Region**（目前为新加坡 `sin1`）。注意：香港 `hkg1` 节点实测连不上 AMD 接口，换区域后应在网站上实际提问一次确认 AI 正常。推送到 `main` 后，Vercel 会自动构建并更新线上网站，因此维护者应在本地检查通过后再按用户要求推送。GitHub Pages 已停用；[`.github/workflows/pages.yml`](.github/workflows/pages.yml) 现在只在推送和 PR 时运行校验、测试与构建，不再发布。数据本身没有定时刷新。
 
 ## 本地运行
 
@@ -225,7 +225,8 @@ CPI 指数化金额 = 100 本币 × 终点 CPI ÷ 起点 CPI
 - 页面右下角新增 AI 助手浮窗，使用 AMD Radeon Cloud Token Factory 的 `Qwen3.8-27B`：流式回答、可复制、可停止、可清空；不会因鼠标或焦点回到网页而关闭；对话只存在页面内存中，刷新即清空。
 - 提问时自动附上当前标签页、年份和页面上的累计变化，便于 AI 结合读者正在看的数字回答。
 - 网站托管从 GitHub Pages 迁移到 Vercel：新增 `vercel.json`、Vercel Function `api/chat.js` 与服务端代理 `server/ai-proxy.js`（来源校验、每 IP 限流、输入长度限制、服务端系统提示词）。API Key 只保存在 Vercel 环境变量 `RADEON_API_KEY` 中。
-- `.github/workflows/pages.yml` 暂时保留；域名切换到 Vercel 后需手动改为只做检查（见“部署到 Vercel”第 4 步）。
+- 已停用 GitHub Pages，`.github/workflows/pages.yml` 改为只做检查。
+- Vercel 函数区域：香港 `hkg1` 连不上 AMD 接口，先改为悉尼 `syd1` 验证可用；随后 `vercel.json` 不再指定区域，跟随项目设置（新加坡 `sin1`）。
 - 本地预览服务器 `tools/serve.mjs` 新增 `/api/chat`，设置 `RADEON_API_KEY` 后可在本地试用 AI。
 - 新增 `src/assistant.js`、`tests/ai-proxy.test.mjs`，以及中英文 `ai.*` 词条。
 

@@ -3,14 +3,21 @@
   "buildCommand": "npm run verify && npm test && npm run build",
   "outputDirectory": "dist",
   "installCommand": "echo \"No dependencies to install\"",
-  "regions": ["syd1"],
   "functions": {
-    "api/chat.js": { "maxDuration": 60, "supportsCancellation": true }
+    "api/chat.js": {
+      "maxDuration": 60,
+      "supportsCancellation": true
+    }
   },
   "headers": [
     {
       "source": "/api/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
     }
   ]
 }

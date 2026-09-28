@@ -14,7 +14,7 @@ The Chinese and English pages are separate static pages. The site has no account
 
 ## Live site and publishing
 
-Visit [econ.adenxie.com.cn](https://econ.adenxie.com.cn/) or the [English page](https://econ.adenxie.com.cn/en/). The site is hosted on **Vercel**: static pages come from the `dist/` build output, and the AI assistant runs as the Vercel Function [`api/chat.js`](api/chat.js). [`vercel.json`](vercel.json) sets the build command (`npm run verify && npm test && npm run build`) and runs the function in Hong Kong (`hkg1`), close to the AMD endpoint. Vercel builds and deploys every push to `main`, so maintainers should validate locally and push only when the user requests it. The existing [GitHub Pages workflow](.github/workflows/pages.yml) still checks, tests and publishes to GitHub Pages on each push; once the domain points to Vercel, turn Pages off and make that workflow check-only as described in step 4 of “Deploy to Vercel”. The data snapshot is not refreshed on a schedule.
+Visit [econ.adenxie.com.cn](https://econ.adenxie.com.cn/) or the [English page](https://econ.adenxie.com.cn/en/). The site is hosted on **Vercel**: static pages come from the `dist/` build output, and the AI assistant runs as the Vercel Function [`api/chat.js`](api/chat.js). [`vercel.json`](vercel.json) sets the build command (`npm run verify && npm test && npm run build`). It does not pin a function region, so the function follows the Vercel project setting **Settings → Functions → Function Region** (currently Singapore, `sin1`). Note that the Hong Kong `hkg1` region could not reach the AMD endpoint in testing; after changing region, ask the assistant a question on the live site to confirm it still works. Vercel builds and deploys every push to `main`, so maintainers should validate locally and push only when the user requests it. GitHub Pages is turned off; [`.github/workflows/pages.yml`](.github/workflows/pages.yml) now only runs the checks, tests and build on pushes and pull requests and no longer publishes. The data snapshot is not refreshed on a schedule.
 
 ## Run locally
 
@@ -204,7 +204,8 @@ The ABS states that website material is generally available under the [Creative 
 - Added a floating AI assistant in the bottom-right corner using `Qwen3.8-27B` from AMD Radeon Cloud Token Factory: streamed, copyable answers that can be stopped or cleared. It does not close when the pointer or focus returns to the page, and the conversation lives only in page memory, so a reload clears it.
 - Each question automatically includes the current tab, years and cumulative changes shown on the page.
 - Moved hosting from GitHub Pages to Vercel: added `vercel.json`, the Vercel Function `api/chat.js`, and the server-side proxy `server/ai-proxy.js` (origin check, per-IP limit, input limits, server-side system prompt). The API key is stored only in the Vercel environment variable `RADEON_API_KEY`.
-- `.github/workflows/pages.yml` is kept for now; make it check-only by hand once the domain points to Vercel (step 4 of “Deploy to Vercel”).
+- GitHub Pages is turned off and `.github/workflows/pages.yml` is now check-only.
+- Vercel function region: Hong Kong `hkg1` could not reach the AMD endpoint, so Sydney `syd1` was used to confirm it works; `vercel.json` then stopped pinning a region and follows the project setting (Singapore, `sin1`).
 - The local preview server `tools/serve.mjs` now serves `/api/chat`; set `RADEON_API_KEY` to try the assistant locally.
 - Added `src/assistant.js`, `tests/ai-proxy.test.mjs`, and `ai.*` copy in both languages.
 
