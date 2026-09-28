@@ -15,6 +15,7 @@ test("English page preserves structural language controls and uses relative asse
 
   assert.match(english, /<html lang="en">/);
   assert.match(english, /<title>How much more expensive is the basket\?/);
+  assert.match(english, /<link rel="icon" type="image\/svg\+xml" href="\.\.\/assets\/favicon\.svg" sizes="any"/);
   assert.match(english, /href="\.\.\/src\/style\.css"/);
   assert.match(english, /src="\.\.\/src\/app\.js"/);
   assert.match(english, /<nav class="language-switch" aria-label="Choose language">[\s\S]*?id="language-en"[^>]*aria-current="page"/);

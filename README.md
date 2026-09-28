@@ -2,7 +2,11 @@
 
 [English documentation](README.en.md)
 
-本项目用于制作可复核的经济数据故事板，帮助读者通过图表探索日常经济问题。当前首个故事板聚焦澳洲 CPI 与 WPI；项目之后可扩展至其他经济体和主题，未来计划加入世界银行数据（目前尚未实现）。页面提供独立的中英文静态版本；没有账户、数据库、浏览器端翻译请求或自动发布。
+本项目用于制作可复核的经济数据故事板，帮助读者通过图表探索日常经济问题。当前首个故事板聚焦澳洲 CPI 与 WPI；项目之后可扩展至其他经济体和主题，未来计划加入世界银行数据（目前尚未实现）。页面提供独立的中英文静态版本；没有账户、数据库或浏览器端翻译请求。
+
+## 在线查看与发布
+
+网站地址：[econ.adenxie.com.cn](https://econ.adenxie.com.cn/)；英文版位于 [/en/](https://econ.adenxie.com.cn/en/)。GitHub Pages 使用 [发布工作流](.github/workflows/pages.yml) 校验数据、运行测试、构建静态文件并发布 `dist/`。推送到 `main` 会更新线上网站，因此维护者应在本地检查通过后再按用户要求推送。数据本身没有定时刷新。
 
 ## 本地运行
 
@@ -70,7 +74,7 @@ ABS 从 2025 年 12 月的 CPI 发布起，将季度 CPI 重设为 **2025 年 9 
    npm run build
    ```
 
-如果新版 ABS 工作簿更改了 sheet 布局或系列 ID，先对照发布页和工作簿 `Index` 页，再修改提取器及明确的校验值；不要仅因为提取成功就沿用旧口径。仓库没有定时任务或发布动作。
+如果新版 ABS 工作簿更改了 sheet 布局或系列 ID，先对照发布页和工作簿 `Index` 页，再修改提取器及明确的校验值；不要仅因为提取成功就沿用旧口径。仓库没有定时数据刷新任务；推送到 `main` 会触发网站构建和发布。
 
 ## 设计系统与字体
 
@@ -95,6 +99,6 @@ ABS 从 2025 年 12 月的 CPI 发布起，将季度 CPI 重设为 **2025 年 9 
 
 ## 代码、字体与数据许可
 
-- `LICENSE` 中的 MIT 许可仅覆盖本项目的原创代码，不覆盖字体、ABS 工作簿、数据快照或其他第三方内容。
+- `LICENSE` 中的 Apache License 2.0 仅覆盖本项目的原创代码，不覆盖字体、ABS 工作簿、数据快照或其他第三方内容。该协议明确提供贡献者专利授权，并要求再分发时保留许可及适用的署名说明。
 - 四种随项目提供的字体分别依照 `assets/fonts/` 内的许可文件分发；Source Han Sans CN 和 Source Han Serif CN 使用 SIL OFL 1.1。
-- ABS 网站说明其网页材料通常采用 [Creative Commons Attribution 4.0 International（CC BY 4.0）](https://www.abs.gov.au/privacy-and-legals)，但徽标、微观数据、第三方内容等例外材料以及具体发布产品标注的专门条款不在该通用许可内。`data/sources/` 中保留官方 CPI/WPI 工作簿；仓库中的数据和由其整理出的图表不属于 MIT 代码许可。重用时请遵循对应 ABS 来源的许可与署名要求。引用本站整理的图表或衍生数据时，请采用署名 **Based on Australian Bureau of Statistics data**（基于澳大利亚统计局数据）。
+- ABS 网站说明其网页材料通常采用 [Creative Commons Attribution 4.0 International（CC BY 4.0）](https://www.abs.gov.au/privacy-and-legals)，但徽标、微观数据、第三方内容等例外材料以及具体发布产品标注的专门条款不在该通用许可内。`data/sources/` 中保留官方 CPI/WPI 工作簿；仓库中的数据和由其整理出的图表不属于 Apache-2.0 代码许可。重用时请遵循对应 ABS 来源的许可与署名要求。引用本站整理的图表或衍生数据时，请采用署名 **Based on Australian Bureau of Statistics data**（基于澳大利亚统计局数据）。

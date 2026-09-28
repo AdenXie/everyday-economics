@@ -4,7 +4,11 @@
 
 Everyday Economics is a collection of reproducible, chart-led stories about everyday economic questions. The first storyboard compares Australian consumer prices and wage prices using quarterly CPI and WPI data. The project can grow to cover other economies and topics; World Bank data is planned for a future addition and is not included yet.
 
-The Chinese and English pages are separate static pages. The site has no accounts, database, browser-based translation requests, or automatic publishing.
+The Chinese and English pages are separate static pages. The site has no accounts, database, or browser-based translation requests.
+
+## Live site and publishing
+
+Visit [econ.adenxie.com.cn](https://econ.adenxie.com.cn/) or the [English page](https://econ.adenxie.com.cn/en/). The [GitHub Pages workflow](.github/workflows/pages.yml) validates the data, runs the tests, builds the static pages, and publishes `dist/`. A push to `main` updates the live website, so maintainers should validate locally and push only when the user requests it. The data snapshot is not refreshed on a schedule.
 
 ## Run locally
 
@@ -63,7 +67,7 @@ Starting with the December 2025 release, ABS rebased quarterly CPI to September 
        npm test
        npm run build
 
-If ABS changes a workbook layout or series ID, compare the release page and workbook Index sheet before changing the extractor or its explicit checks. Do not keep an old series definition simply because extraction succeeds. The repository has no scheduled job or publishing action.
+If ABS changes a workbook layout or series ID, compare the release page and workbook Index sheet before changing the extractor or its explicit checks. Do not keep an old series definition simply because extraction succeeds. The repository has no scheduled data refresh; a push to `main` builds and publishes the website.
 
 ## Design and bundled fonts
 
@@ -81,8 +85,8 @@ All font files are served from this project; the page does not request fonts fro
 
 ## Code, font, and data licenses
 
-The MIT License in LICENSE applies only to this project’s original code. It does not apply to bundled fonts, ABS workbooks, the derived data snapshot, or other third-party material.
+The Apache License 2.0 in LICENSE applies only to this project’s original code. It does not apply to bundled fonts, ABS workbooks, the derived data snapshot, or other third-party material. Apache-2.0 includes an express contributor patent grant and redistribution notice requirements.
 
 The four bundled font families have their own license files in assets/fonts/. Both Source Han fonts are covered by the SIL Open Font License 1.1.
 
-The ABS states that website material is generally available under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://www.abs.gov.au/privacy-and-legals), with exceptions including the Coat of Arms, ABS logo, microdata, third-party material, and material protected by trademarks, as well as any product-specific terms. The official CPI and WPI workbooks in data/sources/ and the derived snapshot are separate from the project’s MIT code license. Reusers should follow the applicable ABS terms and retain attribution. For attribution of the transformed data used in this storyboard, use: “Based on Australian Bureau of Statistics data.”
+The ABS states that website material is generally available under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://www.abs.gov.au/privacy-and-legals), with exceptions including the Coat of Arms, ABS logo, microdata, third-party material, and material protected by trademarks, as well as any product-specific terms. The official CPI and WPI workbooks in data/sources/ and the derived snapshot are separate from the project’s Apache-2.0 code license. Reusers should follow the applicable ABS terms and retain attribution. For attribution of the transformed data used in this storyboard, use: “Based on Australian Bureau of Statistics data.”

@@ -60,6 +60,7 @@ export function renderEnglishPage(sourceHtml, messages) {
     .replace(/\sdata-i18n-attr="[^"]*"/g, "")
     .replace(/\sdata-i18n="[^"]*"/g, "")
     .replace('<html lang="zh-CN">', '<html lang="en">')
+    .replace('href="./assets/favicon.svg"', 'href="../assets/favicon.svg"')
     .replace('href="./src/style.css"', 'href="../src/style.css"')
     .replace('src="./src/app.js"', 'src="../src/app.js"');
 

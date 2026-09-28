@@ -10,6 +10,7 @@ const files = [
   ["src/app.js", "src/app.js"],
   ["src/analysis.js", "src/analysis.js"],
   ["src/style.css", "src/style.css"],
+  ["assets/favicon.svg", "assets/favicon.svg"],
   ["data/quarterly.json", "data/quarterly.json"],
   ["data/messages.zh.json", "data/messages.zh.json"],
   ["assets/fonts/plus-jakarta-sans-latin.woff2", "assets/fonts/plus-jakarta-sans-latin.woff2"],
