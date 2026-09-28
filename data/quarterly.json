@@ -1,0 +1,848 @@
+{
+  "snapshotDate": "2026-09-28",
+  "firstQuarter": "1997-Q3",
+  "latestQuarter": "2026-Q2",
+  "observationCount": 116,
+  "series": {
+    "cpi": {
+      "publication": "Consumer Price Index, Australia, June 2026",
+      "releaseDate": "2026-07-29",
+      "table": "Table 17. CPI: Quarterly All Groups, Index numbers and Percentage change",
+      "pageUrl": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia/jun-2026",
+      "seriesId": "A2325846C",
+      "seriesDescription": "Index Numbers ; All groups CPI ; Australia ;",
+      "seriesType": "Original",
+      "indexReferencePeriod": "September month 2025 = 100.00",
+      "sourceWorkbook": "data/sources/abs-cpi-table-17-jun-2026.xlsx",
+      "sourceSha256": "742C7159D8A0A5CF7C357F418D2BA467209D3547AA1583E80A9FF1DD4478CB9F",
+      "scope": "Australia; All groups CPI; weighted average of eight capital cities"
+    },
+    "wpi": {
+      "publication": "Wage Price Index, Australia, June 2026",
+      "releaseDate": "2026-08-19",
+      "table": "Table 1. Total hourly rates of pay excluding bonuses: sector, original, seasonally adjusted and trend",
+      "pageUrl": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia/jun-2026",
+      "seriesId": "A2603609J",
+      "seriesDescription": "Quarterly Index ; Total hourly rates of pay excluding bonuses ; Australia ; Private and Public ; All industries ;",
+      "seriesType": "Original",
+      "indexReferencePeriod": "See ABS Table 1; comparison rebased to selected starting quarter",
+      "sourceWorkbook": "data/sources/abs-wpi-table-1-jun-2026.xlsx",
+      "sourceSha256": "C349B06A564EE6BB488DD4E02FC058048BFF16CF50F99DBD8455AB7A2EFE3E3D",
+      "scope": "Australia; private and public sectors; all industries; total hourly rates of pay excluding bonuses"
+    }
+  },
+  "observations": [
+    {
+      "period": "1997-Q3",
+      "cpiIndex": 46.28,
+      "wpiIndex": 66.7,
+      "cpiQuarterChangePct": -0.4,
+      "wpiQuarterChangePct": null
+    },
+    {
+      "period": "1997-Q4",
+      "cpiIndex": 46.39,
+      "wpiIndex": 67.3,
+      "cpiQuarterChangePct": 0.2,
+      "wpiQuarterChangePct": 0.9
+    },
+    {
+      "period": "1998-Q1",
+      "cpiIndex": 46.51,
+      "wpiIndex": 67.8,
+      "cpiQuarterChangePct": 0.3,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "1998-Q2",
+      "cpiIndex": 46.78,
+      "wpiIndex": 68.2,
+      "cpiQuarterChangePct": 0.6,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "1998-Q3",
+      "cpiIndex": 46.91,
+      "wpiIndex": 68.9,
+      "cpiQuarterChangePct": 0.3,
+      "wpiQuarterChangePct": 1.0
+    },
+    {
+      "period": "1998-Q4",
+      "cpiIndex": 47.11,
+      "wpiIndex": 69.3,
+      "cpiQuarterChangePct": 0.4,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "1999-Q1",
+      "cpiIndex": 47.08,
+      "wpiIndex": 70.0,
+      "cpiQuarterChangePct": -0.1,
+      "wpiQuarterChangePct": 1.0
+    },
+    {
+      "period": "1999-Q2",
+      "cpiIndex": 47.29,
+      "wpiIndex": 70.3,
+      "cpiQuarterChangePct": 0.4,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "1999-Q3",
+      "cpiIndex": 47.72,
+      "wpiIndex": 71.0,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 1.0
+    },
+    {
+      "period": "1999-Q4",
+      "cpiIndex": 47.97,
+      "wpiIndex": 71.4,
+      "cpiQuarterChangePct": 0.5,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2000-Q1",
+      "cpiIndex": 48.4,
+      "wpiIndex": 71.9,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "2000-Q2",
+      "cpiIndex": 48.77,
+      "wpiIndex": 72.3,
+      "cpiQuarterChangePct": 0.8,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2000-Q3",
+      "cpiIndex": 50.59,
+      "wpiIndex": 73.2,
+      "cpiQuarterChangePct": 3.7,
+      "wpiQuarterChangePct": 1.2
+    },
+    {
+      "period": "2000-Q4",
+      "cpiIndex": 50.76,
+      "wpiIndex": 73.8,
+      "cpiQuarterChangePct": 0.3,
+      "wpiQuarterChangePct": 0.8
+    },
+    {
+      "period": "2001-Q1",
+      "cpiIndex": 51.3,
+      "wpiIndex": 74.6,
+      "cpiQuarterChangePct": 1.1,
+      "wpiQuarterChangePct": 1.1
+    },
+    {
+      "period": "2001-Q2",
+      "cpiIndex": 51.73,
+      "wpiIndex": 75.0,
+      "cpiQuarterChangePct": 0.8,
+      "wpiQuarterChangePct": 0.5
+    },
+    {
+      "period": "2001-Q3",
+      "cpiIndex": 51.87,
+      "wpiIndex": 75.8,
+      "cpiQuarterChangePct": 0.3,
+      "wpiQuarterChangePct": 1.1
+    },
+    {
+      "period": "2001-Q4",
+      "cpiIndex": 52.35,
+      "wpiIndex": 76.4,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 0.8
+    },
+    {
+      "period": "2002-Q1",
+      "cpiIndex": 52.82,
+      "wpiIndex": 76.9,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "2002-Q2",
+      "cpiIndex": 53.2,
+      "wpiIndex": 77.4,
+      "cpiQuarterChangePct": 0.7,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "2002-Q3",
+      "cpiIndex": 53.56,
+      "wpiIndex": 78.3,
+      "cpiQuarterChangePct": 0.7,
+      "wpiQuarterChangePct": 1.2
+    },
+    {
+      "period": "2002-Q4",
+      "cpiIndex": 53.92,
+      "wpiIndex": 78.9,
+      "cpiQuarterChangePct": 0.7,
+      "wpiQuarterChangePct": 0.8
+    },
+    {
+      "period": "2003-Q1",
+      "cpiIndex": 54.62,
+      "wpiIndex": 79.7,
+      "cpiQuarterChangePct": 1.3,
+      "wpiQuarterChangePct": 1.0
+    },
+    {
+      "period": "2003-Q2",
+      "cpiIndex": 54.62,
+      "wpiIndex": 80.1,
+      "cpiQuarterChangePct": 0.0,
+      "wpiQuarterChangePct": 0.5
+    },
+    {
+      "period": "2003-Q3",
+      "cpiIndex": 54.93,
+      "wpiIndex": 81.1,
+      "cpiQuarterChangePct": 0.6,
+      "wpiQuarterChangePct": 1.2
+    },
+    {
+      "period": "2003-Q4",
+      "cpiIndex": 55.22,
+      "wpiIndex": 81.9,
+      "cpiQuarterChangePct": 0.5,
+      "wpiQuarterChangePct": 1.0
+    },
+    {
+      "period": "2004-Q1",
+      "cpiIndex": 55.71,
+      "wpiIndex": 82.5,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "2004-Q2",
+      "cpiIndex": 55.97,
+      "wpiIndex": 82.9,
+      "cpiQuarterChangePct": 0.5,
+      "wpiQuarterChangePct": 0.5
+    },
+    {
+      "period": "2004-Q3",
+      "cpiIndex": 56.2,
+      "wpiIndex": 84.0,
+      "cpiQuarterChangePct": 0.4,
+      "wpiQuarterChangePct": 1.3
+    },
+    {
+      "period": "2004-Q4",
+      "cpiIndex": 56.63,
+      "wpiIndex": 84.8,
+      "cpiQuarterChangePct": 0.8,
+      "wpiQuarterChangePct": 1.0
+    },
+    {
+      "period": "2005-Q1",
+      "cpiIndex": 57.01,
+      "wpiIndex": 85.7,
+      "cpiQuarterChangePct": 0.7,
+      "wpiQuarterChangePct": 1.1
+    },
+    {
+      "period": "2005-Q2",
+      "cpiIndex": 57.35,
+      "wpiIndex": 86.3,
+      "cpiQuarterChangePct": 0.6,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "2005-Q3",
+      "cpiIndex": 57.92,
+      "wpiIndex": 87.5,
+      "cpiQuarterChangePct": 1.0,
+      "wpiQuarterChangePct": 1.4
+    },
+    {
+      "period": "2005-Q4",
+      "cpiIndex": 58.22,
+      "wpiIndex": 88.3,
+      "cpiQuarterChangePct": 0.5,
+      "wpiQuarterChangePct": 0.9
+    },
+    {
+      "period": "2006-Q1",
+      "cpiIndex": 58.72,
+      "wpiIndex": 89.2,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 1.0
+    },
+    {
+      "period": "2006-Q2",
+      "cpiIndex": 59.65,
+      "wpiIndex": 89.9,
+      "cpiQuarterChangePct": 1.6,
+      "wpiQuarterChangePct": 0.8
+    },
+    {
+      "period": "2006-Q3",
+      "cpiIndex": 60.18,
+      "wpiIndex": 90.9,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 1.1
+    },
+    {
+      "period": "2006-Q4",
+      "cpiIndex": 60.11,
+      "wpiIndex": 91.8,
+      "cpiQuarterChangePct": -0.1,
+      "wpiQuarterChangePct": 1.0
+    },
+    {
+      "period": "2007-Q1",
+      "cpiIndex": 60.16,
+      "wpiIndex": 92.8,
+      "cpiQuarterChangePct": 0.1,
+      "wpiQuarterChangePct": 1.1
+    },
+    {
+      "period": "2007-Q2",
+      "cpiIndex": 60.9,
+      "wpiIndex": 93.5,
+      "cpiQuarterChangePct": 1.2,
+      "wpiQuarterChangePct": 0.8
+    },
+    {
+      "period": "2007-Q3",
+      "cpiIndex": 61.32,
+      "wpiIndex": 94.8,
+      "cpiQuarterChangePct": 0.7,
+      "wpiQuarterChangePct": 1.4
+    },
+    {
+      "period": "2007-Q4",
+      "cpiIndex": 61.89,
+      "wpiIndex": 95.7,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 0.9
+    },
+    {
+      "period": "2008-Q1",
+      "cpiIndex": 62.72,
+      "wpiIndex": 96.6,
+      "cpiQuarterChangePct": 1.3,
+      "wpiQuarterChangePct": 0.9
+    },
+    {
+      "period": "2008-Q2",
+      "cpiIndex": 63.63,
+      "wpiIndex": 97.5,
+      "cpiQuarterChangePct": 1.5,
+      "wpiQuarterChangePct": 0.9
+    },
+    {
+      "period": "2008-Q3",
+      "cpiIndex": 64.37,
+      "wpiIndex": 98.6,
+      "cpiQuarterChangePct": 1.2,
+      "wpiQuarterChangePct": 1.1
+    },
+    {
+      "period": "2008-Q4",
+      "cpiIndex": 64.16,
+      "wpiIndex": 99.8,
+      "cpiQuarterChangePct": -0.3,
+      "wpiQuarterChangePct": 1.2
+    },
+    {
+      "period": "2009-Q1",
+      "cpiIndex": 64.23,
+      "wpiIndex": 100.5,
+      "cpiQuarterChangePct": 0.1,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "2009-Q2",
+      "cpiIndex": 64.55,
+      "wpiIndex": 101.1,
+      "cpiQuarterChangePct": 0.5,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2009-Q3",
+      "cpiIndex": 65.16,
+      "wpiIndex": 102.0,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 0.9
+    },
+    {
+      "period": "2009-Q4",
+      "cpiIndex": 65.51,
+      "wpiIndex": 102.7,
+      "cpiQuarterChangePct": 0.5,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "2010-Q1",
+      "cpiIndex": 66.12,
+      "wpiIndex": 103.6,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 0.9
+    },
+    {
+      "period": "2010-Q2",
+      "cpiIndex": 66.52,
+      "wpiIndex": 104.2,
+      "cpiQuarterChangePct": 0.6,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2010-Q3",
+      "cpiIndex": 67.0,
+      "wpiIndex": 105.7,
+      "cpiQuarterChangePct": 0.7,
+      "wpiQuarterChangePct": 1.4
+    },
+    {
+      "period": "2010-Q4",
+      "cpiIndex": 67.26,
+      "wpiIndex": 106.6,
+      "cpiQuarterChangePct": 0.4,
+      "wpiQuarterChangePct": 0.9
+    },
+    {
+      "period": "2011-Q1",
+      "cpiIndex": 68.3,
+      "wpiIndex": 107.6,
+      "cpiQuarterChangePct": 1.5,
+      "wpiQuarterChangePct": 0.9
+    },
+    {
+      "period": "2011-Q2",
+      "cpiIndex": 68.93,
+      "wpiIndex": 108.2,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2011-Q3",
+      "cpiIndex": 69.34,
+      "wpiIndex": 109.5,
+      "cpiQuarterChangePct": 0.6,
+      "wpiQuarterChangePct": 1.2
+    },
+    {
+      "period": "2011-Q4",
+      "cpiIndex": 69.34,
+      "wpiIndex": 110.5,
+      "cpiQuarterChangePct": 0.0,
+      "wpiQuarterChangePct": 0.9
+    },
+    {
+      "period": "2012-Q1",
+      "cpiIndex": 69.38,
+      "wpiIndex": 111.4,
+      "cpiQuarterChangePct": 0.1,
+      "wpiQuarterChangePct": 0.8
+    },
+    {
+      "period": "2012-Q2",
+      "cpiIndex": 69.74,
+      "wpiIndex": 112.2,
+      "cpiQuarterChangePct": 0.5,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "2012-Q3",
+      "cpiIndex": 70.69,
+      "wpiIndex": 113.5,
+      "cpiQuarterChangePct": 1.4,
+      "wpiQuarterChangePct": 1.2
+    },
+    {
+      "period": "2012-Q4",
+      "cpiIndex": 70.87,
+      "wpiIndex": 114.3,
+      "cpiQuarterChangePct": 0.3,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "2013-Q1",
+      "cpiIndex": 71.11,
+      "wpiIndex": 115.0,
+      "cpiQuarterChangePct": 0.3,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2013-Q2",
+      "cpiIndex": 71.38,
+      "wpiIndex": 115.5,
+      "cpiQuarterChangePct": 0.4,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2013-Q3",
+      "cpiIndex": 72.25,
+      "wpiIndex": 116.6,
+      "cpiQuarterChangePct": 1.2,
+      "wpiQuarterChangePct": 1.0
+    },
+    {
+      "period": "2013-Q4",
+      "cpiIndex": 72.77,
+      "wpiIndex": 117.2,
+      "cpiQuarterChangePct": 0.7,
+      "wpiQuarterChangePct": 0.5
+    },
+    {
+      "period": "2014-Q1",
+      "cpiIndex": 73.2,
+      "wpiIndex": 118.0,
+      "cpiQuarterChangePct": 0.6,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "2014-Q2",
+      "cpiIndex": 73.57,
+      "wpiIndex": 118.5,
+      "cpiQuarterChangePct": 0.5,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2014-Q3",
+      "cpiIndex": 73.88,
+      "wpiIndex": 119.5,
+      "cpiQuarterChangePct": 0.4,
+      "wpiQuarterChangePct": 0.8
+    },
+    {
+      "period": "2014-Q4",
+      "cpiIndex": 74.02,
+      "wpiIndex": 120.2,
+      "cpiQuarterChangePct": 0.2,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2015-Q1",
+      "cpiIndex": 74.16,
+      "wpiIndex": 120.7,
+      "cpiQuarterChangePct": 0.2,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2015-Q2",
+      "cpiIndex": 74.69,
+      "wpiIndex": 121.2,
+      "cpiQuarterChangePct": 0.7,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2015-Q3",
+      "cpiIndex": 74.98,
+      "wpiIndex": 122.2,
+      "cpiQuarterChangePct": 0.4,
+      "wpiQuarterChangePct": 0.8
+    },
+    {
+      "period": "2015-Q4",
+      "cpiIndex": 75.27,
+      "wpiIndex": 122.7,
+      "cpiQuarterChangePct": 0.4,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2016-Q1",
+      "cpiIndex": 75.12,
+      "wpiIndex": 123.2,
+      "cpiQuarterChangePct": -0.2,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2016-Q2",
+      "cpiIndex": 75.45,
+      "wpiIndex": 123.7,
+      "cpiQuarterChangePct": 0.4,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2016-Q3",
+      "cpiIndex": 75.98,
+      "wpiIndex": 124.6,
+      "cpiQuarterChangePct": 0.7,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "2016-Q4",
+      "cpiIndex": 76.38,
+      "wpiIndex": 125.1,
+      "cpiQuarterChangePct": 0.5,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2017-Q1",
+      "cpiIndex": 76.73,
+      "wpiIndex": 125.6,
+      "cpiQuarterChangePct": 0.5,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2017-Q2",
+      "cpiIndex": 76.88,
+      "wpiIndex": 126.1,
+      "cpiQuarterChangePct": 0.2,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2017-Q3",
+      "cpiIndex": 77.35,
+      "wpiIndex": 127.1,
+      "cpiQuarterChangePct": 0.6,
+      "wpiQuarterChangePct": 0.8
+    },
+    {
+      "period": "2017-Q4",
+      "cpiIndex": 77.87,
+      "wpiIndex": 127.7,
+      "cpiQuarterChangePct": 0.7,
+      "wpiQuarterChangePct": 0.5
+    },
+    {
+      "period": "2018-Q1",
+      "cpiIndex": 78.21,
+      "wpiIndex": 128.2,
+      "cpiQuarterChangePct": 0.4,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2018-Q2",
+      "cpiIndex": 78.49,
+      "wpiIndex": 128.7,
+      "cpiQuarterChangePct": 0.4,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2018-Q3",
+      "cpiIndex": 78.83,
+      "wpiIndex": 130.0,
+      "cpiQuarterChangePct": 0.4,
+      "wpiQuarterChangePct": 1.0
+    },
+    {
+      "period": "2018-Q4",
+      "cpiIndex": 79.24,
+      "wpiIndex": 130.6,
+      "cpiQuarterChangePct": 0.5,
+      "wpiQuarterChangePct": 0.5
+    },
+    {
+      "period": "2019-Q1",
+      "cpiIndex": 79.23,
+      "wpiIndex": 131.2,
+      "cpiQuarterChangePct": 0.0,
+      "wpiQuarterChangePct": 0.5
+    },
+    {
+      "period": "2019-Q2",
+      "cpiIndex": 79.7,
+      "wpiIndex": 131.8,
+      "cpiQuarterChangePct": 0.6,
+      "wpiQuarterChangePct": 0.5
+    },
+    {
+      "period": "2019-Q3",
+      "cpiIndex": 80.15,
+      "wpiIndex": 132.9,
+      "cpiQuarterChangePct": 0.6,
+      "wpiQuarterChangePct": 0.8
+    },
+    {
+      "period": "2019-Q4",
+      "cpiIndex": 80.7,
+      "wpiIndex": 133.5,
+      "cpiQuarterChangePct": 0.7,
+      "wpiQuarterChangePct": 0.5
+    },
+    {
+      "period": "2020-Q1",
+      "cpiIndex": 81.0,
+      "wpiIndex": 134.1,
+      "cpiQuarterChangePct": 0.4,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2020-Q2",
+      "cpiIndex": 79.44,
+      "wpiIndex": 134.1,
+      "cpiQuarterChangePct": -1.9,
+      "wpiQuarterChangePct": 0.0
+    },
+    {
+      "period": "2020-Q3",
+      "cpiIndex": 80.67,
+      "wpiIndex": 134.7,
+      "cpiQuarterChangePct": 1.5,
+      "wpiQuarterChangePct": 0.4
+    },
+    {
+      "period": "2020-Q4",
+      "cpiIndex": 81.4,
+      "wpiIndex": 135.4,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 0.5
+    },
+    {
+      "period": "2021-Q1",
+      "cpiIndex": 81.87,
+      "wpiIndex": 136.1,
+      "cpiQuarterChangePct": 0.6,
+      "wpiQuarterChangePct": 0.5
+    },
+    {
+      "period": "2021-Q2",
+      "cpiIndex": 82.47,
+      "wpiIndex": 136.5,
+      "cpiQuarterChangePct": 0.7,
+      "wpiQuarterChangePct": 0.3
+    },
+    {
+      "period": "2021-Q3",
+      "cpiIndex": 83.17,
+      "wpiIndex": 137.7,
+      "cpiQuarterChangePct": 0.8,
+      "wpiQuarterChangePct": 0.9
+    },
+    {
+      "period": "2021-Q4",
+      "cpiIndex": 84.23,
+      "wpiIndex": 138.5,
+      "cpiQuarterChangePct": 1.3,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2022-Q1",
+      "cpiIndex": 86.05,
+      "wpiIndex": 139.3,
+      "cpiQuarterChangePct": 2.2,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2022-Q2",
+      "cpiIndex": 87.59,
+      "wpiIndex": 140.1,
+      "cpiQuarterChangePct": 1.8,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2022-Q3",
+      "cpiIndex": 89.2,
+      "wpiIndex": 142.1,
+      "cpiQuarterChangePct": 1.8,
+      "wpiQuarterChangePct": 1.4
+    },
+    {
+      "period": "2022-Q4",
+      "cpiIndex": 90.85,
+      "wpiIndex": 143.2,
+      "cpiQuarterChangePct": 1.8,
+      "wpiQuarterChangePct": 0.8
+    },
+    {
+      "period": "2023-Q1",
+      "cpiIndex": 92.08,
+      "wpiIndex": 144.3,
+      "cpiQuarterChangePct": 1.4,
+      "wpiQuarterChangePct": 0.8
+    },
+    {
+      "period": "2023-Q2",
+      "cpiIndex": 92.87,
+      "wpiIndex": 145.2,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2023-Q3",
+      "cpiIndex": 93.94,
+      "wpiIndex": 147.9,
+      "cpiQuarterChangePct": 1.2,
+      "wpiQuarterChangePct": 1.9
+    },
+    {
+      "period": "2023-Q4",
+      "cpiIndex": 94.53,
+      "wpiIndex": 149.3,
+      "cpiQuarterChangePct": 0.6,
+      "wpiQuarterChangePct": 0.9
+    },
+    {
+      "period": "2024-Q1",
+      "cpiIndex": 95.41,
+      "wpiIndex": 150.2,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2024-Q2",
+      "cpiIndex": 96.41,
+      "wpiIndex": 151.1,
+      "cpiQuarterChangePct": 1.0,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2024-Q3",
+      "cpiIndex": 96.62,
+      "wpiIndex": 153.1,
+      "cpiQuarterChangePct": 0.2,
+      "wpiQuarterChangePct": 1.3
+    },
+    {
+      "period": "2024-Q4",
+      "cpiIndex": 96.81,
+      "wpiIndex": 154.1,
+      "cpiQuarterChangePct": 0.2,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "2025-Q1",
+      "cpiIndex": 97.7,
+      "wpiIndex": 155.3,
+      "cpiQuarterChangePct": 0.9,
+      "wpiQuarterChangePct": 0.8
+    },
+    {
+      "period": "2025-Q2",
+      "cpiIndex": 98.43,
+      "wpiIndex": 156.2,
+      "cpiQuarterChangePct": 0.7,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2025-Q3",
+      "cpiIndex": 99.73,
+      "wpiIndex": 158.3,
+      "cpiQuarterChangePct": 1.3,
+      "wpiQuarterChangePct": 1.3
+    },
+    {
+      "period": "2025-Q4",
+      "cpiIndex": 100.32,
+      "wpiIndex": 159.4,
+      "cpiQuarterChangePct": 0.6,
+      "wpiQuarterChangePct": 0.7
+    },
+    {
+      "period": "2026-Q1",
+      "cpiIndex": 101.7,
+      "wpiIndex": 160.3,
+      "cpiQuarterChangePct": 1.4,
+      "wpiQuarterChangePct": 0.6
+    },
+    {
+      "period": "2026-Q2",
+      "cpiIndex": 102.31,
+      "wpiIndex": 161.2,
+      "cpiQuarterChangePct": 0.6,
+      "wpiQuarterChangePct": 0.6
+    }
+  ]
+}

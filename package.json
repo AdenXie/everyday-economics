@@ -1,0 +1,11 @@
+{
+  "name": "everyday-economics",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "dev": "node tools/serve.mjs",
+    "verify": "node tools/verify-data.mjs",
+    "test": "node --test"
+  }
+}

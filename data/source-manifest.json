@@ -1,0 +1,29 @@
+{
+  "preparedOn": "2026-09-28",
+  "cpi": {
+    "publication": "Consumer Price Index, Australia, June 2026",
+    "releaseDate": "2026-07-29",
+    "table": "Table 17. CPI: Quarterly All Groups, Index numbers and Percentage change",
+    "pageUrl": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia/jun-2026",
+    "workbook": "data/sources/abs-cpi-table-17-jun-2026.xlsx",
+    "indexSeriesId": "A2325846C",
+    "quarterChangeSeriesId": "A2325850V",
+    "sha256": "742C7159D8A0A5CF7C357F418D2BA467209D3547AA1583E80A9FF1DD4478CB9F",
+    "seriesDescription": "Index Numbers ; All groups CPI ; Australia ;",
+    "seriesType": "Original",
+    "indexReferencePeriod": "September month 2025 = 100.00"
+  },
+  "wpi": {
+    "publication": "Wage Price Index, Australia, June 2026",
+    "releaseDate": "2026-08-19",
+    "table": "Table 1. Total hourly rates of pay excluding bonuses: sector, original, seasonally adjusted and trend",
+    "pageUrl": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia/jun-2026",
+    "workbook": "data/sources/abs-wpi-table-1-jun-2026.xlsx",
+    "indexSeriesId": "A2603609J",
+    "quarterChangeSeriesId": "A2603610T",
+    "sha256": "C349B06A564EE6BB488DD4E02FC058048BFF16CF50F99DBD8455AB7A2EFE3E3D",
+    "seriesDescription": "Quarterly Index ; Total hourly rates of pay excluding bonuses ; Australia ; Private and Public ; All industries ;",
+    "seriesType": "Original",
+    "indexReferencePeriod": "See ABS Table 1; comparison rebased to selected starting quarter"
+  }
+}

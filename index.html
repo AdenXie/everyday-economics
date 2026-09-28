@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#e9e1d1" />
+    <meta name="description" content="用澳大利亚统计局同季度 CPI 与 WPI 官方指数，看看物价和工资价格如何变化。" data-i18n="metadata.description" data-i18n-attr="content" />
+    <title data-i18n="metadata.title">一篮子贵了多少？｜澳洲物价与工资</title>
+    <script>
+      (() => {
+        document.addEventListener("click", (event) => {
+          const target = event.target instanceof Element ? event.target : event.target?.parentElement;
+          const choice = target?.closest("[data-language-choice]");
+          if (!choice) return;
+          try { localStorage.setItem("econ-tab-language", choice.dataset.languageChoice); } catch {}
+          const destination = new URL(choice.href, window.location.href);
+          destination.search = window.location.search;
+          destination.hash = window.location.hash;
+          choice.href = destination.href;
+        });
+        if (!document.documentElement.lang.toLowerCase().startsWith("zh")) return;
+        let preferred;
+        try { preferred = localStorage.getItem("econ-tab-language"); } catch {}
+        if (preferred !== "zh" && (preferred === "en" || !/^zh(?:[-_]|$)/i.test((navigator.languages?.[0] || navigator.language || "en")))) {
+          const target = new URL("./en/", window.location.href);
+          target.search = window.location.search;
+          target.hash = window.location.hash;
+          window.location.replace(target);
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="./src/style.css" />
+    <script type="module" src="./src/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#story" data-i18n="page.skip">跳到数据故事</a>
+    <div class="page-shell">
+      <header class="masthead">
+        <a class="identity" href="#top" aria-label="澳洲物价与工资，回到顶部" data-i18n="brand.aria" data-i18n-attr="aria-label">
+          <span class="identity-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="identity-copy">
+            <span class="identity-kicker">ECONOMIC FIELDNOTE</span>
+            <span class="identity-name" data-i18n="brand.name">澳洲 · 价格与工资</span>
+          </span>
+        </a>
+        <div class="masthead-meta">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span data-i18n="meta.national">全国季度指数</span>
+          <span class="meta-divider" aria-hidden="true"></span>
+          <span id="snapshot-stamp" data-i18n="meta.snapshotLoading">正在读取快照…</span>
+          <nav class="language-switch" aria-label="切换语言" data-i18n="switch.aria" data-i18n-attr="aria-label">
+            <a id="language-zh" href="./" lang="zh-CN" data-language-choice="zh" aria-current="page" data-i18n="switch.zh">中文</a>
+            <a id="language-en" href="./en/" lang="en" data-language-choice="en" data-i18n="switch.en">English</a>
+          </nav>
+        </div>
+      </header>
+
+      <main id="story">
+        <section class="hero" id="top" aria-labelledby="story-title">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-i18n="hero.eyebrow">一篇关于价格变化的经济小课</span></p>
+            <h1 id="story-title"><span data-i18n="hero.titleLine1">一篮子贵了多少？</span><br /><span data-i18n="hero.titleLine2">工资价格跟上了吗？</span></h1>
+            <p class="hero-intro" data-i18n="hero.intro">把两条全国季度指数放在同一段时间里：一条记录家庭消费价格，一条记录可比工作组合的工资价格。先把各自起点归到 100，再看它们走向哪里。</p>
+          </div>
+          <aside class="hero-note" aria-label="读图提示" data-i18n="hero.noteAria" data-i18n-attr="aria-label">
+            <span class="hero-note-label" data-i18n="hero.noteLabel">读图的起点</span>
+            <div class="hero-equation" aria-hidden="true"><span>100</span><b>→</b><span>?</span></div>
+            <p data-i18n="hero.noteBody">指数的高低取决于基期。这里比较的是变化比例，不是两种指数原始点数。</p>
+            <div class="hero-rule" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+          </aside>
+        </section>
+
+        <section class="story-panel" aria-labelledby="chart-heading">
+          <div class="panel-heading">
+            <div class="heading-copy">
+              <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-i18n="story.eyebrow">同一段时间 · 原始指数</span></p>
+              <h2 id="chart-heading" data-i18n="story.title">从同一起点，沿季度读下去</h2>
+              <p class="heading-caption" data-i18n="story.caption">选定起止季度。两条线都会以起点 = 100 重新标尺。</p>
+            </div>
+            <form class="period-controls" aria-label="选择比较区间" data-i18n="story.controlsAria" data-i18n-attr="aria-label" onsubmit="return false">
+              <label class="period-field" for="start-quarter">
+                <span data-i18n="story.startLabel">从哪一季</span>
+                <select id="start-quarter" name="start-quarter"></select>
+              </label>
+              <span class="period-arrow" aria-hidden="true">→</span>
+              <label class="period-field" for="end-quarter">
+                <span data-i18n="story.endLabel">到哪一季</span>
+                <select id="end-quarter" name="end-quarter"></select>
+              </label>
+            </form>
+          </div>
+
+          <figure class="chart-paper" aria-labelledby="chart-heading" aria-describedby="chart-note">
+            <div class="chart-topline">
+              <p id="selected-range" class="selected-range">—</p>
+              <div class="legend" aria-label="图例" data-i18n="chart.legendAria" data-i18n-attr="aria-label">
+                <span><i class="legend-swatch cpi-swatch" aria-hidden="true"></i><span data-i18n="chart.legendCpi">CPI · 家庭消费价格</span></span>
+                <span><i class="legend-swatch wpi-swatch" aria-hidden="true"></i><span data-i18n="chart.legendWpi">WPI · 工资价格</span></span>
+              </div>
+            </div>
+            <div class="chart-scroll" id="chart-scroll">
+              <svg id="trend-chart" viewBox="0 0 1000 390" role="img" aria-label="季度 CPI 与 WPI 指数对比图，加载中" data-i18n="chart.loadingAria" data-i18n-attr="aria-label"></svg>
+            </div>
+            <p class="chart-scroll-hint" data-i18n="chart.scrollHint">左右滑动查看后续季度</p>
+            <figcaption id="chart-note" class="chart-caption">
+              <span data-i18n="chart.caption">纵轴是归一化指数；季度点使用 ABS 发布的原始值。</span>
+            </figcaption>
+          </figure>
+
+          <div class="results-row" aria-live="polite" aria-atomic="true">
+            <article class="result-block result-cpi">
+              <div class="result-label"><span class="result-dot" aria-hidden="true"></span><span data-i18n="result.cpiLabel">消费价格 · CPI</span></div>
+              <div class="result-main"><strong id="cpi-growth">—</strong><span data-i18n="result.windowChange">所选区间累计变化</span></div>
+              <p class="result-detail"><span data-i18n="result.cpiDetail">起点 A$100 的 CPI 指数化金额，到终点约为</span> <strong id="basket-value">—</strong></p>
+            </article>
+            <article class="result-block result-wpi">
+              <div class="result-label"><span class="result-dot" aria-hidden="true"></span><span data-i18n="result.wpiLabel">工资价格 · WPI</span></div>
+              <div class="result-main"><strong id="wpi-growth">—</strong><span data-i18n="result.windowChange">所选区间累计变化</span></div>
+              <p class="result-detail" data-i18n="result.wpiDetail">固定工作组合的工资价格指数；不是个人到手工资</p>
+            </article>
+            <div class="comparison-note">
+              <span class="comparison-label" data-i18n="result.gapLabel">这段区间的差</span>
+              <strong id="comparison-result" data-i18n="result.waiting">等待数据</strong>
+              <p id="comparison-detail" data-i18n="result.initialDetail">比较两项全国指数的累计变化。</p>
+            </div>
+          </div>
+          <p class="calculation-note" data-i18n="result.calculationNote">A$100 示意 = A$100 × 终点 CPI ÷ 起点 CPI。它是指数化金额，不代表某个家庭实际花费，也不是一份永不变化的商品清单。</p>
+        </section>
+
+        <section class="learning-section" aria-labelledby="learn-heading">
+          <div class="learning-heading">
+            <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-i18n="learning.eyebrow">把刻度读成经济</span></p>
+            <h2 id="learn-heading" data-i18n="learning.title">两条线，回答的不是同一个问题</h2>
+          </div>
+          <div class="learning-grid">
+            <article class="learning-card">
+              <p class="learning-index"><span data-i18n="learning.cpiIndex">消费端</span> <span>01</span></p>
+              <h3 data-i18n="learning.cpiTitle">家庭买的东西，整体贵了多少？</h3>
+              <p data-i18n="learning.cpiBody">CPI 汇总家庭常买商品和服务的价格变化，并按支出重要性加权。澳大利亚全国序列以八个首府城市加权平均构成。每个家庭的消费篮子不同，所以 CPI 不是你的个人账单。</p>
+              <a class="text-link" href="https://www.abs.gov.au/methodologies/consumer-price-index-australia-methodology/jul-2026" target="_blank" rel="noreferrer"><span data-i18n="learning.cpiLink">看 ABS 的 CPI 口径</span> <span aria-hidden="true">↗</span></a>
+            </article>
+            <article class="learning-card">
+              <p class="learning-index"><span data-i18n="learning.wpiIndex">工作端</span> <span>02</span></p>
+              <h3 data-i18n="learning.wpiTitle">类似工作对应的工资价格变了多少？</h3>
+              <p data-i18n="learning.wpiBody">WPI 跟踪可比工作组合的工资价格变化，尽量剔除工作内容、数量和质量变化；这里用的是不含奖金的总小时工资率原始指数。它不表示每个人的工资、工时、奖金或税后收入。</p>
+              <a class="text-link" href="https://www.abs.gov.au/methodologies/wage-price-index-australia-methodology/jun-2026" target="_blank" rel="noreferrer"><span data-i18n="learning.wpiLink">看 ABS 的 WPI 口径</span> <span aria-hidden="true">↗</span></a>
+            </article>
+            <article class="learning-card learning-why">
+              <p class="learning-index"><span data-i18n="learning.normalizeIndex">为什么先归一？</span> <span>03</span></p>
+              <h3 data-i18n="learning.normalizeTitle">基期不同，先比较变化比例</h3>
+              <p data-i18n="learning.normalizeBody">指数的基期只是刻度原点。我们把你选择的起始季度都设为 100，之后的数值表示各自相对起点的变化。两条线之间的差，是指数累计涨幅的百分点差，不是个人购买力差。</p>
+              <span class="text-link static-link" data-i18n="learning.normalizeLink">可比的，是趋势和区间变化。</span>
+            </article>
+          </div>
+        </section>
+
+        <section class="sources-section" aria-labelledby="sources-heading">
+          <div class="sources-title">
+            <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-i18n="sources.eyebrow">出处与范围</span></p>
+            <h2 id="sources-heading" data-i18n="sources.title">数据来自 ABS 官方季度表</h2>
+            <p id="data-range">—</p>
+          </div>
+          <div class="source-list">
+            <article class="source-item">
+              <span class="source-key cpi-source-key">CPI</span>
+              <div>
+                <a id="cpi-source-link" href="#" target="_blank" rel="noreferrer">Consumer Price Index, Australia</a>
+                <p id="cpi-source-detail" data-i18n="sources.cpiDetail">Table 17 · All groups · Australia · 原始季度指数</p>
+              </div>
+              <span id="cpi-source-date" class="source-date">—</span>
+            </article>
+            <article class="source-item">
+              <span class="source-key wpi-source-key">WPI</span>
+              <div>
+                <a id="wpi-source-link" href="#" target="_blank" rel="noreferrer">Wage Price Index, Australia</a>
+                <p id="wpi-source-detail" data-i18n="sources.wpiDetail">Table 1 · Private and Public · All industries · 原始指数</p>
+              </div>
+              <span id="wpi-source-date" class="source-date">—</span>
+            </article>
+          </div>
+          <p class="source-footnote" data-i18n="sources.note">CPI 原始指数自 2025 年 12 月发布起按 2025 年 9 月 = 100 重新定基；图中两线则都按你选的起点重设为 100。快照整理日与两份发布表各自发布日期分开标注。</p>
+        </section>
+      </main>
+
+      <footer class="page-footer">
+        <span data-i18n="footer.name">澳洲 · 价格与工资</span>
+        <span data-i18n="footer.note">静态官方快照 · 非实时 · 仅作统计学习</span>
+        <a href="#top" data-i18n="footer.top">回到顶部 ↑</a>
+      </footer>
+      <p id="load-error" class="load-error" role="alert" hidden data-i18n="error.load">数据快照无法读取。请确认已先完成本地构建，再通过本地预览地址打开页面。</p>
+    </div>
+  </body>
+</html>
