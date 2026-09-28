@@ -118,7 +118,18 @@ export function validatePayload(payload) {
   return { locale, context, messages };
 }
 
-export function buildUpstreamBody({ locale, context, messages }, model) {
+// Model settings come from environment variables so the model can be switched in the
+// Vercel dashboard without a code change (redeploy after editing them):
+//   AI_MODEL             model ID at the upstream, e.g. "Qwen3.8-27B"
+//   AI_REASONING_EFFORT  "low" (default), another tier the model accepts, or "none" to omit it
+export function modelSettings(env = {}) {
+  const model = String(env.AI_MODEL ?? "").trim() || DEFAULT_MODEL;
+  const effort = String(env.AI_REASONING_EFFORT ?? "").trim().toLowerCase() || "low";
+  return { model, reasoningEffort: effort === "none" ? null : effort };
+}
+
+export function buildUpstreamBody({ locale, context, messages }, settings) {
+  const { model, reasoningEffort } = typeof settings === "string" ? { model: settings, reasoningEffort: "low" } : settings;
   const contextLabel = locale === "en" ? "Page context" : "页面上下文";
   const system = context
     ? `${SYSTEM_PROMPTS[locale]}\n\n${contextLabel}:\n"""\n${context}\n"""`
@@ -129,7 +140,7 @@ export function buildUpstreamBody({ locale, context, messages }, model) {
     stream: true,
     max_tokens: LIMITS.maxTokens,
     temperature: 0.4,
-    reasoning_effort: "low",
+    ...(reasoningEffort ? { reasoning_effort: reasoningEffort } : {}),
   };
 }
 
@@ -148,6 +159,9 @@ function clientIp(request) {
 const sharedLimiter = createRateLimiter();
 
 export async function handleChat(request, env = {}, { limiter = sharedLimiter } = {}) {
+  // GET only reports which model is configured (shown in the assistant's header); it
+  // never reveals the key and does not call the upstream.
+  if (request.method === "GET") return json(200, { model: modelSettings(env).model, configured: Boolean(env.RADEON_API_KEY) });
   if (request.method !== "POST") return json(405, { error: "method_not_allowed" });
   if (!isAllowedOrigin(request, env)) return json(403, { error: "origin_not_allowed" });
   if (!env.RADEON_API_KEY) return json(503, { error: "not_configured" });
@@ -168,7 +182,7 @@ export async function handleChat(request, env = {}, { limiter = sharedLimiter } 
     upstream = await fetch(env.UPSTREAM_URL || DEFAULT_UPSTREAM, {
       method: "POST",
       headers: { Authorization: `Bearer ${env.RADEON_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify(buildUpstreamBody(parsed, env.AI_MODEL || DEFAULT_MODEL)),
+      body: JSON.stringify(buildUpstreamBody(parsed, modelSettings(env))),
       signal: request.signal,
     });
   } catch {

@@ -343,13 +343,31 @@ function clearConversation() {
   ui.input.focus();
 }
 
+// Ask the server which model is configured (AI_MODEL on Vercel) and show it in the header.
+let modelLoaded = false;
+async function loadModelName() {
+  if (modelLoaded) return;
+  modelLoaded = true;
+  try {
+    const response = await fetch(ENDPOINT, { method: "GET", headers: { Accept: "application/json" } });
+    if (!response.ok) return;
+    const { model } = await response.json();
+    if (typeof model === "string" && model) ui.subtitle.textContent = t("ai.subtitle", { model: model.slice(0, 60) });
+  } catch {
+    // Keep the generic subtitle.
+  }
+}
+
 function setOpen(open) {
   ui.panel.hidden = !open;
   ui.fab.setAttribute("aria-expanded", String(open));
   ui.fab.replaceChildren(icon(open ? ICONS.close : ICONS.chat, 22), el("span", { className: "ai-fab-label", text: open ? t("ai.close") : t("ai.open") }));
   ui.fab.setAttribute("aria-label", open ? t("ai.closeAria") : t("ai.openAria"));
   document.documentElement.classList.toggle("ai-open", open);
-  if (open) requestAnimationFrame(() => ui.input.focus());
+  if (open) {
+    loadModelName();
+    requestAnimationFrame(() => ui.input.focus());
+  }
 }
 
 export function startAssistant(localeMessages, activeLocale) {
@@ -382,7 +400,7 @@ export function startAssistant(localeMessages, activeLocale) {
     el("header", { className: "ai-head" }, [
       el("div", {}, [
         el("h2", { id: "ai-title", text: t("ai.title") }),
-        el("p", { className: "ai-sub", text: t("ai.subtitle") }),
+        (ui.subtitle = el("p", { className: "ai-sub", text: t("ai.subtitle", { model: "AI" }) })),
       ]),
       el("div", { className: "ai-head-actions" }, [clear, close]),
     ]),

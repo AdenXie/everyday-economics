@@ -152,7 +152,7 @@ For a selected start and end year:
 
 The floating button in the bottom-right corner opens an economics helper that explains the concepts and numbers on the page.
 
-- **Model**: `Qwen3.8-27B` from AMD Radeon Cloud Token Factory, called through the OpenAI-compatible endpoint `https://developer.amd.com.cn/radeon/api/v1/chat/completions` with streaming and `reasoning_effort: low` for quicker answers. The model's `<think>` reasoning is never shown.
+- **Model**: set by the Vercel environment variable `AI_MODEL`, currently `Qwen3.8-27B` from AMD Radeon Cloud Token Factory. The assistant header shows the configured model (read from `GET /api/chat`, which returns only the model name, never the key). Called through the OpenAI-compatible endpoint `https://developer.amd.com.cn/radeon/api/v1/chat/completions` with streaming and `reasoning_effort: low` by default for quicker answers (adjustable with `AI_REASONING_EFFORT`). The model's `<think>` reasoning is never shown.
 - **The API key stays on the server**: browsers call `/api/chat` on the same domain; the key lives in the Vercel environment variable `RADEON_API_KEY` and is added by [`server/ai-proxy.js`](server/ai-proxy.js). It is not in the page code, the repository, or the build output.
 - **The system prompt is set on the server**: use only page data or numbers the reader gives, never invent statistics, no investment, tax or legal advice, and answer in the reader's language. Browsers cannot change the prompt, model or parameters.
 - **Page context**: each question carries the current tab, years and the cumulative changes shown on the page (up to 1,400 characters) so answers can refer to what the reader is looking at. The server marks this as data and ignores any instructions inside it.
@@ -169,7 +169,15 @@ The floating button in the bottom-right corner opens an economics helper that ex
 4. In the GitHub repository, **Settings → Pages**, remove the custom domain and turn off Pages so the two platforms do not compete for the domain. Then edit `.github/workflows/pages.yml`: delete the whole `deploy` job and the `actions/configure-pages` and `actions/upload-pages-artifact` steps, keeping only the verify, test and build checks (otherwise every push reports a failed deployment once Pages is off).
 5. Every push to `main` then deploys automatically. After changing the key, redeploy on Vercel for it to take effect.
 
-Optional environment variables: `AI_MODEL` (default `Qwen3.8-27B`), `UPSTREAM_URL` (default: the AMD public endpoint), and `ALLOWED_ORIGINS` (comma-separated extra origins).
+**Changing the model**: edit `AI_MODEL` in the Vercel project's **Settings → Environment Variables** (type Config, Production), then open **Deployments** and **Redeploy** the latest deployment; environment variables only apply to new deployments. The model ID must match the AMD Token Factory model list exactly, for example `Qwen3.8-27B`, `Qwen3.8-Flash-Next`, or `DeepSeek-V4-Flash`. Ask the assistant a question on the live site afterwards to confirm it works.
+
+| Variable | Type | Purpose |
+|---|---|---|
+| `RADEON_API_KEY` | Secret (required) | AMD Token Factory key, starting with `rc-` |
+| `AI_MODEL` | Config | Model ID to call; falls back to `Qwen3.8-27B` when unset |
+| `AI_REASONING_EFFORT` | Config (optional) | Reasoning effort, default `low`; `none` omits the parameter for models that do not support it. `Qwen3.8-27B` accepts only `low`, `medium`, and `xhigh` |
+| `UPSTREAM_URL` | Config (optional) | Upstream endpoint, default: the AMD public endpoint |
+| `ALLOWED_ORIGINS` | Config (optional) | Comma-separated extra allowed origins |
 
 ## Design and bundled fonts
 
@@ -198,6 +206,12 @@ World Bank WDI data are generally available under [CC BY 4.0](https://www.worldb
 The ABS states that website material is generally available under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://www.abs.gov.au/privacy-and-legals), with exceptions including the Coat of Arms, ABS logo, microdata, third-party material, and material protected by trademarks, as well as any product-specific terms. The official CPI and WPI workbooks in data/sources/ and the derived snapshot are separate from the project’s Apache-2.0 code license. Reusers should follow the applicable ABS terms and retain attribution. For attribution of the transformed data used in this storyboard, use: “Based on Australian Bureau of Statistics data.”
 
 ## Changelog
+
+### 28 September 2026 · Model set by a Vercel environment variable
+
+- The model is now chosen by the Vercel environment variable `AI_MODEL` (currently `Qwen3.8-27B`), so switching models needs no code change; added the optional `AI_REASONING_EFFORT`.
+- `GET /api/chat` returns the configured model name, which the assistant header shows instead of a hard-coded label.
+- Added matching tests in `tests/ai-proxy.test.mjs`.
 
 ### 28 September 2026 · AI assistant and move to Vercel
 

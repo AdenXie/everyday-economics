@@ -169,7 +169,7 @@ CPI 指数化金额 = 100 本币 × 终点 CPI ÷ 起点 CPI
 
 页面右下角的浮窗是一个经济学问答助手，帮助读者理解页面上的概念和数字。
 
-- **模型**：AMD Radeon Cloud Token Factory 的 `Qwen3.8-27B`，通过 OpenAI 兼容接口 `https://developer.amd.com.cn/radeon/api/v1/chat/completions` 调用，流式输出，推理强度设为 `low` 以加快回答。模型输出的 `<think>` 推理部分不会显示给读者。
+- **模型**：由 Vercel 环境变量 `AI_MODEL` 决定，目前为 AMD Radeon Cloud Token Factory 的 `Qwen3.8-27B`；浮窗标题会显示当前模型名（读取 `GET /api/chat`，只返回模型名，不含 Key）。通过 OpenAI 兼容接口 `https://developer.amd.com.cn/radeon/api/v1/chat/completions` 调用，流式输出，推理强度默认 `low` 以加快回答（可用 `AI_REASONING_EFFORT` 调整）。模型输出的 `<think>` 推理部分不会显示给读者。
 - **API Key 只在服务端**：浏览器只请求同域名的 `/api/chat`；Key 存在 Vercel 项目的环境变量 `RADEON_API_KEY` 中，由 [`server/ai-proxy.js`](server/ai-proxy.js) 在服务端加到请求上。网页代码、仓库和构建产物里都没有 Key。
 - **系统提示词在服务端**：解释概念时只用页面数据或读者给出的数字，不编造统计数据；不提供投资、税务或法律建议；按提问语言回答。浏览器不能修改系统提示词、模型或参数。
 - **附带页面上下文**：每次提问会附上读者当前的标签页、年份和页面上显示的累计变化（最多 1,400 字），让 AI 能结合“你正在看的数字”回答。服务端把这段内容标记为数据，其中若出现指令会被忽略。
@@ -186,7 +186,15 @@ CPI 指数化金额 = 100 本币 × 终点 CPI ÷ 起点 CPI
 4. 在 GitHub 仓库 **Settings → Pages** 中移除自定义域名并停用 Pages，避免两个平台争用同一个域名。随后编辑 `.github/workflows/pages.yml`：删除整个 `deploy` job，以及 build job 里的 `actions/configure-pages` 和 `actions/upload-pages-artifact` 两步，只保留 verify、test、build 检查（否则停用 Pages 后每次推送都会报部署失败）。
 5. 以后推送到 `main` 就会自动部署。修改 Key 后，需要在 Vercel 里重新部署一次才会生效。
 
-可选环境变量：`AI_MODEL`（默认 `Qwen3.8-27B`）、`UPSTREAM_URL`（默认 AMD 公共接口）、`ALLOWED_ORIGINS`（逗号分隔的额外允许来源）。
+**更换模型**：在 Vercel 项目 **Settings → Environment Variables** 中修改 `AI_MODEL`（类型 Config，勾选 Production），然后在 **Deployments** 里对最新部署点 **Redeploy**，环境变量只对之后的部署生效。模型 ID 要与 AMD Token Factory 模型列表中的写法完全一致，例如 `Qwen3.8-27B`、`Qwen3.8-Flash-Next`、`DeepSeek-V4-Flash`。换模型后在网站上实际提问一次确认可用。
+
+| 环境变量 | 类型 | 作用 |
+|---|---|---|
+| `RADEON_API_KEY` | Secret（必填） | AMD Token Factory 的 Key，`rc-` 开头 |
+| `AI_MODEL` | Config | 调用的模型 ID；未设置时回退为 `Qwen3.8-27B` |
+| `AI_REASONING_EFFORT` | Config（可选） | 推理强度，默认 `low`；填 `none` 则不发送该参数（适用于不支持此参数的模型）。注意 `Qwen3.8-27B` 只接受 `low`、`medium`、`xhigh` |
+| `UPSTREAM_URL` | Config（可选） | 上游接口地址，默认 AMD 公共接口 |
+| `ALLOWED_ORIGINS` | Config（可选） | 逗号分隔的额外允许来源 |
 
 ## 设计系统与字体
 
@@ -219,6 +227,12 @@ CPI 指数化金额 = 100 本币 × 终点 CPI ÷ 起点 CPI
 - ABS 网站说明其网页材料通常采用 [Creative Commons Attribution 4.0 International（CC BY 4.0）](https://www.abs.gov.au/privacy-and-legals)，但徽标、微观数据、第三方内容等例外材料以及具体发布产品标注的专门条款不在该通用许可内。`data/sources/` 中保留官方 CPI/WPI 工作簿；仓库中的数据和由其整理出的图表不属于 Apache-2.0 代码许可。重用时请遵循对应 ABS 来源的许可与署名要求。引用本站整理的图表或衍生数据时，请采用署名 **Based on Australian Bureau of Statistics data**（基于澳大利亚统计局数据）。
 
 ## 更新记录
+
+### 2026-09-28 · 模型改为由 Vercel 环境变量配置
+
+- 调用的模型改由 Vercel 环境变量 `AI_MODEL` 决定（当前值 `Qwen3.8-27B`），更换模型无需改代码；新增可选的 `AI_REASONING_EFFORT`。
+- `GET /api/chat` 返回当前配置的模型名，浮窗标题据此显示，不再写死在词条里。
+- 新增对应测试（`tests/ai-proxy.test.mjs`）。
 
 ### 2026-09-28 · AI 助手与迁移到 Vercel
 

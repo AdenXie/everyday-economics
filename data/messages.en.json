@@ -166,7 +166,7 @@
   "ai.openAria": "Open the economics AI assistant",
   "ai.closeAria": "Close the AI assistant",
   "ai.title": "Economics helper",
-  "ai.subtitle": "Qwen3.8-27B · not saved; cleared on reload",
+  "ai.subtitle": "{model} · not saved; cleared on reload",
   "ai.emptyTitle": "Stuck on a concept while reading the charts?",
   "ai.emptyBody": "Ask me. I take into account the tab and years you are looking at.",
   "ai.suggest1": "What is the difference between CPI and WPI?",

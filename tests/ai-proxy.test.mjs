@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { handleChat, validatePayload, buildUpstreamBody, createRateLimiter, LIMITS } from "../server/ai-proxy.js";
+import { handleChat, validatePayload, buildUpstreamBody, createRateLimiter, modelSettings, LIMITS } from "../server/ai-proxy.js";
 import vercelFunction from "../api/chat.js";
 
 const origin = "https://econ.adenxie.com.cn";
@@ -22,7 +22,7 @@ test("the Vercel function exports a fetch handler", () => {
 test("rejects requests from other sites and non-POST methods", async () => {
   assert.equal((await handleChat(request(hi, { Origin: "https://evil.test" }), env, { limiter: null })).status, 403);
   assert.equal((await handleChat(request(hi, { Origin: "" }), env, { limiter: null })).status, 403);
-  assert.equal((await handleChat(request(null, {}, "GET"), env, { limiter: null })).status, 405);
+  assert.equal((await handleChat(request(null, {}, "DELETE"), env, { limiter: null })).status, 405);
 });
 
 test("accepts the site's own origin, including Vercel preview hosts", async () => {
@@ -108,4 +108,32 @@ test("assistant hides the model's <think> block from readers", async () => {
   assert.equal(stripThinking("<think>internal</think>\n答案"), "答案");
   assert.equal(stripThinking("<think>still thinking"), "");
   assert.equal(stripThinking("plain"), "plain");
+});
+
+test("the model and reasoning effort come from environment variables", () => {
+  assert.deepEqual(modelSettings({}), { model: "Qwen3.8-27B", reasoningEffort: "low" });
+  assert.deepEqual(modelSettings({ AI_MODEL: " DeepSeek-V4-Flash ", AI_REASONING_EFFORT: "medium" }), { model: "DeepSeek-V4-Flash", reasoningEffort: "medium" });
+  const body = buildUpstreamBody(validatePayload({ messages: [{ role: "user", content: "hi" }] }), modelSettings({ AI_MODEL: "GLM-5.3-Flash", AI_REASONING_EFFORT: "none" }));
+  assert.equal(body.model, "GLM-5.3-Flash");
+  assert.equal("reasoning_effort" in body, false);
+});
+
+test("GET reports the configured model without exposing the key", async () => {
+  const response = await handleChat(request(null, {}, "GET"), { ...env, AI_MODEL: "Qwen3.8-27B" }, { limiter: null });
+  assert.equal(response.status, 200);
+  const text = await response.text();
+  assert.deepEqual(JSON.parse(text), { model: "Qwen3.8-27B", configured: true });
+  assert.doesNotMatch(text, /rc-test/);
+});
+
+test("the upstream request uses AI_MODEL from the environment", async () => {
+  const original = globalThis.fetch;
+  let sent;
+  globalThis.fetch = async (url, init) => { sent = JSON.parse(init.body); return new Response("data: [DONE]\n\n", { headers: { "Content-Type": "text/event-stream" } }); };
+  try {
+    await handleChat(request(hi), { ...env, AI_MODEL: "MiMo-V2.6-Flash" }, { limiter: null });
+    assert.equal(sent.model, "MiMo-V2.6-Flash");
+  } finally {
+    globalThis.fetch = original;
+  }
 });

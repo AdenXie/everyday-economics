@@ -166,7 +166,7 @@
   "ai.openAria": "打开经济学 AI 助手",
   "ai.closeAria": "收起 AI 助手",
   "ai.title": "经济学小助手",
-  "ai.subtitle": "Qwen3.8-27B · 对话不保存，刷新即清空",
+  "ai.subtitle": "{model} · 对话不保存，刷新即清空",
   "ai.emptyTitle": "看图时遇到不懂的概念？",
   "ai.emptyBody": "直接问我。我会参考你当前所在的标签页和年份来回答。",
   "ai.suggest1": "CPI 和 WPI 有什么区别？",
