@@ -8,15 +8,17 @@ Everyday Economics is a collection of reproducible, chart-led stories about ever
 - **United States, South Korea, Japan, Singapore, China**: annual World Bank data comparing CPI with nominal GDP per capita (current local currency) from a shared starting year.
 - **Compare**: pick one period and see each economy's price rise, nominal GDP per capita rise, and change after CPI inflation side by side.
 
+An **AI assistant** in the bottom-right corner lets readers ask about concepts they meet while reading the charts (see “AI assistant” below).
+
 The Chinese and English pages are separate static pages. The site has no accounts, database, or browser-based translation requests.
 
 ## Live site and publishing
 
-Visit [econ.adenxie.com.cn](https://econ.adenxie.com.cn/) or the [English page](https://econ.adenxie.com.cn/en/). The [GitHub Pages workflow](.github/workflows/pages.yml) validates the data, runs the tests, builds the static pages, and publishes `dist/`. A push to `main` updates the live website, so maintainers should validate locally and push only when the user requests it. The data snapshot is not refreshed on a schedule.
+Visit [econ.adenxie.com.cn](https://econ.adenxie.com.cn/) or the [English page](https://econ.adenxie.com.cn/en/). The site is hosted on **Vercel**: static pages come from the `dist/` build output, and the AI assistant runs as the Vercel Function [`api/chat.js`](api/chat.js). [`vercel.json`](vercel.json) sets the build command (`npm run verify && npm test && npm run build`) and runs the function in Hong Kong (`hkg1`), close to the AMD endpoint. Vercel builds and deploys every push to `main`, so maintainers should validate locally and push only when the user requests it. The existing [GitHub Pages workflow](.github/workflows/pages.yml) still checks, tests and publishes to GitHub Pages on each push; once the domain points to Vercel, turn Pages off and make that workflow check-only as described in step 4 of “Deploy to Vercel”. The data snapshot is not refreshed on a schedule.
 
 ## Run locally
 
-Node.js 18 or newer is required. Serving the site does not require npm dependencies. Build the Chinese home page and English page at /en/, then start the local server:
+Node.js 20 or newer is required. Serving the site does not require npm dependencies. Build the Chinese home page and English page at /en/, then start the local server:
 
     npm run build
     npm run dev
@@ -24,6 +26,13 @@ Node.js 18 or newer is required. Serving the site does not require npm dependenc
 Open the local address printed by the server (usually http://127.0.0.1:4173/). The English page is at /en/. On first visit, the browser’s preferred language selects a page; the manual language switch remembers the selection and keeps the selected quarter range, tab, and years. The server listens on the local loopback interface only.
 
 The tab and years live in the URL, so views can be shared: `?view=USA&from=2000&to=2024` opens the United States for 2000–2024, and `?view=compare&from=1997&to=2012` opens the comparison. `view` accepts `AUS`, `USA`, `KOR`, `JPN`, `SGP`, `CHN`, or `compare`; without it the Australia tab opens.
+
+The local server also handles `/api/chat` the same way the Vercel Function does. To try the assistant locally, set the key in the same PowerShell window before starting the server; it lives only in that terminal session and is never written to a file:
+
+    $env:RADEON_API_KEY = "rc-your-key"
+    npm run dev
+
+Without a key the pages and charts work as usual and the assistant reports that it is not configured.
 
 If the default port is busy, set ECON_TAB_PORT to 0 in PowerShell before running npm run dev. The server will choose an available port and print its address. Press Ctrl+C in the server terminal to stop the preview.
 
@@ -139,6 +148,29 @@ For a selected start and end year:
 
    The extractor stops if an economy has a gap in its years. Find out why before changing anything; do not drop years just to pass the checks.
 
+## AI assistant
+
+The floating button in the bottom-right corner opens an economics helper that explains the concepts and numbers on the page.
+
+- **Model**: `Qwen3.8-27B` from AMD Radeon Cloud Token Factory, called through the OpenAI-compatible endpoint `https://developer.amd.com.cn/radeon/api/v1/chat/completions` with streaming and `reasoning_effort: low` for quicker answers. The model's `<think>` reasoning is never shown.
+- **The API key stays on the server**: browsers call `/api/chat` on the same domain; the key lives in the Vercel environment variable `RADEON_API_KEY` and is added by [`server/ai-proxy.js`](server/ai-proxy.js). It is not in the page code, the repository, or the build output.
+- **The system prompt is set on the server**: use only page data or numbers the reader gives, never invent statistics, no investment, tax or legal advice, and answer in the reader's language. Browsers cannot change the prompt, model or parameters.
+- **Page context**: each question carries the current tab, years and the cumulative changes shown on the page (up to 1,400 characters) so answers can refer to what the reader is looking at. The server marks this as data and ignores any instructions inside it.
+- **Nothing is saved**: the conversation exists only in the page's memory — not in localStorage, cookies or any server — and a reload clears it. The server logs no message content and has no database.
+- **Interaction**: the button opens and closes the panel; moving the pointer or focus back to the page never closes it, only that button (or the × inside the panel) does. Answers are selectable text and each has a Copy button for the original text; generation can be stopped, and the conversation can be cleared. Enter sends, Shift+Enter adds a line, and Enter while choosing characters in an IME does not send.
+- **Abuse limits**: the server accepts requests only from the site's own pages (production domain, Vercel preview URLs and local preview); at most 6 questions per IP per minute (a best-effort limit within each function instance); up to 1,500 characters per question, 16 history messages, and 1,200 tokens per answer. The AMD free tier allows about 20 requests per minute per account, shared by all visitors; beyond that readers are asked to wait.
+- **Privacy note**: questions and page context are processed by the Vercel Function and AMD Radeon Cloud.
+
+### Deploy to Vercel (one-time setup)
+
+1. Sign in to [vercel.com](https://vercel.com/) with GitHub, choose **Add New → Project**, and import `AdenXie/everyday-economics`. Choose the **Other** framework preset; build settings come from `vercel.json`.
+2. On the import screen (or later in **Settings → Environment Variables**) add `RADEON_API_KEY` with the AMD Token Factory key (starting with `rc-`) for Production and Preview, then deploy.
+3. In **Settings → Domains**, add `econ.adenxie.com.cn` and update the domain's DNS as Vercel instructs (usually a CNAME for `econ` pointing to the address Vercel shows).
+4. In the GitHub repository, **Settings → Pages**, remove the custom domain and turn off Pages so the two platforms do not compete for the domain. Then edit `.github/workflows/pages.yml`: delete the whole `deploy` job and the `actions/configure-pages` and `actions/upload-pages-artifact` steps, keeping only the verify, test and build checks (otherwise every push reports a failed deployment once Pages is off).
+5. Every push to `main` then deploys automatically. After changing the key, redeploy on Vercel for it to take effect.
+
+Optional environment variables: `AI_MODEL` (default `Qwen3.8-27B`), `UPSTREAM_URL` (default: the AMD public endpoint), and `ALLOWED_ORIGINS` (comma-separated extra origins).
+
 ## Design and bundled fonts
 
 The visual system is designed as an interactive editorial data sheet: the headline frames a question, quarter controls support precise comparison, and the chart carries the main explanation. The paper texture is drawn with local CSS; the site does not load remote images or web services.
@@ -166,6 +198,15 @@ World Bank WDI data are generally available under [CC BY 4.0](https://www.worldb
 The ABS states that website material is generally available under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://www.abs.gov.au/privacy-and-legals), with exceptions including the Coat of Arms, ABS logo, microdata, third-party material, and material protected by trademarks, as well as any product-specific terms. The official CPI and WPI workbooks in data/sources/ and the derived snapshot are separate from the project’s Apache-2.0 code license. Reusers should follow the applicable ABS terms and retain attribution. For attribution of the transformed data used in this storyboard, use: “Based on Australian Bureau of Statistics data.”
 
 ## Changelog
+
+### 28 September 2026 · AI assistant and move to Vercel
+
+- Added a floating AI assistant in the bottom-right corner using `Qwen3.8-27B` from AMD Radeon Cloud Token Factory: streamed, copyable answers that can be stopped or cleared. It does not close when the pointer or focus returns to the page, and the conversation lives only in page memory, so a reload clears it.
+- Each question automatically includes the current tab, years and cumulative changes shown on the page.
+- Moved hosting from GitHub Pages to Vercel: added `vercel.json`, the Vercel Function `api/chat.js`, and the server-side proxy `server/ai-proxy.js` (origin check, per-IP limit, input limits, server-side system prompt). The API key is stored only in the Vercel environment variable `RADEON_API_KEY`.
+- `.github/workflows/pages.yml` is kept for now; make it check-only by hand once the domain points to Vercel (step 4 of “Deploy to Vercel”).
+- The local preview server `tools/serve.mjs` now serves `/api/chat`; set `RADEON_API_KEY` to try the assistant locally.
+- Added `src/assistant.js`, `tests/ai-proxy.test.mjs`, and `ai.*` copy in both languages.
 
 ### 28 September 2026 · World Bank data for six economies
 

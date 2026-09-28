@@ -1,5 +1,6 @@
 import { calculateWindow } from "./analysis.js";
 import { startWorld } from "./world.js";
+import { startAssistant } from "./assistant.js";
 
 const svgNS = "http://www.w3.org/2000/svg";
 const locale = document.documentElement.lang.toLowerCase().startsWith("en") ? "en" : "zh";
@@ -281,6 +282,12 @@ async function start() {
     elements.error.hidden = false;
     elements.snapshotStamp.textContent = message("error.snapshotUnavailable");
     return;
+  }
+
+  try {
+    startAssistant(messages, locale);
+  } catch (error) {
+    console.error(error);
   }
 
   startWorld(messages, locale).catch((error) => {

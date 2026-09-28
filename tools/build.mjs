@@ -10,6 +10,7 @@ const files = [
   ["src/app.js", "src/app.js"],
   ["src/analysis.js", "src/analysis.js"],
   ["src/world.js", "src/world.js"],
+  ["src/assistant.js", "src/assistant.js"],
   ["src/style.css", "src/style.css"],
   ["assets/favicon.svg", "assets/favicon.svg"],
   ["data/quarterly.json", "data/quarterly.json"],

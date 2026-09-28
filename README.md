@@ -8,15 +8,19 @@
 - **美国、韩国、日本、新加坡、中国**：用世界银行年度数据，比较 CPI 与名义人均 GDP（本币现价）从同一起点年份出发的变化。
 - **对比**：选定同一段年份，把六个经济体的物价涨幅、名义人均 GDP 涨幅和“扣除物价后”的变化并排比较。
 
+页面右下角有一个 **AI 助手**浮窗：读者看图时遇到不懂的概念，可以直接提问（详见下方“AI 助手”一节）。
+
 页面提供独立的中英文静态版本；没有账户、数据库或浏览器端翻译请求。
 
 ## 在线查看与发布
 
-网站地址：[econ.adenxie.com.cn](https://econ.adenxie.com.cn/)；英文版位于 [/en/](https://econ.adenxie.com.cn/en/)。GitHub Pages 使用 [发布工作流](.github/workflows/pages.yml) 校验数据、运行测试、构建静态文件并发布 `dist/`。推送到 `main` 会更新线上网站，因此维护者应在本地检查通过后再按用户要求推送。数据本身没有定时刷新。
+网站地址：[econ.adenxie.com.cn](https://econ.adenxie.com.cn/)；英文版位于 [/en/](https://econ.adenxie.com.cn/en/)。
+
+网站托管在 **Vercel**：静态页面来自构建产物 `dist/`，AI 助手的后端是 Vercel Function [`api/chat.js`](api/chat.js)。配置见 [`vercel.json`](vercel.json)：构建命令为 `npm run verify && npm test && npm run build`，函数运行在香港区域（`hkg1`），离 AMD 的接口较近。推送到 `main` 后，Vercel 会自动构建并更新线上网站，因此维护者应在本地检查通过后再按用户要求推送。仓库里原有的 [GitHub Pages 工作流](.github/workflows/pages.yml) 仍会在推送时校验、测试并发布到 GitHub Pages；域名切换到 Vercel 后，应按下方“部署到 Vercel”第 4 步停用 Pages，并把该工作流改为只做检查。数据本身没有定时刷新。
 
 ## 本地运行
 
-需要 Node.js 18 或更新版本；运行页面不需要安装 npm 依赖。构建会从仓库内的中英文词条生成中文首页与英文 `/en/` 页面，不调用在线翻译服务。
+需要 Node.js 20 或更新版本；运行页面不需要安装 npm 依赖。构建会从仓库内的中英文词条生成中文首页与英文 `/en/` 页面，不调用在线翻译服务。
 
 ```powershell
 npm run build
@@ -26,6 +30,15 @@ npm run dev
 然后在浏览器打开 <http://127.0.0.1:4173>，英文页位于 <http://127.0.0.1:4173/en/>。首次访问会按浏览器首选语言打开相应页面；手动切换会记住偏好，并保留季度区间、当前标签页和年份。
 
 标签页和年份写在网址参数里，可以直接分享：`?view=USA&from=2000&to=2024` 打开美国页 2000—2024 年；`?view=compare&from=1997&to=2012` 打开对比页。`view` 可取 `AUS`、`USA`、`KOR`、`JPN`、`SGP`、`CHN`、`compare`，省略时为澳洲。服务只监听本机回环地址。结束预览时，在运行服务的终端按 `Ctrl+C`。
+
+本地预览服务器也会处理 `/api/chat`，行为与 Vercel 上的函数一致。想在本地试用 AI 助手，先在同一个 PowerShell 窗口设置 Key，再启动服务；Key 只存在于这个终端会话里，不会写入任何文件：
+
+```powershell
+$env:RADEON_API_KEY = "rc-你的Key"
+npm run dev
+```
+
+没有设置 Key 时，页面和图表照常可用，AI 助手会提示“尚未配置”。
 
 如果默认端口正被占用，可在 PowerShell 运行 `$env:ECON_TAB_PORT=0` 后再运行 `npm run dev`；服务会分配空闲端口并显示实际预览地址。
 
@@ -152,6 +165,29 @@ CPI 指数化金额 = 100 本币 × 终点 CPI ÷ 起点 CPI
 
    如果某个经济体出现年份缺口，提取器会停止并报错；先查明原因，不要为了通过校验删掉年份。
 
+## AI 助手
+
+页面右下角的浮窗是一个经济学问答助手，帮助读者理解页面上的概念和数字。
+
+- **模型**：AMD Radeon Cloud Token Factory 的 `Qwen3.8-27B`，通过 OpenAI 兼容接口 `https://developer.amd.com.cn/radeon/api/v1/chat/completions` 调用，流式输出，推理强度设为 `low` 以加快回答。模型输出的 `<think>` 推理部分不会显示给读者。
+- **API Key 只在服务端**：浏览器只请求同域名的 `/api/chat`；Key 存在 Vercel 项目的环境变量 `RADEON_API_KEY` 中，由 [`server/ai-proxy.js`](server/ai-proxy.js) 在服务端加到请求上。网页代码、仓库和构建产物里都没有 Key。
+- **系统提示词在服务端**：解释概念时只用页面数据或读者给出的数字，不编造统计数据；不提供投资、税务或法律建议；按提问语言回答。浏览器不能修改系统提示词、模型或参数。
+- **附带页面上下文**：每次提问会附上读者当前的标签页、年份和页面上显示的累计变化（最多 1,400 字），让 AI 能结合“你正在看的数字”回答。服务端把这段内容标记为数据，其中若出现指令会被忽略。
+- **不保存记录**：对话只存在浏览器页面的内存里，不写入 localStorage、Cookie 或任何服务器；刷新页面即清空。服务端不记录消息内容，也没有数据库。
+- **交互**：点击右下角按钮打开或收起；鼠标或焦点回到网页时浮窗不会自动关闭，只能通过这个按钮（或浮窗内的 × 按钮）收起。每条 AI 回答都能直接选中文字复制，也可以点“复制”按钮复制原文；回答生成中可以随时停止，也可以一键清空对话。输入框按 Enter 发送、Shift+Enter 换行，中文输入法选字时按 Enter 不会误发。
+- **防滥用**：服务端只接受本站页面发来的请求（生产域名、Vercel 预览地址和本地预览）；每个 IP 每分钟最多 6 次提问（在同一函数实例内生效的尽力限制）；单条问题最多 1,500 字，最多带 16 条历史消息，单次回答最多 1,200 tokens。AMD 免费额度为每个账号每分钟约 20 次请求、由所有访客共享，超出时读者会看到“请稍等再试”。
+- **隐私提示**：读者的问题和页面上下文会发送到 Vercel 函数和 AMD Radeon Cloud 处理。
+
+### 部署到 Vercel（一次性设置）
+
+1. 用 GitHub 账号登录 [vercel.com](https://vercel.com/)，选择 **Add New → Project**，导入仓库 `AdenXie/everyday-economics`。Framework Preset 选 **Other**；构建设置会自动读取 `vercel.json`，无需修改。
+2. 在导入页面（或之后的 **Settings → Environment Variables**）添加 `RADEON_API_KEY`，值为 AMD Token Factory 的 Key（`rc-` 开头），勾选 Production 和 Preview。然后部署。
+3. 部署完成后，在 **Settings → Domains** 添加 `econ.adenxie.com.cn`，按 Vercel 显示的值修改域名 DNS（通常是把 `econ` 的 CNAME 指向 Vercel 给出的地址）。
+4. 在 GitHub 仓库 **Settings → Pages** 中移除自定义域名并停用 Pages，避免两个平台争用同一个域名。随后编辑 `.github/workflows/pages.yml`：删除整个 `deploy` job，以及 build job 里的 `actions/configure-pages` 和 `actions/upload-pages-artifact` 两步，只保留 verify、test、build 检查（否则停用 Pages 后每次推送都会报部署失败）。
+5. 以后推送到 `main` 就会自动部署。修改 Key 后，需要在 Vercel 里重新部署一次才会生效。
+
+可选环境变量：`AI_MODEL`（默认 `Qwen3.8-27B`）、`UPSTREAM_URL`（默认 AMD 公共接口）、`ALLOWED_ORIGINS`（逗号分隔的额外允许来源）。
+
 ## 设计系统与字体
 
 这是一张“可操作的经济观察折页”：标题提出问题，季度刻度负责精确，图中的细刻度脊线是识别点。纸面纹理由本地 CSS 绘制，不加载外部图片或网页服务。
@@ -183,6 +219,15 @@ CPI 指数化金额 = 100 本币 × 终点 CPI ÷ 起点 CPI
 - ABS 网站说明其网页材料通常采用 [Creative Commons Attribution 4.0 International（CC BY 4.0）](https://www.abs.gov.au/privacy-and-legals)，但徽标、微观数据、第三方内容等例外材料以及具体发布产品标注的专门条款不在该通用许可内。`data/sources/` 中保留官方 CPI/WPI 工作簿；仓库中的数据和由其整理出的图表不属于 Apache-2.0 代码许可。重用时请遵循对应 ABS 来源的许可与署名要求。引用本站整理的图表或衍生数据时，请采用署名 **Based on Australian Bureau of Statistics data**（基于澳大利亚统计局数据）。
 
 ## 更新记录
+
+### 2026-09-28 · AI 助手与迁移到 Vercel
+
+- 页面右下角新增 AI 助手浮窗，使用 AMD Radeon Cloud Token Factory 的 `Qwen3.8-27B`：流式回答、可复制、可停止、可清空；不会因鼠标或焦点回到网页而关闭；对话只存在页面内存中，刷新即清空。
+- 提问时自动附上当前标签页、年份和页面上的累计变化，便于 AI 结合读者正在看的数字回答。
+- 网站托管从 GitHub Pages 迁移到 Vercel：新增 `vercel.json`、Vercel Function `api/chat.js` 与服务端代理 `server/ai-proxy.js`（来源校验、每 IP 限流、输入长度限制、服务端系统提示词）。API Key 只保存在 Vercel 环境变量 `RADEON_API_KEY` 中。
+- `.github/workflows/pages.yml` 暂时保留；域名切换到 Vercel 后需手动改为只做检查（见“部署到 Vercel”第 4 步）。
+- 本地预览服务器 `tools/serve.mjs` 新增 `/api/chat`，设置 `RADEON_API_KEY` 后可在本地试用 AI。
+- 新增 `src/assistant.js`、`tests/ai-proxy.test.mjs`，以及中英文 `ai.*` 词条。
 
 ### 2026-09-28 · 加入世界银行六个经济体
 
