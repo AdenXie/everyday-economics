@@ -1,0 +1,16 @@
+{
+  "preparedOn": "2026-09-28",
+  "countries": ["AUS", "USA", "KOR", "JPN", "SGP", "CHN"],
+  "indicators": {
+    "cpi": {
+      "id": "FP.CPI.TOTL",
+      "file": "data/sources/worldbank-FP.CPI.TOTL.json",
+      "pageUrl": "https://data.worldbank.org/indicator/FP.CPI.TOTL"
+    },
+    "income": {
+      "id": "NY.GDP.PCAP.CN",
+      "file": "data/sources/worldbank-NY.GDP.PCAP.CN.json",
+      "pageUrl": "https://data.worldbank.org/indicator/NY.GDP.PCAP.CN"
+    }
+  }
+}

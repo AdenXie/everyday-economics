@@ -401,6 +401,7 @@ select:focus-visible {
 
 .comparison-note { display: flex; flex-direction: column; justify-content: center; background: rgba(235, 226, 209, .38); }
 .comparison-note > strong { margin-top: 7px; font: 600 17px/1.4 var(--font-ui); letter-spacing: -.02em; }
+.world-panel .comparison-note > strong { color: var(--ink); font-size: clamp(24px, 2.4vw, 30px); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
 .comparison-note p { margin: 4px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
 
 .calculation-note { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
@@ -514,6 +515,167 @@ select:focus-visible {
   .source-date { grid-column: 2; margin-top: -5px; font-size: 9px; }
   .source-footnote { grid-column: 1; }
   .page-footer { align-items: start; flex-direction: column; justify-content: center; gap: 2px; padding: 14px 0; }
+}
+
+[hidden] { display: none !important; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- economy tabs ---------- */
+
+.country-tabs {
+  position: sticky;
+  z-index: 6;
+  top: 0;
+  display: flex;
+  gap: 2px;
+  margin: 0 -42px;
+  padding: 0 42px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--rule);
+  background: rgba(251, 248, 241, .96);
+  backdrop-filter: blur(6px);
+  scrollbar-width: none;
+}
+
+.country-tabs::-webkit-scrollbar { display: none; }
+
+.country-tabs button {
+  flex: 0 0 auto;
+  min-height: 50px;
+  padding: 0 17px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  background: none;
+  font: 600 13px/1.2 var(--font-ui);
+  letter-spacing: .01em;
+  cursor: pointer;
+}
+
+.country-tabs button:hover { color: var(--ink); }
+
+.country-tabs button[aria-selected="true"] {
+  border-bottom-color: var(--brass);
+  color: var(--ink);
+}
+
+.country-tabs .compare-tab {
+  margin-left: auto;
+  border-left: 1px solid var(--rule);
+  padding-left: 22px;
+  color: #425c56;
+}
+
+.country-tabs button:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--brass);
+  outline-offset: -3px;
+}
+
+/* ---------- World Bank country view ---------- */
+
+.world-panel { border-bottom: 1px solid var(--rule); }
+#abs-view + .world-panel { padding-top: 56px; }
+.world-panel .learning-grid { margin-top: 36px; }
+.world-sources { margin-top: 30px; }
+
+.chart-hover-area { position: relative; }
+.hover-target { fill: transparent; cursor: crosshair; }
+.crosshair { stroke: #938873; stroke-width: 1; stroke-dasharray: 2 4; vector-effect: non-scaling-stroke; }
+
+.chart-tooltip {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  min-width: 190px;
+  gap: 4px;
+  padding: 9px 11px;
+  border: 1px solid var(--rule-dark);
+  color: var(--ink);
+  background: var(--paper-white);
+  box-shadow: 0 8px 22px rgba(76, 62, 40, .12);
+  font: 500 11px/1.4 var(--font-ui);
+  pointer-events: none;
+}
+
+.chart-tooltip strong { font-size: 12px; }
+.tooltip-note { margin-top: -3px; color: var(--muted); font-size: 10px; }
+.tooltip-row { display: grid; grid-template-columns: 12px 1fr auto; align-items: center; gap: 7px; color: var(--muted); }
+.tooltip-row i { width: 10px; height: 3px; border-radius: 2px; }
+.tooltip-cpi i { background: var(--cpi); }
+.tooltip-wpi i { background: var(--wpi); }
+.tooltip-row b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ---------- comparison view ---------- */
+
+.compare-controls { flex-wrap: wrap; }
+.sort-field { margin-left: 10px; }
+.sort-field select { width: 170px; }
+
+.compare-paper { padding-bottom: 14px; }
+.compare-scroll { margin-top: 12px; overflow-x: auto; }
+
+.compare-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-family: var(--font-ui);
+}
+
+.compare-table th,
+.compare-table td { padding: 12px 10px; border-bottom: 1px solid rgba(201, 189, 169, .7); text-align: left; vertical-align: middle; }
+.compare-table thead th { padding-top: 4px; color: var(--muted); font: 600 10px/1.3 var(--font-ui); letter-spacing: .07em; }
+.compare-table tbody th { width: 128px; font: 600 14px/1.3 var(--font-ui); }
+.compare-table .numeric { width: 120px; text-align: right; font-variant-numeric: tabular-nums; }
+.compare-real { font: 600 17px/1.2 var(--font-ui); letter-spacing: -.02em; }
+.compare-table tbody tr:last-child > * { border-bottom: 0; }
+
+.bar-row { display: grid; grid-template-columns: minmax(0, 1fr) 150px; align-items: center; gap: 12px; }
+.bar-row + .bar-row { margin-top: 5px; }
+
+.bar-track {
+  position: relative;
+  height: 12px;
+  background: linear-gradient(90deg, transparent calc(var(--zero) - .5px), #938873 calc(var(--zero) - .5px), #938873 calc(var(--zero) + .5px), transparent calc(var(--zero) + .5px));
+}
+
+.bar { position: absolute; top: 1px; height: 10px; min-width: 2px; border-radius: 0 4px 4px 0; }
+.bar.is-negative { border-radius: 4px 0 0 4px; }
+.bar-cpi { background: var(--cpi); }
+.bar-wpi { background: var(--wpi); }
+.bar-value { color: #55584f; font: 500 11px/1.3 var(--font-ui); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.is-unavailable th,
+.is-unavailable td { color: var(--muted); font-size: 12px; font-weight: 500; }
+
+.compare-caption { display: block; margin-top: 8px; }
+
+@media (max-width: 640px) {
+  .country-tabs { margin: 0 -19px; padding: 0 19px; }
+  .country-tabs button { min-height: 44px; padding: 0 12px; font-size: 12px; }
+  .country-tabs .compare-tab { margin-left: 6px; padding-left: 14px; }
+  .compare-controls { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+  .sort-field { grid-column: 1 / -1; margin-left: 0; }
+  .sort-field select { width: 100%; }
+  .compare-scroll { overflow: visible; }
+  .compare-table { min-width: 0; }
+  .compare-table th, .compare-table td { padding: 11px 4px; }
+  .compare-table tbody th { width: 76px; font-size: 13px; }
+  .compare-table .numeric { width: 70px; }
+  .compare-real { font-size: 15px; }
+  .bar-row { grid-template-columns: 1fr; gap: 2px; }
+  .bar-row + .bar-row { margin-top: 7px; }
+  .bar-value { font-size: 10px; }
+  .is-unavailable td { font-size: 11px; line-height: 1.45; }
+  .chart-tooltip { min-width: 160px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

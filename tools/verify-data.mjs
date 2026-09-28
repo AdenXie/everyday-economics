@@ -46,3 +46,27 @@ assert.ok(Math.abs(fullWindow.cpiIndexed100 - (100 * rows.at(-1).cpiIndex) / row
 console.log(`Verified ${rows.length} aligned original quarterly observations (${snapshot.firstQuarter} to ${snapshot.latestQuarter}).`);
 console.log(`Latest source indices: CPI ${rows.at(-1).cpiIndex}; WPI ${rows.at(-1).wpiIndex}.`);
 console.log(`Full-span growth from published index levels: CPI ${fullWindow.cpiGrowthPct.toFixed(1)}%; WPI ${fullWindow.wpiGrowthPct.toFixed(1)}%.`);
+
+// World Bank annual snapshot: rebuild from the checksummed source extracts and require an exact match.
+const { buildSnapshot } = await import("./extract_worldbank.mjs");
+const { calculateYearWindow } = await import("../src/analysis.js");
+const worldBank = JSON.parse(await readFile(new URL("../data/worldbank.json", import.meta.url), "utf8"));
+assert.deepEqual(worldBank, buildSnapshot(), "data/worldbank.json must match a rebuild from data/sources (run node tools/extract_worldbank.mjs)");
+assert.deepEqual(worldBank.countries.map((country) => country.iso3), ["AUS", "USA", "KOR", "JPN", "SGP", "CHN"]);
+assert.equal(worldBank.indicators.cpi.id, "FP.CPI.TOTL");
+assert.equal(worldBank.indicators.income.id, "NY.GDP.PCAP.CN");
+for (const country of worldBank.countries) {
+  const years = country.observations.map((row) => row.year);
+  assert.equal(years[0], country.firstYear);
+  assert.equal(years.at(-1), country.lastYear);
+  years.forEach((year, index) => assert.equal(year, country.firstYear + index, `${country.iso3} years must be continuous`));
+  for (const row of country.observations) {
+    assert.ok(Number.isFinite(row.cpi) && row.cpi > 0, `${country.iso3} CPI ${row.year}`);
+    assert.ok(Number.isFinite(row.gdpPerCapita) && row.gdpPerCapita > 0, `${country.iso3} GDP per capita ${row.year}`);
+  }
+  const cpi2010 = country.observations.find((row) => row.year === 2010)?.cpi;
+  assert.ok(Math.abs(cpi2010 - 100) < 1e-9, `${country.iso3} CPI must equal 100 in the 2010 reference year`);
+  const full = calculateYearWindow(country.observations, country.firstYear, country.lastYear);
+  console.log(`World Bank ${country.iso3}: ${country.firstYear}–${country.lastYear}; CPI ${full.cpiGrowthPct.toFixed(1)}%, nominal GDP per capita ${full.incomeGrowthPct.toFixed(1)}%.`);
+}
+console.log(`World Bank common range ${worldBank.commonFirstYear}–${worldBank.commonLastYear}; source checksums verified.`);

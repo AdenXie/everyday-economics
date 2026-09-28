@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#e9e1d1" />
     <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" sizes="any" />
-    <meta name="description" content="用澳大利亚统计局同季度 CPI 与 WPI 官方指数，看看物价和工资价格如何变化。" data-i18n="metadata.description" data-i18n-attr="content" />
-    <title data-i18n="metadata.title">一篮子贵了多少？｜澳洲物价与工资</title>
+    <meta name="description" content="用澳大利亚统计局季度 CPI 与 WPI，以及世界银行六个经济体的年度 CPI 与人均 GDP，看看物价和收入如何变化。" data-i18n="metadata.description" data-i18n-attr="content" />
+    <title data-i18n="metadata.title">一篮子贵了多少？｜日常经济学</title>
     <script>
       (() => {
         document.addEventListener("click", (event) => {
@@ -37,16 +37,16 @@
     <a class="skip-link" href="#story" data-i18n="page.skip">跳到数据故事</a>
     <div class="page-shell">
       <header class="masthead">
-        <a class="identity" href="#top" aria-label="澳洲物价与工资，回到顶部" data-i18n="brand.aria" data-i18n-attr="aria-label">
+        <a class="identity" href="#top" aria-label="日常经济学，回到顶部" data-i18n="brand.aria" data-i18n-attr="aria-label">
           <span class="identity-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
           <span class="identity-copy">
             <span class="identity-kicker">ECONOMIC FIELDNOTE</span>
-            <span class="identity-name" data-i18n="brand.name">澳洲 · 价格与工资</span>
+            <span class="identity-name" data-i18n="brand.name">日常经济学 · 价格与收入</span>
           </span>
         </a>
         <div class="masthead-meta">
           <span class="live-dot" aria-hidden="true"></span>
-          <span data-i18n="meta.national">全国季度指数</span>
+          <span data-i18n="meta.national">官方统计快照</span>
           <span class="meta-divider" aria-hidden="true"></span>
           <span id="snapshot-stamp" data-i18n="meta.snapshotLoading">正在读取快照…</span>
           <nav class="language-switch" aria-label="切换语言" data-i18n="switch.aria" data-i18n-attr="aria-label">
@@ -56,7 +56,18 @@
         </div>
       </header>
 
-      <main id="story">
+      <nav class="country-tabs" role="tablist" aria-label="选择经济体或对比" data-i18n="tabs.aria" data-i18n-attr="aria-label">
+        <button type="button" role="tab" id="tab-AUS" data-view="AUS" aria-controls="story" aria-selected="true" data-i18n="country.AUS">澳洲</button>
+        <button type="button" role="tab" id="tab-USA" data-view="USA" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.USA">美国</button>
+        <button type="button" role="tab" id="tab-KOR" data-view="KOR" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.KOR">韩国</button>
+        <button type="button" role="tab" id="tab-JPN" data-view="JPN" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.JPN">日本</button>
+        <button type="button" role="tab" id="tab-SGP" data-view="SGP" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.SGP">新加坡</button>
+        <button type="button" role="tab" id="tab-CHN" data-view="CHN" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.CHN">中国</button>
+        <button type="button" role="tab" id="tab-compare" class="compare-tab" data-view="compare" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="tabs.compare">对比</button>
+      </nav>
+
+      <main id="story" role="tabpanel" aria-labelledby="tab-AUS">
+        <div id="abs-view">
         <section class="hero" id="top" aria-labelledby="story-title">
           <div class="hero-copy">
             <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-i18n="hero.eyebrow">一篇关于价格变化的经济小课</span></p>
@@ -181,10 +192,160 @@
           </div>
           <p class="source-footnote" data-i18n="sources.note">CPI 原始指数自 2025 年 12 月发布起按 2025 年 9 月 = 100 重新定基；图中两线则都按你选的起点重设为 100。快照整理日与两份发布表各自发布日期分开标注。</p>
         </section>
+        </div>
+        <section id="world-country" class="story-panel world-panel" aria-labelledby="world-title">
+          <div class="panel-heading">
+            <div class="heading-copy">
+              <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-i18n="world.eyebrow">世界银行 · 年度数据 · 本币</span></p>
+              <h2 id="world-title" data-i18n="world.titleLoading">物价涨了多少？人均收入跟上了吗？</h2>
+              <p class="heading-caption" data-i18n="world.caption">选定起止年份。CPI 和名义人均 GDP（本币现价）都会以起点年份 = 100 重新标尺。</p>
+            </div>
+            <form class="period-controls" aria-label="选择比较年份" data-i18n="world.controlsAria" data-i18n-attr="aria-label" onsubmit="return false">
+              <label class="period-field" for="world-start">
+                <span data-i18n="world.startLabel">从哪一年</span>
+                <select id="world-start" name="world-start"></select>
+              </label>
+              <span class="period-arrow" aria-hidden="true">→</span>
+              <label class="period-field" for="world-end">
+                <span data-i18n="world.endLabel">到哪一年</span>
+                <select id="world-end" name="world-end"></select>
+              </label>
+            </form>
+          </div>
+
+          <figure class="chart-paper" aria-labelledby="world-title" aria-describedby="world-chart-note">
+            <div class="chart-topline">
+              <p id="world-range" class="selected-range">—</p>
+              <div class="legend" aria-label="图例" data-i18n="chart.legendAria" data-i18n-attr="aria-label">
+                <span><i class="legend-swatch cpi-swatch" aria-hidden="true"></i><span data-i18n="world.legendCpi">CPI · 消费价格</span></span>
+                <span><i class="legend-swatch wpi-swatch" aria-hidden="true"></i><span data-i18n="world.legendIncome">名义人均 GDP · 本币现价</span></span>
+              </div>
+            </div>
+            <div class="chart-scroll chart-hover-area">
+              <svg id="world-chart" viewBox="0 0 1000 390" role="img" aria-label="年度 CPI 与名义人均 GDP 对比图，加载中" data-i18n="world.loadingAria" data-i18n-attr="aria-label"></svg>
+              <div id="world-tooltip" class="chart-tooltip" hidden></div>
+            </div>
+            <p class="chart-scroll-hint" data-i18n="world.scrollHint">左右滑动查看后续年份</p>
+            <figcaption id="world-chart-note" class="chart-caption">
+              <span data-i18n="world.chartCaption">纵轴是归一化指数；年度数值来自世界银行 World Development Indicators。把鼠标移到图上可看每一年的数值。</span>
+            </figcaption>
+          </figure>
+
+          <div class="results-row" aria-live="polite" aria-atomic="true">
+            <article class="result-block result-cpi">
+              <div class="result-label"><span class="result-dot" aria-hidden="true"></span><span data-i18n="world.cpiLabel">消费价格 · CPI</span></div>
+              <div class="result-main"><strong id="world-cpi-growth">—</strong><span data-i18n="result.windowChange">所选区间累计变化</span></div>
+              <p class="result-detail"><span id="world-basket-label">—</span> <strong id="world-basket">—</strong></p>
+            </article>
+            <article class="result-block result-wpi">
+              <div class="result-label"><span class="result-dot" aria-hidden="true"></span><span data-i18n="world.incomeLabel">名义人均 GDP</span></div>
+              <div class="result-main"><strong id="world-income-growth">—</strong><span data-i18n="result.windowChange">所选区间累计变化</span></div>
+              <p class="result-detail" data-i18n="world.incomeDetail">经济体的人均产出，按当年价格计；不是个人工资或到手收入</p>
+            </article>
+            <div class="comparison-note">
+              <span class="comparison-label" data-i18n="world.realLabel">扣除物价后的人均 GDP</span>
+              <strong id="world-real" data-i18n="result.waiting">等待数据</strong>
+              <p id="world-real-detail" data-i18n="world.realInitial">名义人均 GDP 的倍数 ÷ CPI 的倍数。</p>
+            </div>
+          </div>
+          <p class="calculation-note" data-i18n="world.calculationNote">扣除物价后的变化 = 终点与起点名义人均 GDP 之比 ÷ 终点与起点 CPI 之比 − 1。区间越长，这个结果和“两条线的百分点差”相差越大：例如物价翻倍、名义收入涨到 3 倍，百分点差是 100，但扣除物价后只多了 50%。</p>
+
+          <div class="learning-grid world-notes">
+            <article class="learning-card">
+              <p class="learning-index"><span data-i18n="learning.cpiIndex">消费端</span> <span>01</span></p>
+              <h3 data-i18n="world.cpiTitle">年度 CPI（2010 = 100）</h3>
+              <p data-i18n="world.cpiBody">世界银行转载国际货币基金组织 IFS 数据库的消费者价格指数，是全年平均水平，统一以 2010 年为 100。各国编制方法和消费篮子不同，所以更适合比较各自的涨幅，而不是指数点数。</p>
+            </article>
+            <article class="learning-card">
+              <p class="learning-index"><span data-i18n="world.incomeIndex">收入端</span> <span>02</span></p>
+              <h3 data-i18n="world.incomeTitle">名义人均 GDP（本币现价）</h3>
+              <p data-i18n="world.incomeBody">一年里经济体生产的全部最终产品和服务，按当年价格计算，再除以人口。它和 CPI 一样没有扣除物价，所以两者可以放在一起比较；但它包括企业利润和政府收入，不等于家庭工资或可支配收入。</p>
+            </article>
+            <article class="learning-card learning-why">
+              <p class="learning-index"><span data-i18n="world.noteIndex">读这个经济体</span> <span>03</span></p>
+              <h3 id="world-note-title" data-i18n="world.noteTitle">这个经济体需要留意什么？</h3>
+              <p id="world-note">—</p>
+            </article>
+          </div>
+
+          <div class="source-list world-sources">
+            <article class="source-item">
+              <span class="source-key cpi-source-key">CPI</span>
+              <div>
+                <a id="wb-cpi-link" href="https://data.worldbank.org/indicator/FP.CPI.TOTL" target="_blank" rel="noreferrer">Consumer price index (2010 = 100) · FP.CPI.TOTL</a>
+                <p data-i18n="world.cpiSource">世界银行 WDI · 原始来源：IMF 国际金融统计</p>
+              </div>
+              <span id="wb-cpi-date" class="source-date">—</span>
+            </article>
+            <article class="source-item">
+              <span class="source-key wpi-source-key">GDP</span>
+              <div>
+                <a id="wb-income-link" href="https://data.worldbank.org/indicator/NY.GDP.PCAP.CN" target="_blank" rel="noreferrer">GDP per capita (current LCU) · NY.GDP.PCAP.CN</a>
+                <p data-i18n="world.incomeSource">世界银行 WDI · 各国统计机构、OECD 国民账户与世界银行估算</p>
+              </div>
+              <span id="wb-income-date" class="source-date">—</span>
+            </article>
+          </div>
+        </section>
+
+        <section id="world-compare" class="story-panel compare-panel" aria-labelledby="compare-title" hidden>
+          <div class="panel-heading">
+            <div class="heading-copy">
+              <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-i18n="compare.eyebrow">同期对比 · 六个经济体 · 各自本币</span></p>
+              <h2 id="compare-title" data-i18n="compare.title">同一段年份里，各地物价与人均收入各涨了多少？</h2>
+              <p class="heading-caption" data-i18n="compare.caption">每个经济体都用自己的本币计算涨幅，所以百分比可以放在一起比；人均 GDP 的绝对水平没有换算汇率，不能直接比较。</p>
+            </div>
+            <form class="period-controls compare-controls" aria-label="选择对比年份与排序" data-i18n="compare.controlsAria" data-i18n-attr="aria-label" onsubmit="return false">
+              <label class="period-field" for="compare-start">
+                <span data-i18n="world.startLabel">从哪一年</span>
+                <select id="compare-start" name="compare-start"></select>
+              </label>
+              <span class="period-arrow" aria-hidden="true">→</span>
+              <label class="period-field" for="compare-end">
+                <span data-i18n="world.endLabel">到哪一年</span>
+                <select id="compare-end" name="compare-end"></select>
+              </label>
+              <label class="period-field sort-field" for="compare-sort">
+                <span data-i18n="compare.sortLabel">排序</span>
+                <select id="compare-sort" name="compare-sort">
+                  <option value="default" data-i18n="compare.sortDefault">默认顺序</option>
+                  <option value="real" data-i18n="compare.sortReal">扣除物价后最高</option>
+                  <option value="cpi" data-i18n="compare.sortCpi">物价涨幅最高</option>
+                  <option value="income" data-i18n="compare.sortIncome">人均 GDP 涨幅最高</option>
+                </select>
+              </label>
+            </form>
+          </div>
+
+          <div class="chart-paper compare-paper">
+            <div class="chart-topline">
+              <p id="compare-range" class="selected-range">—</p>
+              <div class="legend" aria-label="图例" data-i18n="chart.legendAria" data-i18n-attr="aria-label">
+                <span><i class="legend-swatch cpi-swatch" aria-hidden="true"></i><span data-i18n="world.legendCpi">CPI · 消费价格</span></span>
+                <span><i class="legend-swatch wpi-swatch" aria-hidden="true"></i><span data-i18n="world.legendIncome">名义人均 GDP · 本币现价</span></span>
+              </div>
+            </div>
+            <div class="compare-scroll">
+              <table class="compare-table" aria-describedby="compare-note">
+                <caption class="visually-hidden" data-i18n="compare.tableCaption">所选年份内各经济体的 CPI、名义人均 GDP 与扣除物价后人均 GDP 的累计变化</caption>
+                <thead>
+                  <tr>
+                    <th scope="col" data-i18n="compare.colCountry">经济体</th>
+                    <th scope="col" data-i18n="compare.colBars">累计变化</th>
+                    <th scope="col" class="numeric" data-i18n="compare.colReal">扣除物价后</th>
+                  </tr>
+                </thead>
+                <tbody id="compare-rows"></tbody>
+              </table>
+            </div>
+            <p id="compare-note" class="chart-caption compare-caption" data-i18n="compare.note">横条长度在同一张表内按相同比例绘制；竖线是 0。“扣除物价后”= 名义人均 GDP 倍数 ÷ CPI 倍数 − 1。</p>
+          </div>
+          <p id="compare-missing" class="calculation-note" hidden>—</p>
+        </section>
       </main>
 
       <footer class="page-footer">
-        <span data-i18n="footer.name">澳洲 · 价格与工资</span>
+        <span data-i18n="footer.name">日常经济学 · 价格与收入</span>
         <span data-i18n="footer.note">静态官方快照 · 非实时 · 仅作统计学习</span>
         <a href="#top" data-i18n="footer.top">回到顶部 ↑</a>
       </footer>

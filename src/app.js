@@ -1,4 +1,5 @@
 import { calculateWindow } from "./analysis.js";
+import { startWorld } from "./world.js";
 
 const svgNS = "http://www.w3.org/2000/svg";
 const locale = document.documentElement.lang.toLowerCase().startsWith("en") ? "en" : "zh";
@@ -272,13 +273,25 @@ function render(snapshot) {
 
 async function start() {
   try {
-    const [localeResponse, snapshotResponse] = await Promise.all([
-      fetch(new URL(`../data/messages.${locale}.json`, import.meta.url), { cache: "no-store" }),
-      fetch(new URL("../data/quarterly.json", import.meta.url), { cache: "no-store" }),
-    ]);
+    const localeResponse = await fetch(new URL(`../data/messages.${locale}.json`, import.meta.url), { cache: "no-store" });
     if (!localeResponse.ok) throw new Error(`Language data request failed: ${localeResponse.status}`);
-    if (!snapshotResponse.ok) throw new Error(message("error.snapshotRequest", { status: snapshotResponse.status }));
     messages = await localeResponse.json();
+  } catch (error) {
+    console.error(error);
+    elements.error.hidden = false;
+    elements.snapshotStamp.textContent = message("error.snapshotUnavailable");
+    return;
+  }
+
+  startWorld(messages, locale).catch((error) => {
+    console.error(error);
+    elements.error.hidden = false;
+    elements.error.textContent = message("world.error");
+  });
+
+  try {
+    const snapshotResponse = await fetch(new URL("../data/quarterly.json", import.meta.url), { cache: "no-store" });
+    if (!snapshotResponse.ok) throw new Error(message("error.snapshotRequest", { status: snapshotResponse.status }));
     const snapshot = await snapshotResponse.json();
     setSourceLinks(snapshot);
     populateQuarterSelects(snapshot);

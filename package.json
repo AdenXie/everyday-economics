@@ -6,6 +6,7 @@
     "build": "node tools/build.mjs",
     "dev": "node tools/serve.mjs",
     "verify": "node tools/verify-data.mjs",
+    "extract:worldbank": "node tools/extract_worldbank.mjs",
     "test": "node --test"
   }
 }
