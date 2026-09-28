@@ -1,19 +1,19 @@
-name: Publish Everyday Economics
+name: Check Everyday Economics
+
+# The site and its /api/chat function are hosted on Vercel, which builds and deploys
+# every push to main (see vercel.json). This workflow only runs the checks.
 
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
 
-concurrency:
-  group: github-pages
-  cancel-in-progress: false
-
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -25,21 +25,3 @@ jobs:
       - run: npm run verify
       - run: npm test
       - run: npm run build
-      - uses: actions/configure-pages@v6
-      - uses: actions/upload-pages-artifact@v5
-        with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    permissions:
-      pages: write
-      id-token: write
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v5
