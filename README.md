@@ -2,11 +2,13 @@
 
 [English documentation](README.en.md)
 
-本项目用于制作可复核的经济数据故事板，帮助读者通过图表探索日常经济问题。页面顶部有一排标签页：**澳洲｜美国｜韩国｜日本｜新加坡｜中国｜对比**。
+本项目用于制作可复核的经济数据故事板，帮助读者通过图表探索日常经济问题。页面顶部有一排标签页：**澳洲｜美国｜韩国｜日本｜新加坡｜中国｜德国｜英国｜对比**。
 
 - **澳洲**：首个故事板，用 ABS 季度 CPI 与 WPI 比较物价和工资价格；下方另附世界银行口径的年度视角。
-- **美国、韩国、日本、新加坡、中国**：用世界银行年度数据，比较 CPI 与名义人均 GDP（本币现价）从同一起点年份出发的变化。
-- **对比**：选定同一段年份，把六个经济体的物价涨幅、名义人均 GDP 涨幅和“扣除物价后”的变化并排比较。
+- **美国、韩国、日本、新加坡、中国、德国、英国**：用世界银行年度数据，比较 CPI 与名义人均 GDP（本币现价）从同一起点年份出发的变化。
+- **对比**：选定同一段年份，把八个经济体的物价涨幅、名义人均 GDP 涨幅和“扣除物价后”的变化并排比较。
+
+页头的“我的博客”按钮链接到 [Aden's Space](https://blog.adenxie.com.cn/)，头像直接使用博客的 `https://blog.adenxie.com.cn/images/avatar.jpg`，不在本站保存副本。英文页显示“My blog”。
 
 页面右下角有一个 **AI 助手**浮窗：读者看图时遇到不懂的概念，可以直接提问（详见下方“AI 助手”一节）。
 
@@ -33,7 +35,7 @@ npm run dev
 
 然后在浏览器打开 <http://127.0.0.1:4173>，英文页位于 <http://127.0.0.1:4173/en/>。首次访问会按浏览器首选语言打开相应页面；手动切换会记住偏好，并保留季度区间、当前标签页和年份。
 
-标签页和年份写在网址参数里，可以直接分享：`?view=USA&from=2000&to=2024` 打开美国页 2000—2024 年；`?view=compare&from=1997&to=2012` 打开对比页。`view` 可取 `AUS`、`USA`、`KOR`、`JPN`、`SGP`、`CHN`、`compare`，省略时为澳洲。服务只监听本机回环地址。结束预览时，在运行服务的终端按 `Ctrl+C`。
+标签页和年份写在网址参数里，可以直接分享：`?view=USA&from=2000&to=2024` 打开美国页 2000—2024 年；`?view=compare&from=1997&to=2012` 打开对比页。`view` 可取 `AUS`、`USA`、`KOR`、`JPN`、`SGP`、`CHN`、`DEU`、`GBR`、`compare`，省略时为澳洲。服务只监听本机回环地址。结束预览时，在运行服务的终端按 `Ctrl+C`。
 
 本地预览服务器也会处理 `/api/chat`，行为与 Vercel 上的函数一致。想在本地试用 AI 助手，先在同一个 PowerShell 窗口设置 Key，再启动服务；Key 只存在于这个终端会话里，不会写入任何文件：
 
@@ -104,16 +106,16 @@ ABS 从 2025 年 12 月的 CPI 发布起，将季度 CPI 重设为 **2025 年 9 
 
 如果新版 ABS 工作簿更改了 sheet 布局或系列 ID，先对照发布页和工作簿 `Index` 页，再修改提取器及明确的校验值；不要仅因为提取成功就沿用旧口径。推送到 `main` 会触发网站构建和发布。
 
-## 世界银行六个经济体（年度）
+## 世界银行八个经济体（年度）
 
 ### 数据来源
 
 <!-- worldbank-data-status:start -->
-- 快照整理于 **2026-09-28**，取自世界银行 WDI；CPI 最后更新于 **2026-07-13**，名义人均 GDP 最后更新于 **2026-07-13**。快照不是实时数据。
+- 快照整理于 **2026-10-04**，取自世界银行 WDI；CPI 最后更新于 **2026-07-13**，名义人均 GDP 最后更新于 **2026-07-13**。快照不是实时数据。
 <!-- worldbank-data-status:end -->
 - **CPI**：[`FP.CPI.TOTL`](https://data.worldbank.org/indicator/FP.CPI.TOTL)，Consumer price index (2010 = 100)，年度平均；世界银行注明原始来源为 IMF 国际金融统计（IFS）。
 - **名义人均 GDP**：[`NY.GDP.PCAP.CN`](https://data.worldbank.org/indicator/NY.GDP.PCAP.CN)，GDP per capita (current LCU)，本币现价、未扣除物价。
-- 经济体：澳大利亚（AUS）、美国（USA）、韩国（KOR）、日本（JPN）、新加坡（SGP）、中国（CHN，中国大陆）。
+- 经济体：澳大利亚（AUS）、美国（USA）、韩国（KOR）、日本（JPN）、新加坡（SGP）、中国（CHN，中国大陆）、德国（DEU）、英国（GBR）。
 
 <!-- worldbank-coverage:start -->
 | 经济体 | 两项都有数据的年份 | 说明 |
@@ -124,8 +126,10 @@ ABS 从 2025 年 12 月的 CPI 发布起，将季度 CPI 重设为 **2025 年 9 
 | 日本 | 1960—2025 | |
 | 新加坡 | 1960—2025 | |
 | 中国 | 1986—2025 | |
+| 德国 | 1960—2025 | |
+| 英国 | 1960—2025 | |
 
-六个经济体都有配对数据的共同区间是 **1986—2024**。对比页默认显示 2000—2024 年；超出某经济体覆盖范围的年份会标为“数据不完整”。
+8 个经济体都有配对数据的共同区间是 **1986—2024**。对比页默认显示 2000—2024 年；超出某经济体覆盖范围的年份会标为“数据不完整”。
 <!-- worldbank-coverage:end -->
 
 ### 文件与校验
@@ -158,13 +162,13 @@ CPI 指数化金额 = 100 本币 × 终点 CPI ÷ 起点 CPI
 
 ### 以后如何更新世界银行快照
 
-GitHub Actions 的 **Update World Bank data** 每年 1、4、7、10 月检查一次，也可手动运行。它读取两项 WDI 指标；只有数值变化才生成 `data/worldbank-update` 候选分支。审阅后合并到 `main` 才会更新网站。GitHub 的定时任务可能延迟或漏跑；公开仓库连续 60 天无活动时也可能被停用，届时需在 Actions 中重新启用并手动运行。本地可运行 `npm run refresh:worldbank`，如有变化再运行 `npm run extract:worldbank` 和下方三项检查。
+GitHub Actions 的 **Update World Bank data** 每年 1、4、7、10 月检查一次，也可手动运行。它按 `data/worldbank-manifest.json` 的国家列表读取两项 WDI 指标，覆盖八个经济体（含德国、英国）；只有数值变化才生成 `data/worldbank-update` 候选分支。审阅后合并到 `main` 才会更新网站。GitHub 的定时任务可能延迟或漏跑；公开仓库连续 60 天无活动时也可能被停用，届时需在 Actions 中重新启用并手动运行。本地可运行 `npm run refresh:worldbank`，如有变化再运行 `npm run extract:worldbank` 和下方三项检查。
 
 1. 用浏览器打开以下两个地址（本仓库的命令行环境可能无法直接访问 API）：
-   - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN/indicator/FP.CPI.TOTL?format=json&per_page=1000&date=1960:2025`
-   - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN/indicator/NY.GDP.PCAP.CN?format=json&per_page=1000&date=1960:2025`
+   - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN;DEU;GBR/indicator/FP.CPI.TOTL?format=json&per_page=1000&date=1960:2026`
+   - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN;DEU;GBR/indicator/NY.GDP.PCAP.CN?format=json&per_page=1000&date=1960:2026`
 
-   需要新年份时，把 `date=1960:2025` 的结束年份改大。
+   需要新年份时，把 `date=1960:2026` 的结束年份改大。
 2. 把每个响应里的非空值按 `{"ISO3": {"年份": 数值}}` 写入 `data/sources/worldbank-<指标>.json` 的 `series`，同时更新 `retrievedOn`、`lastUpdated`（响应头部的 `lastupdated`）、`rawResponse` 与 `canonicalSha256`。`canonicalSha256` 应在取数的浏览器里按上面的规范化方式计算，用来证明转写没有出错。
 3. 如有需要，更新 `data/worldbank-manifest.json` 的 `preparedOn`。
 4. 运行：
@@ -228,7 +232,7 @@ GitHub Actions 的 **Update World Bank data** 每年 1、4、7、10 月检查一
 - **中文正文：** 本地打包 Adobe Source Han Serif CN 简体中文可变 WOFF2（10,421,244 字节，约 10.4 MB），并随项目分发对应的 [Adobe SIL Open Font License 1.1](https://github.com/adobe-fonts/source-han-serif/blob/master/LICENSE.txt)。
 - Plus Jakarta Sans 与 Newsreader 按 [SIL Open Font License 1.1](https://openfontlicense.org/) 分发；对应许可文本与字体文件同放在 `assets/fonts/`。来源分别为 [Google Fonts / Plus Jakarta Sans](https://github.com/google/fonts/tree/main/ofl/plusjakartasans) 和 [Production Type / Newsreader](https://github.com/productiontype/Newsreader)。Source Han Sans CN 和 Source Han Serif CN 对应通常所称的 Source Han Sans SC / Source Han Serif SC 简体中文版本；二者分别来自 [Adobe Source Han Sans](https://github.com/adobe-fonts/source-han-sans/tree/release/Variable/WOFF2/OTF/Subset) 和 [Adobe Source Han Serif](https://github.com/adobe-fonts/source-han-serif/tree/release/Variable/WOFF2/OTF/Subset) 官方项目。
 
-**图表配色**：各国标签页与对比页只用 CPI 赤土和收入端桉叶两种颜色，与澳洲页的 CPI/WPI 保持同一含义。对比页没有把六个国家画成六条彩色线，因为六种颜色无法两两区分（包括色觉差异读者），所以改为“每个经济体一行、并排两根横条”，国家由行名区分，横条在同一张表内共用比例尺，0 用竖线标出。年度图表支持鼠标悬停查看每一年的数值。
+**图表配色**：各国标签页与对比页只用 CPI 赤土和收入端桉叶两种颜色，与澳洲页的 CPI/WPI 保持同一含义。对比页不为每个国家分别分配一种颜色，以免色觉差异读者难以区分，所以改为“每个经济体一行、并排两根横条”，国家由行名区分，横条在同一张表内共用比例尺，0 用竖线标出。年度图表支持鼠标悬停查看每一年的数值。
 
 字体只保存在本项目的静态资源内；页面不会向 Google Fonts 或其他字体 CDN 发请求。页面支持键盘操作、窄屏布局和 `prefers-reduced-motion`。
 
@@ -240,6 +244,12 @@ GitHub Actions 的 **Update World Bank data** 每年 1、4、7、10 月检查一
 - ABS 网站说明其网页材料通常采用 [Creative Commons Attribution 4.0 International（CC BY 4.0）](https://www.abs.gov.au/privacy-and-legals)，但徽标、微观数据、第三方内容等例外材料以及具体发布产品标注的专门条款不在该通用许可内。`data/sources/` 中保留官方 CPI/WPI 工作簿；仓库中的数据和由其整理出的图表不属于 Apache-2.0 代码许可。重用时请遵循对应 ABS 来源的许可与署名要求。引用本站整理的图表或衍生数据时，请采用署名 **Based on Australian Bureau of Statistics data**（基于澳大利亚统计局数据）。
 
 ## 更新记录
+
+### 2026-10-04 · 加入德国、英国与博客入口
+
+- 从世界银行官方 API 获取德国（DEU）和英国（GBR）的年度 CPI 与本币现价名义人均 GDP，重建带来源校验的八经济体快照；新增单国标签页、货币示例、阅读提示和跨国对比行，中英文同步。
+- 世界银行更新脚本、校验器及自动生成的中英文数据说明覆盖德国和英国；现有 GitHub Actions 季度定时与手动更新继续使用该脚本。
+- 页头新增带博客头像的“我的博客”按钮（英文为“My blog”），直接链接博客头像与主页，沿用现有配色、字体和细边框，适配窄屏并支持键盘焦点。
 
 ### 2026-09-28 · 接入 Vercel Web Analytics
 

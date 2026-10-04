@@ -2,11 +2,13 @@
 
 [简体中文文档](README.md)
 
-Everyday Economics is a collection of reproducible, chart-led stories about everyday economic questions. A row of tabs at the top of the page reads **Australia | United States | South Korea | Japan | Singapore | China | Compare**.
+Everyday Economics is a collection of reproducible, chart-led stories about everyday economic questions. A row of tabs at the top of the page reads **Australia | United States | South Korea | Japan | Singapore | China | Germany | United Kingdom | Compare**.
 
 - **Australia**: the first storyboard, comparing consumer prices and wage prices with quarterly ABS CPI and WPI, followed by an annual World Bank view.
-- **United States, South Korea, Japan, Singapore, China**: annual World Bank data comparing CPI with nominal GDP per capita (current local currency) from a shared starting year.
+- **United States, South Korea, Japan, Singapore, China, Germany, United Kingdom**: annual World Bank data comparing CPI with nominal GDP per capita (current local currency) from a shared starting year.
 - **Compare**: pick one period and see each economy's price rise, nominal GDP per capita rise, and change after CPI inflation side by side.
+
+The header's “My blog” button links to [Aden's Space](https://blog.adenxie.com.cn/) and loads the avatar directly from `https://blog.adenxie.com.cn/images/avatar.jpg`, without storing a copy here. The Chinese page labels it “我的博客”.
 
 An **AI assistant** in the bottom-right corner lets readers ask about concepts they meet while reading the charts (see “AI assistant” below).
 
@@ -29,7 +31,7 @@ Node.js 20 or newer is required. Serving the site does not require npm dependenc
 
 Open the local address printed by the server (usually http://127.0.0.1:4173/). The English page is at /en/. On first visit, the browser’s preferred language selects a page; the manual language switch remembers the selection and keeps the selected quarter range, tab, and years. The server listens on the local loopback interface only.
 
-The tab and years live in the URL, so views can be shared: `?view=USA&from=2000&to=2024` opens the United States for 2000–2024, and `?view=compare&from=1997&to=2012` opens the comparison. `view` accepts `AUS`, `USA`, `KOR`, `JPN`, `SGP`, `CHN`, or `compare`; without it the Australia tab opens.
+The tab and years live in the URL, so views can be shared: `?view=USA&from=2000&to=2024` opens the United States for 2000–2024, and `?view=compare&from=1997&to=2012` opens the comparison. `view` accepts `AUS`, `USA`, `KOR`, `JPN`, `SGP`, `CHN`, `DEU`, `GBR`, or `compare`; without it the Australia tab opens.
 
 The local server also handles `/api/chat` the same way the Vercel Function does. To try the assistant locally, set the key in the same PowerShell window before starting the server; it lives only in that terminal session and is never written to a file:
 
@@ -91,16 +93,16 @@ Run **Update ABS data** in GitHub Actions to read the latest official CPI Table 
 
 If ABS changes a workbook layout or series ID, compare the release page and workbook Index sheet before changing the extractor or its explicit checks. Do not keep an old series definition simply because extraction succeeds. A push to `main` builds and publishes the website.
 
-## World Bank: six economies (annual)
+## World Bank: eight economies (annual)
 
 ### Sources
 
 <!-- worldbank-data-status:start -->
-- Prepared on **2026-09-28** from World Bank WDI. WDI last updated CPI on **2026-07-13** and nominal GDP per capita on **2026-07-13**. This is a dated snapshot, not a live feed.
+- Prepared on **2026-10-04** from World Bank WDI. WDI last updated CPI on **2026-07-13** and nominal GDP per capita on **2026-07-13**. This is a dated snapshot, not a live feed.
 <!-- worldbank-data-status:end -->
 - **CPI**: [`FP.CPI.TOTL`](https://data.worldbank.org/indicator/FP.CPI.TOTL), Consumer price index (2010 = 100), annual average; the World Bank cites the IMF International Financial Statistics as the original source.
 - **Nominal GDP per capita**: [`NY.GDP.PCAP.CN`](https://data.worldbank.org/indicator/NY.GDP.PCAP.CN), GDP per capita (current LCU), in current local currency and not adjusted for inflation.
-- Economies: Australia (AUS), United States (USA), South Korea (KOR), Japan (JPN), Singapore (SGP), China (CHN, mainland).
+- Economies: Australia (AUS), United States (USA), South Korea (KOR), Japan (JPN), Singapore (SGP), China (CHN, mainland), Germany (DEU), United Kingdom (GBR).
 
 <!-- worldbank-coverage:start -->
 | Economy | Years with both series | Note |
@@ -111,8 +113,10 @@ If ABS changes a workbook layout or series ID, compare the release page and work
 | Japan | 1960–2025 | |
 | Singapore | 1960–2025 | |
 | China | 1986–2025 | |
+| Germany | 1960–2025 | |
+| United Kingdom | 1960–2025 | |
 
-All six economies have paired data for **1986–2024**. The comparison opens on 2000–2024. Years outside an economy's coverage are marked incomplete.
+All 8 economies have paired data for **1986–2024**. The comparison opens on 2000–2024. Years outside an economy's coverage are marked incomplete.
 <!-- worldbank-coverage:end -->
 
 ### Files and checks
@@ -143,13 +147,13 @@ For a selected start and end year:
 
 ### Refresh the World Bank snapshot
 
-The **Update World Bank data** GitHub Action checks the two WDI indicators in January, April, July, and October, and can also run manually. Changed values create a `data/worldbank-update` candidate branch. Review and merge it into `main` to update the site. GitHub may delay or miss scheduled runs, and may disable the schedule after 60 days without public-repository activity. If disabled, re-enable the workflow in Actions and run it manually. Locally, run `npm run refresh:worldbank`, then `npm run extract:worldbank` and the three checks below if data changed.
+The **Update World Bank data** GitHub Action checks both WDI indicators for all eight economies, including Germany and the United Kingdom, using the country list in `data/worldbank-manifest.json`. It runs in January, April, July, and October, and can also run manually. Changed values create a `data/worldbank-update` candidate branch. Review and merge it into `main` to update the site. GitHub may delay or miss scheduled runs, and may disable the schedule after 60 days without public-repository activity. If disabled, re-enable the workflow in Actions and run it manually. Locally, run `npm run refresh:worldbank`, then `npm run extract:worldbank` and the three checks below if data changed.
 
 1. Open both URLs in a browser (the repository's command-line environment may not reach the API directly):
-   - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN/indicator/FP.CPI.TOTL?format=json&per_page=1000&date=1960:2025`
-   - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN/indicator/NY.GDP.PCAP.CN?format=json&per_page=1000&date=1960:2025`
+   - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN;DEU;GBR/indicator/FP.CPI.TOTL?format=json&per_page=1000&date=1960:2026`
+   - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN;DEU;GBR/indicator/NY.GDP.PCAP.CN?format=json&per_page=1000&date=1960:2026`
 
-   Raise the end year in `date=1960:2025` when newer years are needed.
+   Raise the end year in `date=1960:2026` when newer years are needed.
 2. Write each response's non-null values into `series` in `data/sources/worldbank-<indicator>.json` as `{"ISO3": {"year": value}}`, and update `retrievedOn`, `lastUpdated` (the response's `lastupdated`), `rawResponse`, and `canonicalSha256`. Compute `canonicalSha256` in the browser that fetched the data, using the canonical form above, so the transcription can be proven exact.
 3. Update `preparedOn` in `data/worldbank-manifest.json` if needed.
 4. Run:
@@ -204,7 +208,7 @@ The visual system is designed as an interactive editorial data sheet: the headli
 - Both Source Han fonts are distributed under the SIL Open Font License 1.1, with their license texts in assets/fonts/. Sources: [Source Han Sans CN WOFF2](https://github.com/adobe-fonts/source-han-sans/blob/release/Variable/WOFF2/OTF/Subset/SourceHanSansCN-VF.otf.woff2), [Source Han Sans license](https://github.com/adobe-fonts/source-han-sans/blob/master/LICENSE.txt), [Source Han Serif CN WOFF2](https://github.com/adobe-fonts/source-han-serif/blob/release/Variable/WOFF2/OTF/Subset/SourceHanSerifCN-VF.otf.woff2), and [Source Han Serif license](https://github.com/adobe-fonts/source-han-serif/blob/master/LICENSE.txt).
 - Plus Jakarta Sans and Newsreader are also distributed under the SIL Open Font License 1.1; their font files and license texts are in assets/fonts/. Their sources are [Google Fonts / Plus Jakarta Sans](https://github.com/google/fonts/tree/main/ofl/plusjakartasans) and [Production Type / Newsreader](https://github.com/productiontype/Newsreader).
 
-**Chart colors**: the country tabs and the comparison use only two colors, CPI terracotta and income eucalyptus, with the same meaning as CPI and WPI on the Australia tab. The comparison does not draw six colored lines, because six hues cannot all be told apart from each other (including by readers with color-vision differences). Instead each economy gets a row with two bars; the row label identifies the economy, the bars share one scale across the table, and a vertical rule marks 0. Annual charts show each year's values on hover.
+**Chart colors**: the country tabs and the comparison use only two colors, CPI terracotta and income eucalyptus, with the same meaning as CPI and WPI on the Australia tab. The comparison avoids a separate colored line for each economy, which would be difficult to distinguish, especially for readers with color-vision differences. Instead each economy gets a row with two bars; the row label identifies the economy, the bars share one scale across the table, and a vertical rule marks 0. Annual charts show each year's values on hover.
 
 All font files are served from this project; the page does not request fonts from Google Fonts or another font CDN. The page supports keyboard navigation, narrow screens, and prefers-reduced-motion.
 
@@ -219,6 +223,12 @@ World Bank WDI data are generally available under [CC BY 4.0](https://www.worldb
 The ABS states that website material is generally available under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://www.abs.gov.au/privacy-and-legals), with exceptions including the Coat of Arms, ABS logo, microdata, third-party material, and material protected by trademarks, as well as any product-specific terms. The official CPI and WPI workbooks in data/sources/ and the derived snapshot are separate from the project’s Apache-2.0 code license. Reusers should follow the applicable ABS terms and retain attribution. For attribution of the transformed data used in this storyboard, use: “Based on Australian Bureau of Statistics data.”
 
 ## Changelog
+
+### 4 October 2026 · Germany, United Kingdom and blog link
+
+- Retrieved annual CPI and nominal GDP per capita (current LCU) for Germany (DEU) and the United Kingdom (GBR) from the official World Bank API and rebuilt the checksummed eight-economy snapshot. Added country tabs, currency illustrations, reading notes and comparison rows in both languages.
+- Extended the World Bank refresh script, validator and generated bilingual data notes to cover Germany and the United Kingdom. The existing quarterly and manual GitHub Actions runs continue to use this script.
+- Added a header button labelled “My blog” (“我的博客” in Chinese) with the blog's directly linked avatar and home page, using the site's existing palette, fonts and fine borders, with a narrow-screen layout and keyboard focus.
 
 ### 28 September 2026 · Vercel Web Analytics
 

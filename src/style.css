@@ -109,12 +109,14 @@ select:focus-visible {
 
 .masthead {
   min-height: 90px;
+  gap: 24px;
   justify-content: space-between;
   border-bottom: 1px solid var(--rule);
   font-family: var(--font-ui);
 }
 
 .identity {
+  flex-shrink: 0;
   gap: 13px;
   color: inherit;
   text-decoration: none;
@@ -145,6 +147,7 @@ select:focus-visible {
 .masthead-meta {
   gap: 10px;
   flex-wrap: wrap;
+  justify-content: flex-end;
   color: var(--muted);
   font-size: 11px;
   letter-spacing: .05em;
@@ -169,6 +172,37 @@ select:focus-visible {
 .language-switch a[aria-current="page"] {
   border-color: var(--brass);
   color: var(--ink);
+}
+
+.blog-link {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  margin-left: 6px;
+  padding: 5px 11px 5px 6px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  color: var(--ink);
+  background: var(--paper-white);
+  font: 600 11px/1.3 var(--font-ui);
+  letter-spacing: .02em;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.blog-link:hover {
+  border-color: var(--brass);
+  background: var(--paper-shade);
+}
+
+.blog-link img {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .live-dot {
@@ -472,7 +506,7 @@ select:focus-visible {
   .identity-copy { line-height: 1.1; }
   .identity-kicker { font-size: 8px; }
   .identity-name { margin-top: 3px; font-size: 13px; }
-  .masthead-meta { gap: 7px; font-size: 9px; }
+  .masthead-meta { gap: 7px; justify-content: flex-start; font-size: 9px; }
   .language-switch { gap: 7px; font-size: 9px; }
   .live-dot { width: 6px; height: 6px; }
   .meta-divider { height: 11px; }
@@ -673,7 +707,7 @@ button:focus-visible {
   .compare-real { font-size: 15px; }
   .bar-row { grid-template-columns: 1fr; gap: 2px; }
   .bar-row + .bar-row { margin-top: 7px; }
-  .bar-value { font-size: 10px; }
+  .bar-value { font-size: 10px; white-space: normal; }
   .is-unavailable td { font-size: 11px; line-height: 1.45; }
   .chart-tooltip { min-width: 160px; }
 }

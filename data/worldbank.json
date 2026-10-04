@@ -1,5 +1,5 @@
 {
-  "snapshotDate": "2026-09-28",
+  "snapshotDate": "2026-10-04",
   "frequency": "Annual",
   "indicators": {
     "cpi": {
@@ -7,22 +7,22 @@
       "name": "Consumer price index (2010 = 100)",
       "database": "World Development Indicators",
       "sourceOrganization": "International Financial Statistics database, International Monetary Fund (IMF)",
-      "apiUrl": "https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN/indicator/FP.CPI.TOTL?format=json&per_page=1000&date=1960:2025",
+      "apiUrl": "https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN;DEU;GBR/indicator/FP.CPI.TOTL?format=json&per_page=1000&date=1960%3A2026",
       "pageUrl": "https://data.worldbank.org/indicator/FP.CPI.TOTL",
       "lastUpdated": "2026-07-13",
-      "retrievedOn": "2026-09-28",
-      "rawResponseSha256": "59F0EC83762C1D0A3AD0A7BC19EA711AFF7F5E31082B20E105BE83F90EC7628A"
+      "retrievedOn": "2026-10-04",
+      "rawResponseSha256": "87C3432CCB731689B9461C2A9E2F4982645D22195AAC1A18D14D88E48277E124"
     },
     "income": {
       "id": "NY.GDP.PCAP.CN",
       "name": "GDP per capita (current LCU)",
       "database": "World Development Indicators",
       "sourceOrganization": "Country official statistics, National Statistical Organizations and/or Central Banks; National Accounts data files, Organisation for Economic Co-operation and Development (OECD); Staff estimates, World Bank (WB)",
-      "apiUrl": "https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN/indicator/NY.GDP.PCAP.CN?format=json&per_page=1000&date=1960:2025",
+      "apiUrl": "https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN;DEU;GBR/indicator/NY.GDP.PCAP.CN?format=json&per_page=1000&date=1960%3A2026",
       "pageUrl": "https://data.worldbank.org/indicator/NY.GDP.PCAP.CN",
       "lastUpdated": "2026-07-13",
-      "retrievedOn": "2026-09-28",
-      "rawResponseSha256": "A4641066CBF2172CD11F5B7131CBAE47F9D7E50059E82B96B34BD0EB7C6EF349"
+      "retrievedOn": "2026-10-04",
+      "rawResponseSha256": "B8A4E5B035C0A77E0F207754CFDD26303D36E7A9C735FB51816881AA349FA413"
     }
   },
   "commonFirstYear": 1986,
@@ -1912,6 +1912,680 @@
           "year": 2025,
           "cpi": 132.596515636861,
           "gdpPerCapita": 99665.4450317613
+        }
+      ]
+    },
+    {
+      "iso3": "DEU",
+      "firstYear": 1960,
+      "lastYear": 2025,
+      "observations": [
+        {
+          "year": 1960,
+          "cpi": 24.6460704672795,
+          "gdpPerCapita": 2495.57230526438
+        },
+        {
+          "year": 1961,
+          "cpi": 25.2113761550113,
+          "gdpPerCapita": 2713.67880876944
+        },
+        {
+          "year": 1962,
+          "cpi": 25.9282036997301,
+          "gdpPerCapita": 2925.65488851467
+        },
+        {
+          "year": 1963,
+          "cpi": 26.6974830741086,
+          "gdpPerCapita": 3072.15754188251
+        },
+        {
+          "year": 1964,
+          "cpi": 27.321065747114,
+          "gdpPerCapita": 3348.87012627311
+        },
+        {
+          "year": 1965,
+          "cpi": 28.206901917499,
+          "gdpPerCapita": 3628.53340469755
+        },
+        {
+          "year": 1966,
+          "cpi": 29.203468786457,
+          "gdpPerCapita": 3826.11030810359
+        },
+        {
+          "year": 1967,
+          "cpi": 29.7279776648559,
+          "gdpPerCapita": 3856.40038973942
+        },
+        {
+          "year": 1968,
+          "cpi": 30.1650649435156,
+          "gdpPerCapita": 4141.63095316575
+        },
+        {
+          "year": 1969,
+          "cpi": 30.7420256515742,
+          "gdpPerCapita": 4599.49518749238
+        },
+        {
+          "year": 1970,
+          "cpi": 31.8027021959782,
+          "gdpPerCapita": 5185.9020746626
+        },
+        {
+          "year": 1971,
+          "cpi": 33.4694737028883,
+          "gdpPerCapita": 5745.42627376491
+        },
+        {
+          "year": 1972,
+          "cpi": 35.305251951825,
+          "gdpPerCapita": 6234.16991352175
+        },
+        {
+          "year": 1973,
+          "cpi": 37.7879257398802,
+          "gdpPerCapita": 6921.6576109257
+        },
+        {
+          "year": 1974,
+          "cpi": 40.4279531332749,
+          "gdpPerCapita": 7488.39918602901
+        },
+        {
+          "year": 1975,
+          "cpi": 42.8173811077969,
+          "gdpPerCapita": 7873.45704504464
+        },
+        {
+          "year": 1976,
+          "cpi": 44.6356772971534,
+          "gdpPerCapita": 8573.00962061964
+        },
+        {
+          "year": 1977,
+          "cpi": 46.302445978604,
+          "gdpPerCapita": 9155.39178483715
+        },
+        {
+          "year": 1978,
+          "cpi": 47.5612691704011,
+          "gdpPerCapita": 9773.73596876088
+        },
+        {
+          "year": 1979,
+          "cpi": 49.4844661936176,
+          "gdpPerCapita": 10610.1782561197
+        },
+        {
+          "year": 1980,
+          "cpi": 52.1769444748521,
+          "gdpPerCapita": 11322.6757502908
+        },
+        {
+          "year": 1981,
+          "cpi": 55.487176506199,
+          "gdpPerCapita": 11839.8038988593
+        },
+        {
+          "year": 1982,
+          "cpi": 58.3952844362268,
+          "gdpPerCapita": 12345.0385241967
+        },
+        {
+          "year": 1983,
+          "cpi": 60.3184833430829,
+          "gdpPerCapita": 12925.0839407937
+        },
+        {
+          "year": 1984,
+          "cpi": 61.7696214339205,
+          "gdpPerCapita": 13601.2426744685
+        },
+        {
+          "year": 1985,
+          "cpi": 63.045925743478,
+          "gdpPerCapita": 14245.3888287878
+        },
+        {
+          "year": 1986,
+          "cpi": 62.9643358920914,
+          "gdpPerCapita": 15001.4320686518
+        },
+        {
+          "year": 1987,
+          "cpi": 63.1216876137913,
+          "gdpPerCapita": 15382.7856066656
+        },
+        {
+          "year": 1988,
+          "cpi": 63.9259329909699,
+          "gdpPerCapita": 16159.4868611491
+        },
+        {
+          "year": 1989,
+          "cpi": 65.7034380219124,
+          "gdpPerCapita": 17139.4608136099
+        },
+        {
+          "year": 1990,
+          "cpi": 67.4751103626825,
+          "gdpPerCapita": 18492.8084512552
+        },
+        {
+          "year": 1991,
+          "cpi": 70.2058500742827,
+          "gdpPerCapita": 19891.6698169528
+        },
+        {
+          "year": 1992,
+          "cpi": 73.756144444307,
+          "gdpPerCapita": 21208.0437287886
+        },
+        {
+          "year": 1993,
+          "cpi": 77.0564195564705,
+          "gdpPerCapita": 21653.7549865314
+        },
+        {
+          "year": 1994,
+          "cpi": 79.1315923938292,
+          "gdpPerCapita": 22569.4656772753
+        },
+        {
+          "year": 1995,
+          "cpi": 80.4817042975643,
+          "gdpPerCapita": 23261.2063674242
+        },
+        {
+          "year": 1996,
+          "cpi": 81.6484693106268,
+          "gdpPerCapita": 23543.477737261
+        },
+        {
+          "year": 1997,
+          "cpi": 83.2319349704303,
+          "gdpPerCapita": 23979.8316740593
+        },
+        {
+          "year": 1998,
+          "cpi": 83.990331616738,
+          "gdpPerCapita": 24648.1308715063
+        },
+        {
+          "year": 1999,
+          "cpi": 84.482039736113,
+          "gdpPerCapita": 25301.2649426628
+        },
+        {
+          "year": 2000,
+          "cpi": 85.6988078472918,
+          "gdpPerCapita": 25904.6458556629
+        },
+        {
+          "year": 2001,
+          "cpi": 87.3989499142195,
+          "gdpPerCapita": 26660.9836013815
+        },
+        {
+          "year": 2002,
+          "cpi": 88.6407195744564,
+          "gdpPerCapita": 26953.5769806444
+        },
+        {
+          "year": 2003,
+          "cpi": 89.5574615623787,
+          "gdpPerCapita": 27150.0862866796
+        },
+        {
+          "year": 2004,
+          "cpi": 91.0492533059359,
+          "gdpPerCapita": 27788.9472935395
+        },
+        {
+          "year": 2005,
+          "cpi": 92.457704355053,
+          "gdpPerCapita": 28200.8766837241
+        },
+        {
+          "year": 2006,
+          "cpi": 93.9161566186468,
+          "gdpPerCapita": 29452.3491913969
+        },
+        {
+          "year": 2007,
+          "cpi": 96.0746729759051,
+          "gdpPerCapita": 30902.2986938089
+        },
+        {
+          "year": 2008,
+          "cpi": 98.5998802890494,
+          "gdpPerCapita": 31534.2460257963
+        },
+        {
+          "year": 2009,
+          "cpi": 98.9082405759318,
+          "gdpPerCapita": 30450.5464052435
+        },
+        {
+          "year": 2010,
+          "cpi": 100,
+          "gdpPerCapita": 31980.4130578147
+        },
+        {
+          "year": 2011,
+          "cpi": 102.075172837359,
+          "gdpPerCapita": 34218.7553001413
+        },
+        {
+          "year": 2012,
+          "cpi": 104.1253413002,
+          "gdpPerCapita": 34805.7364610369
+        },
+        {
+          "year": 2013,
+          "cpi": 105.692139574571,
+          "gdpPerCapita": 35544.1564360513
+        },
+        {
+          "year": 2014,
+          "cpi": 106.650549555164,
+          "gdpPerCapita": 36853.2707683759
+        },
+        {
+          "year": 2015,
+          "cpi": 107.199187857464,
+          "gdpPerCapita": 37791.1381340083
+        },
+        {
+          "year": 2016,
+          "cpi": 107.72633665683,
+          "gdpPerCapita": 38800.9914282889
+        },
+        {
+          "year": 2017,
+          "cpi": 109.35246016194,
+          "gdpPerCapita": 40324.593432508
+        },
+        {
+          "year": 2018,
+          "cpi": 111.246629356349,
+          "gdpPerCapita": 41420.8746019668
+        },
+        {
+          "year": 2019,
+          "cpi": 112.854877121191,
+          "gdpPerCapita": 42570.1517295773
+        },
+        {
+          "year": 2020,
+          "cpi": 113.018378926344,
+          "gdpPerCapita": 41494.5148903022
+        },
+        {
+          "year": 2021,
+          "cpi": 116.484275880086,
+          "gdpPerCapita": 44260.9806678627
+        },
+        {
+          "year": 2022,
+          "cpi": 124.489744387368,
+          "gdpPerCapita": 47962.1891477238
+        },
+        {
+          "year": 2023,
+          "cpi": 131.892448207044,
+          "gdpPerCapita": 50659.7208435435
+        },
+        {
+          "year": 2024,
+          "cpi": 134.868598852104,
+          "gdpPerCapita": 51833.6517870167
+        },
+        {
+          "year": 2025,
+          "cpi": 137.797658505945,
+          "gdpPerCapita": 53537.4671422151
+        }
+      ]
+    },
+    {
+      "iso3": "GBR",
+      "firstYear": 1960,
+      "lastYear": 2025,
+      "observations": [
+        {
+          "year": 1960,
+          "cpi": 6.27328379877936,
+          "gdpPerCapita": 499.141221374046
+        },
+        {
+          "year": 1961,
+          "cpi": 6.48955502126873,
+          "gdpPerCapita": 525.852272727273
+        },
+        {
+          "year": 1962,
+          "cpi": 6.76188912520806,
+          "gdpPerCapita": 544.920187793427
+        },
+        {
+          "year": 1963,
+          "cpi": 6.89838080266322,
+          "gdpPerCapita": 576.2348555452
+        },
+        {
+          "year": 1964,
+          "cpi": 7.12475716663584,
+          "gdpPerCapita": 624.388888888889
+        },
+        {
+          "year": 1965,
+          "cpi": 7.46487701128167,
+          "gdpPerCapita": 669.13164317763
+        },
+        {
+          "year": 1966,
+          "cpi": 7.75672517107453,
+          "gdpPerCapita": 709.552869703651
+        },
+        {
+          "year": 1967,
+          "cpi": 7.94925596449048,
+          "gdpPerCapita": 745.491740621292
+        },
+        {
+          "year": 1968,
+          "cpi": 8.32266663584243,
+          "gdpPerCapita": 813.233426972906
+        },
+        {
+          "year": 1969,
+          "cpi": 8.77597429258369,
+          "gdpPerCapita": 875.279009050039
+        },
+        {
+          "year": 1970,
+          "cpi": 9.33470270020344,
+          "gdpPerCapita": 978.221717201205
+        },
+        {
+          "year": 1971,
+          "cpi": 10.2163501941927,
+          "gdpPerCapita": 1088.8034420501
+        },
+        {
+          "year": 1972,
+          "cpi": 10.9387583687812,
+          "gdpPerCapita": 1213.38517865356
+        },
+        {
+          "year": 1973,
+          "cpi": 11.9446902163862,
+          "gdpPerCapita": 1398.60595320964
+        },
+        {
+          "year": 1974,
+          "cpi": 13.8610976511929,
+          "gdpPerCapita": 1568.25610483121
+        },
+        {
+          "year": 1975,
+          "cpi": 17.2164934344368,
+          "gdpPerCapita": 1943.48501933276
+        },
+        {
+          "year": 1976,
+          "cpi": 20.0674625485482,
+          "gdpPerCapita": 2302.89037380794
+        },
+        {
+          "year": 1977,
+          "cpi": 23.2462021453671,
+          "gdpPerCapita": 2683.86951286103
+        },
+        {
+          "year": 1978,
+          "cpi": 25.1670686147587,
+          "gdpPerCapita": 3116.97325513345
+        },
+        {
+          "year": 1979,
+          "cpi": 28.5448113556501,
+          "gdpPerCapita": 3685.40865441755
+        },
+        {
+          "year": 1980,
+          "cpi": 33.673150545589,
+          "gdpPerCapita": 4316.79631303044
+        },
+        {
+          "year": 1981,
+          "cpi": 37.6723848714629,
+          "gdpPerCapita": 4776.6147761765
+        },
+        {
+          "year": 1982,
+          "cpi": 40.911781949325,
+          "gdpPerCapita": 5235.2146791574
+        },
+        {
+          "year": 1983,
+          "cpi": 42.7975300536342,
+          "gdpPerCapita": 5733.79496097907
+        },
+        {
+          "year": 1984,
+          "cpi": 44.9205918254115,
+          "gdpPerCapita": 6149.1183804806
+        },
+        {
+          "year": 1985,
+          "cpi": 47.6478980950619,
+          "gdpPerCapita": 6741.80712989724
+        },
+        {
+          "year": 1986,
+          "cpi": 49.2810819308304,
+          "gdpPerCapita": 7238.90074972748
+        },
+        {
+          "year": 1987,
+          "cpi": 51.325715738857,
+          "gdpPerCapita": 8027.26310053951
+        },
+        {
+          "year": 1988,
+          "cpi": 53.4584797484742,
+          "gdpPerCapita": 8987.98589320919
+        },
+        {
+          "year": 1989,
+          "cpi": 56.5378213427039,
+          "gdpPerCapita": 9925.44927825291
+        },
+        {
+          "year": 1990,
+          "cpi": 61.0967264656926,
+          "gdpPerCapita": 10754.5670135331
+        },
+        {
+          "year": 1991,
+          "cpi": 65.6556315886813,
+          "gdpPerCapita": 11283.7120108374
+        },
+        {
+          "year": 1992,
+          "cpi": 68.6702422785278,
+          "gdpPerCapita": 11673.589913457
+        },
+        {
+          "year": 1993,
+          "cpi": 70.4272239689291,
+          "gdpPerCapita": 12261.7982476156
+        },
+        {
+          "year": 1994,
+          "cpi": 71.9900129461809,
+          "gdpPerCapita": 12878.0161734719
+        },
+        {
+          "year": 1995,
+          "cpi": 73.9319400776771,
+          "gdpPerCapita": 14735.1825771648
+        },
+        {
+          "year": 1996,
+          "cpi": 76.0403181061587,
+          "gdpPerCapita": 15706.6684775461
+        },
+        {
+          "year": 1997,
+          "cpi": 77.7140743480673,
+          "gdpPerCapita": 16436.7123838464
+        },
+        {
+          "year": 1998,
+          "cpi": 79.1289069724431,
+          "gdpPerCapita": 17145.717551829
+        },
+        {
+          "year": 1999,
+          "cpi": 80.5159977806547,
+          "gdpPerCapita": 17837.1338382405
+        },
+        {
+          "year": 2000,
+          "cpi": 81.4684668022933,
+          "gdpPerCapita": 18758.9037207683
+        },
+        {
+          "year": 2001,
+          "cpi": 82.7168485296837,
+          "gdpPerCapita": 19461.2375477787
+        },
+        {
+          "year": 2002,
+          "cpi": 83.9744775291289,
+          "gdpPerCapita": 20121.8858281403
+        },
+        {
+          "year": 2003,
+          "cpi": 85.1303865359719,
+          "gdpPerCapita": 21166.0232233742
+        },
+        {
+          "year": 2004,
+          "cpi": 86.3140373589791,
+          "gdpPerCapita": 22123.5097308366
+        },
+        {
+          "year": 2005,
+          "cpi": 88.1172554096541,
+          "gdpPerCapita": 23232.1354643151
+        },
+        {
+          "year": 2006,
+          "cpi": 90.2811170704642,
+          "gdpPerCapita": 24291.8200162309
+        },
+        {
+          "year": 2007,
+          "cpi": 92.4357314592195,
+          "gdpPerCapita": 25304.4141426609
+        },
+        {
+          "year": 2008,
+          "cpi": 95.6907712224893,
+          "gdpPerCapita": 25922.9072696383
+        },
+        {
+          "year": 2009,
+          "cpi": 97.5679674496024,
+          "gdpPerCapita": 25040.1156010146
+        },
+        {
+          "year": 2010,
+          "cpi": 100,
+          "gdpPerCapita": 25743.7084336491
+        },
+        {
+          "year": 2011,
+          "cpi": 103.856112446828,
+          "gdpPerCapita": 26398.615465577
+        },
+        {
+          "year": 2012,
+          "cpi": 106.528574070649,
+          "gdpPerCapita": 27023.7164696834
+        },
+        {
+          "year": 2013,
+          "cpi": 108.969853893102,
+          "gdpPerCapita": 27894.1033396738
+        },
+        {
+          "year": 2014,
+          "cpi": 110.551137414463,
+          "gdpPerCapita": 29017.2549869234
+        },
+        {
+          "year": 2015,
+          "cpi": 110.958017384871,
+          "gdpPerCapita": 29622.1365249589
+        },
+        {
+          "year": 2016,
+          "cpi": 112.076937303495,
+          "gdpPerCapita": 30557.4947413346
+        },
+        {
+          "year": 2017,
+          "cpi": 114.943591640466,
+          "gdpPerCapita": 31793.4327815172
+        },
+        {
+          "year": 2018,
+          "cpi": 117.579064176068,
+          "gdpPerCapita": 32759.9529319474
+        },
+        {
+          "year": 2019,
+          "cpi": 119.622711300166,
+          "gdpPerCapita": 33814.0271357387
+        },
+        {
+          "year": 2020,
+          "cpi": 120.806362123174,
+          "gdpPerCapita": 31835.7806412946
+        },
+        {
+          "year": 2021,
+          "cpi": 123.848714629184,
+          "gdpPerCapita": 34677.8345128251
+        },
+        {
+          "year": 2022,
+          "cpi": 133.660070279268,
+          "gdpPerCapita": 38159.3973623514
+        },
+        {
+          "year": 2023,
+          "cpi": 142.740891437026,
+          "gdpPerCapita": 40162.3325453113
+        },
+        {
+          "year": 2024,
+          "cpi": 147.410763824672,
+          "gdpPerCapita": 41735.0211457687
+        },
+        {
+          "year": 2025,
+          "cpi": 153.134825226558,
+          "gdpPerCapita": 43747.1901218933
         }
       ]
     }

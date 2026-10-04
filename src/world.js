@@ -1,7 +1,7 @@
 import { calculateYearWindow, compareCountries } from "./analysis.js";
 
 const svgNS = "http://www.w3.org/2000/svg";
-const VIEWS = ["AUS", "USA", "KOR", "JPN", "SGP", "CHN", "compare"];
+const VIEWS = ["AUS", "USA", "KOR", "JPN", "SGP", "CHN", "DEU", "GBR", "compare"];
 const DEFAULT_START = 2000;
 
 let messages = {};

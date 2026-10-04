@@ -23,7 +23,8 @@ jobs:
         with:
           node-version: '22'
           package-manager-cache: false
-      - name: Fetch and validate both WDI indicators
+      # The manifest includes all eight economies, including Germany and the UK.
+      - name: Fetch and validate both WDI indicators for all configured economies
         run: npm run refresh:worldbank
       - name: Check for changed observations
         id: changes

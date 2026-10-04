@@ -14,7 +14,7 @@ const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
 const today = new Date().toISOString().slice(0, 10);
 const countries = manifest.countries;
 const countrySet = new Set(countries);
-if (countries.join(",") !== "AUS,USA,KOR,JPN,SGP,CHN") throw new Error("Unexpected WDI country list");
+if (countries.join(",") !== "AUS,USA,KOR,JPN,SGP,CHN,DEU,GBR") throw new Error("Unexpected WDI country list");
 if (manifest.indicators.cpi.id !== "FP.CPI.TOTL" || manifest.indicators.income.id !== "NY.GDP.PCAP.CN") {
   throw new Error("Unexpected WDI indicator pairing");
 }

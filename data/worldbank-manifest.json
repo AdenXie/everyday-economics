@@ -1,6 +1,15 @@
 {
-  "preparedOn": "2026-09-28",
-  "countries": ["AUS", "USA", "KOR", "JPN", "SGP", "CHN"],
+  "preparedOn": "2026-10-04",
+  "countries": [
+    "AUS",
+    "USA",
+    "KOR",
+    "JPN",
+    "SGP",
+    "CHN",
+    "DEU",
+    "GBR"
+  ],
   "indicators": {
     "cpi": {
       "id": "FP.CPI.TOTL",

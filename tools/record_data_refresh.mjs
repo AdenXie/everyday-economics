@@ -15,6 +15,7 @@ const names = {
   AUS: ["澳大利亚", "Australia"], USA: ["美国", "United States"],
   KOR: ["韩国", "South Korea"], JPN: ["日本", "Japan"],
   SGP: ["新加坡", "Singapore"], CHN: ["中国", "China"],
+  DEU: ["德国", "Germany"], GBR: ["英国", "United Kingdom"],
 };
 
 function replaceBlock(document, key, content) {
@@ -63,8 +64,8 @@ function coverage(english) {
   }
   lines.push("");
   lines.push(english
-    ? `All six economies have paired data for **${wb.commonFirstYear}–${wb.commonLastYear}**. The comparison opens on 2000–${wb.commonLastYear}. Years outside an economy's coverage are marked incomplete.`
-    : `六个经济体都有配对数据的共同区间是 **${wb.commonFirstYear}—${wb.commonLastYear}**。对比页默认显示 2000—${wb.commonLastYear} 年；超出某经济体覆盖范围的年份会标为“数据不完整”。`);
+    ? `All ${wb.countries.length} economies have paired data for **${wb.commonFirstYear}–${wb.commonLastYear}**. The comparison opens on 2000–${wb.commonLastYear}. Years outside an economy's coverage are marked incomplete.`
+    : `${wb.countries.length} 个经济体都有配对数据的共同区间是 **${wb.commonFirstYear}—${wb.commonLastYear}**。对比页默认显示 2000—${wb.commonLastYear} 年；超出某经济体覆盖范围的年份会标为“数据不完整”。`);
   return lines.join("\n");
 }
 
@@ -83,7 +84,7 @@ for (const [file, english] of [["README.md", false], ["README.en.md", true]]) {
     const title = mode === "abs" ? (english ? "ABS data candidate" : "ABS 数据候选更新") : (english ? "World Bank data candidate" : "世界银行数据候选更新");
     const detail = mode === "abs"
       ? (english ? `Updated the official original CPI/WPI snapshot through ${abs.latestQuarter}; review the candidate branch before merging.` : `将官方 CPI/WPI 原始序列快照更新至 ${abs.latestQuarter}；合并候选分支前请审阅。`)
-      : (english ? `Updated the six-economy WDI snapshot through the shared year ${wb.commonLastYear}; review the candidate branch before merging.` : `将六经济体 WDI 快照更新至共同年份 ${wb.commonLastYear}；合并候选分支前请审阅。`);
+      : (english ? `Updated the ${wb.countries.length}-economy WDI snapshot through the shared year ${wb.commonLastYear}; review the candidate branch before merging.` : `将 ${wb.countries.length} 个经济体的 WDI 快照更新至共同年份 ${wb.commonLastYear}；合并候选分支前请审阅。`);
     document = document.replace(heading, `${heading}\n### ${date} · ${title}\n\n- ${detail}\n`);
   }
   writeFileSync(fullPath, document);
