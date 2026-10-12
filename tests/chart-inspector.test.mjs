@@ -175,3 +175,16 @@ test("mouse and keyboard inspection retain the renderer label, support Home/End,
   assert.equal(document.listenerCount("pointerdown"), 1, "rerender replaces the prior outside-tap listener");
   assert.equal(wrapper.children.filter(child => child.getAttribute("role") === "status").length, 1, "rerender replaces the old live region");
 });
+
+test("a partially scrolled chart keeps the tooltip below the sticky navigation", () => {
+  const { document, wrapper, svg, tooltip, x, options } = makeChart();
+  document.defaultView = { innerHeight: 420 };
+  document.querySelector = () => ({ getBoundingClientRect: () => ({ bottom: 50 }) });
+  wrapper.rect.top = -20;
+  svg.rect.top = -20;
+  attachChartInspector(options);
+  plotTarget(svg).dispatch("pointerdown", { pointerType: "touch", pointerId: 1, clientX: svg.rect.left + x(1) });
+  const topInViewport = wrapper.rect.top + Number.parseFloat(tooltip.style.top) - wrapper.scrollTop;
+  assert.ok(topInViewport >= 50, "the selected year must not sit behind the sticky tabs");
+  assert.ok(topInViewport + tooltip.offsetHeight <= 420, "details stay in the viewport");
+});

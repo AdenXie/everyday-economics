@@ -92,8 +92,10 @@ function placeTooltip({ tooltip, svg, width, height, margin, cx }) {
     visibleRight - tooltipWidth - 8,
   );
 
-  const visibleTop = scrollTop;
-  const visibleBottom = visibleTop + visibleHeight;
+  const viewportHeight = svg.ownerDocument.defaultView?.innerHeight ?? wrapperBox.top + visibleHeight;
+  const navigationBottom = svg.ownerDocument.querySelector?.(".country-tabs")?.getBoundingClientRect().bottom ?? 0;
+  const visibleTop = scrollTop + Math.max(0, navigationBottom - wrapperBox.top);
+  const visibleBottom = scrollTop + Math.min(visibleHeight, viewportHeight - wrapperBox.top);
   const anchorTop = svgBox.top - wrapperBox.top + scrollTop + ((margin.top + 8) / height) * svgBox.height;
   const top = clamp(anchorTop, visibleTop + 6, visibleBottom - tooltipHeight - 6);
   tooltip.style.left = `${left}px`;
