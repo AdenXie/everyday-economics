@@ -5,9 +5,8 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const mode = process.argv[2];
-const noChangelog = process.argv.includes("--no-changelog");
 if (!["abs", "worldbank", "both"].includes(mode)) {
-  throw new Error("Usage: node tools/record_data_refresh.mjs abs|worldbank|both [--no-changelog]");
+  throw new Error("Usage: node tools/record_data_refresh.mjs abs|worldbank|both");
 }
 const abs = JSON.parse(readFileSync(path.join(root, "data/quarterly.json"), "utf8"));
 const wb = JSON.parse(readFileSync(path.join(root, "data/worldbank.json"), "utf8"));
@@ -30,21 +29,9 @@ function replaceBlock(document, key, content) {
 }
 
 function absBlock(english) {
-  const last = abs.observations.at(-1);
-  const cpi = abs.series.cpi;
-  const wpi = abs.series.wpi;
-  if (english) return [
-    `This snapshot was prepared on **${abs.snapshotDate}**. It covers **${abs.observationCount} consecutive paired quarters, ${abs.firstQuarter}–${abs.latestQuarter}**. It is a dated snapshot, not a live feed.`,
-    `- CPI: [ABS ${cpi.publication}](${cpi.pageUrl}), Table 17, original national all-groups series **${cpi.seriesId}**; final index **${last.cpiIndex}**.`,
-    `- WPI: [ABS ${wpi.publication}](${wpi.pageUrl}), Table 1, original Australia private and public, all industries, excluding bonuses series **${wpi.seriesId}**; final index **${last.wpiIndex}**.`,
-    `- Official workbooks are retained in [data/sources](data/sources/). Their release details and SHA-256 hashes are in [data/source-manifest.json](data/source-manifest.json); the browser snapshot is [data/quarterly.json](data/quarterly.json).`,
-  ].join("\n");
-  return [
-    `- 快照整理于 **${abs.snapshotDate}**，覆盖 **${abs.firstQuarter}—${abs.latestQuarter}，${abs.observationCount} 个连续配对季度**；不是实时数据。`,
-    `- CPI：[ABS ${cpi.publication}](${cpi.pageUrl})，Table 17，全国所有类别原始序列 **${cpi.seriesId}**；最后一期指数 **${last.cpiIndex}**。`,
-    `- WPI：[ABS ${wpi.publication}](${wpi.pageUrl})，Table 1，全国私营与公共部门合计、所有行业、不含奖金的原始序列 **${wpi.seriesId}**；最后一期指数 **${last.wpiIndex}**。`,
-    `- 官方工作簿保存在 [data/sources](data/sources/)；发布日期与 SHA-256 见 [data/source-manifest.json](data/source-manifest.json)，网页快照见 [data/quarterly.json](data/quarterly.json)。`,
-  ].join("\n");
+  return english
+    ? `Prepared on **${abs.snapshotDate}**; **${abs.observationCount} consecutive paired quarters, ${abs.firstQuarter}–${abs.latestQuarter}**. Release details and workbook checksums are recorded in [the source manifest](data/source-manifest.json).`
+    : `快照整理于 **${abs.snapshotDate}**，覆盖 **${abs.firstQuarter}—${abs.latestQuarter}，${abs.observationCount} 个连续配对季度**。发布日期和工作簿校验值见[来源清单](data/source-manifest.json)。`;
 }
 
 function worldbankStatus(english) {
@@ -55,17 +42,17 @@ function worldbankStatus(english) {
 }
 
 function coverage(english) {
-  const lines = [english ? "| Economy | Years with both series | Note |" : "| 经济体 | 两项都有数据的年份 | 说明 |", "|---|---|---|"];
+  const lines = [english ? "| Economy | Years with both series |" : "| 经济体 | 两项都有数据的年份 |", "|---|---|"];
   for (const country of wb.countries) {
     const [zh, en] = names[country.iso3];
     if (!zh) throw new Error(`Unknown economy ${country.iso3}`);
     const range = `${country.firstYear}${english ? "–" : "—"}${country.lastYear}`;
-    lines.push(`| ${english ? en : zh} | ${range} | |`);
+    lines.push(`| ${english ? en : zh} | ${range} |`);
   }
   lines.push("");
   lines.push(english
-    ? `All ${wb.countries.length} economies have paired data for **${wb.commonFirstYear}–${wb.commonLastYear}**. The comparison opens on 2000–${wb.commonLastYear}. Years outside an economy's coverage are marked incomplete.`
-    : `${wb.countries.length} 个经济体都有配对数据的共同区间是 **${wb.commonFirstYear}—${wb.commonLastYear}**。对比页默认显示 2000—${wb.commonLastYear} 年；超出某经济体覆盖范围的年份会标为“数据不完整”。`);
+    ? `The shared paired range is **${wb.commonFirstYear}–${wb.commonLastYear}**. Comparisons require both indicators throughout the selected period.`
+    : `全部经济体的共同配对区间为 **${wb.commonFirstYear}—${wb.commonLastYear}**。比较时要求所选区间内两项指标都有数据。`);
   return lines.join("\n");
 }
 
@@ -76,16 +63,6 @@ for (const [file, english] of [["README.md", false], ["README.en.md", true]]) {
   if (mode === "worldbank" || mode === "both") {
     document = replaceBlock(document, "worldbank-data-status", worldbankStatus(english));
     document = replaceBlock(document, "worldbank-coverage", coverage(english));
-  }
-  if (!noChangelog) {
-    const heading = english ? "## Changelog\n" : "## 更新记录\n";
-    if (!document.includes(heading)) throw new Error(`Missing changelog in ${file}`);
-    const date = new Date().toISOString().slice(0, 10);
-    const title = mode === "abs" ? (english ? "ABS data candidate" : "ABS 数据候选更新") : (english ? "World Bank data candidate" : "世界银行数据候选更新");
-    const detail = mode === "abs"
-      ? (english ? `Updated the official original CPI/WPI snapshot through ${abs.latestQuarter}; review the candidate branch before merging.` : `将官方 CPI/WPI 原始序列快照更新至 ${abs.latestQuarter}；合并候选分支前请审阅。`)
-      : (english ? `Updated the ${wb.countries.length}-economy WDI snapshot through the shared year ${wb.commonLastYear}; review the candidate branch before merging.` : `将 ${wb.countries.length} 个经济体的 WDI 快照更新至共同年份 ${wb.commonLastYear}；合并候选分支前请审阅。`);
-    document = document.replace(heading, `${heading}\n### ${date} · ${title}\n\n- ${detail}\n`);
   }
   writeFileSync(fullPath, document);
 }

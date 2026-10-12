@@ -147,6 +147,7 @@
             </div>
           </div>
           <p class="calculation-note" data-i18n="result.calculationNote">A$100 示意 = A$100 × 终点 CPI ÷ 起点 CPI。它是指数化金额，不代表某个家庭实际花费，也不是一份永不变化的商品清单。</p>
+          <section id="abs-reading" class="life-reading" aria-label="把图表读成生活" data-i18n="story.aria" data-i18n-attr="aria-label"></section>
         </section>
 
         <section class="learning-section" aria-labelledby="learn-heading">
@@ -260,6 +261,7 @@
           </div>
           <p class="calculation-note" data-i18n="world.calculationNote">扣除物价后的变化 = 终点与起点名义人均 GDP 之比 ÷ 终点与起点 CPI 之比 − 1。区间越长，这个结果和“两条线的百分点差”相差越大：例如物价翻倍、名义收入涨到 3 倍，百分点差是 100，但扣除物价后只多了 50%。</p>
 
+          <section id="world-reading" class="life-reading" aria-label="把图表读成生活" data-i18n="story.aria" data-i18n-attr="aria-label"></section>
           <div class="learning-grid world-notes">
             <article class="learning-card">
               <p class="learning-index"><span data-i18n="learning.cpiIndex">消费端</span> <span>01</span></p>
@@ -351,6 +353,11 @@
             <p id="compare-note" class="chart-caption compare-caption" data-i18n="compare.note">横条长度在同一张表内按相同比例绘制；竖线是 0。“扣除物价后”= 名义人均 GDP 倍数 ÷ CPI 倍数 − 1。</p>
           </div>
           <p id="compare-missing" class="calculation-note" hidden>—</p>
+          <aside class="compare-reading life-reading">
+            <h3 data-i18n="story.compareTitle">这张表能帮我比较什么？</h3>
+            <p data-i18n="story.compareBody">把竖线看作 0：红条表示消费价格的累计变化，绿条表示名义人均产出的累计变化。向右是上涨，向左是下降，离 0 越远，变化幅度越大。绿条更长不等于当地每个人工资更高。右侧先把产出的增长倍数除以价格的增长倍数，再减去 1，帮助区分“金额变大”和“扣除物价后变多”。</p>
+            <p data-i18n="story.compareExample">例如物价涨 100%、名义人均 GDP 涨 200%，两项都在涨，但经 CPI 调整后只增加 50%。这张表比较各地的变化，不比较你去哪里能赚得最多。进入各国标签页，可以查看这些变化背后的历史故事。</p>
+          </aside>
         </section>
       </main>
 

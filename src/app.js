@@ -1,6 +1,7 @@
 import { calculateWindow } from "./analysis.js";
 import { startWorld } from "./world.js";
 import { startAssistant } from "./assistant.js";
+import { renderReading } from "./stories.js";
 
 const svgNS = "http://www.w3.org/2000/svg";
 const locale = document.documentElement.lang.toLowerCase().startsWith("en") ? "en" : "zh";
@@ -270,6 +271,18 @@ function render(snapshot) {
     elements.comparisonResult.textContent = message("comparison.wpiLess", { gap: number.format(Math.abs(gap)) });
     elements.comparisonDetail.textContent = message("comparison.wpiLessDetail");
   }
+  renderReading(document.querySelector("#abs-reading"), {
+    id: "ABS", analysis, kind: "quarterly", locale, message,
+    start: formatQuarter(startPeriod), end: formatQuarter(endPeriod), currency: message("currency.AUS"),
+    first: snapshot.firstQuarter, last: snapshot.latestQuarter,
+    selectRange(start, end) {
+      elements.start.value = start;
+      elements.end.value = end;
+      updateRangeInAddress();
+      render(snapshot);
+      elements.chart.scrollIntoView({ behavior: "instant", block: "center" });
+    },
+  });
 }
 
 async function start() {

@@ -1,4 +1,5 @@
 import { calculateYearWindow, compareCountries } from "./analysis.js";
+import { renderReading } from "./stories.js";
 
 const svgNS = "http://www.w3.org/2000/svg";
 const VIEWS = ["AUS", "USA", "KOR", "JPN", "SGP", "CHN", "DEU", "GBR", "compare"];
@@ -272,6 +273,16 @@ function renderCountry(iso3) {
   else $("#world-real-detail").textContent = message("world.realDownDetail", { gap: number.format(Math.abs(gap)) });
 
   $("#world-note").textContent = message(`world.note.${iso3}`);
+  renderReading($("#world-reading"), {
+    id: iso3, analysis, kind: "annual", locale, message,
+    start: yearLabel(start), end: yearLabel(end), currency, first: country.firstYear, last: country.lastYear,
+    selectRange(from, to) {
+      $("#world-start").value = String(from);
+      $("#world-end").value = String(to);
+      renderCountry(iso3);
+      $("#world-chart").scrollIntoView({ behavior: "instant", block: "center" });
+    },
+  });
   writeParams(iso3, start, end);
 }
 

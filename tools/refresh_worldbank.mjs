@@ -88,8 +88,9 @@ const results = [
 if (!results.some((result) => result.changed)) {
   console.log("No World Bank values changed; the repository snapshot stays as it is.");
 } else {
+  // Keep both source records from this retrieval together when rebuilding a snapshot.
   for (const result of results) {
-    if (result.changed) writeFileSync(result.filePath, `${JSON.stringify(result.source, null, 2)}\n`);
+    writeFileSync(result.filePath, `${JSON.stringify(result.source, null, 2)}\n`);
   }
   manifest.preparedOn = today;
   writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);

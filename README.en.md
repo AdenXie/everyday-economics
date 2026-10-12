@@ -1,269 +1,149 @@
 # Everyday Economics
 
-[简体中文文档](README.md)
+[简体中文](README.md)
 
-Everyday Economics is a collection of reproducible, chart-led stories about everyday economic questions. A row of tabs at the top of the page reads **Australia | United States | South Korea | Japan | Singapore | China | Germany | United Kingdom | Compare**.
+An open-source economic data explorer built on official statistics. Rebased indices and changes over shared periods help readers understand consumer prices, wage prices and output per person.
 
-- **Australia**: the first storyboard, comparing consumer prices and wage prices with quarterly ABS CPI and WPI, followed by an annual World Bank view.
-- **United States, South Korea, Japan, Singapore, China, Germany, United Kingdom**: annual World Bank data comparing CPI with nominal GDP per capita (current local currency) from a shared starting year.
-- **Compare**: pick one period and see each economy's price rise, nominal GDP per capita rise, and change after CPI inflation side by side.
-
-The header's “My blog” button links to [Aden's Space](https://blog.adenxie.com.cn/) and loads the avatar directly from `https://blog.adenxie.com.cn/images/avatar.jpg`, without storing a copy here. The Chinese page labels it “我的博客”.
-
-An **AI assistant** in the bottom-right corner lets readers ask about concepts they meet while reading the charts (see “AI assistant” below).
-
-The Chinese and English pages are separate static pages. The site has no accounts, database, or browser-based translation requests.
-
-## Live site and publishing
-
-Visit [econ.adenxie.com.cn](https://econ.adenxie.com.cn/) or the [English page](https://econ.adenxie.com.cn/en/). The site is hosted on **Vercel**: static pages come from the `dist/` build output, and the AI assistant runs as the Vercel Function [`api/chat.js`](api/chat.js). [`vercel.json`](vercel.json) sets the build command (`npm run verify && npm test && npm run build`). It does not pin a function region, so the function follows the Vercel project setting **Settings → Functions → Function Region** (currently Singapore, `sin1`). Note that the Hong Kong `hkg1` region could not reach the AMD endpoint in testing; after changing region, ask the assistant a question on the live site to confirm it still works. Vercel builds and deploys every push to `main`, so maintainers should validate locally and push only when the user requests it. GitHub Pages is turned off; [`.github/workflows/pages.yml`](.github/workflows/pages.yml) now only runs the checks, tests and build on pushes and pull requests and no longer publishes. The data snapshot is not refreshed on a schedule.
-
-## Visit analytics
-
-Vercel Web Analytics is integrated through a first-party script shared by the Chinese and English pages. It aggregates visitors and page views; AI conversation content is not sent as a custom event. Vercel serves the analytics script in deployed environments, so local preview does not produce live analytics data. See the [Vercel Web Analytics privacy guide](https://vercel.com/docs/analytics/privacy-policy).
+- Compare Australian consumer prices and wage prices using quarterly ABS CPI and WPI.
+- Explore long-term changes in eight economies using annual World Bank CPI and nominal GDP per capita.
+- Use separate Chinese and English pages with reproducible sources and calculations.
 
 ## Run locally
 
-Node.js 20 or newer is required. Serving the site does not require npm dependencies. Build the Chinese home page and English page at /en/, then start the local server:
+Node.js 20 or newer is required. The core charts need no external AI service or npm runtime dependencies.
 
-    npm run build
-    npm run dev
+```sh
+npm run build
+npm run dev
+```
 
-Open the local address printed by the server (usually http://127.0.0.1:4173/). The English page is at /en/. On first visit, the browser’s preferred language selects a page; the manual language switch remembers the selection and keeps the selected quarter range, tab, and years. The server listens on the local loopback interface only.
+Open the local address printed by the server. Chinese is served at the root and English at `/en/`; build output is written to `dist/`. Rebuild after editing source files to update the preview.
 
-The tab and years live in the URL, so views can be shared: `?view=USA&from=2000&to=2024` opens the United States for 2000–2024, and `?view=compare&from=1997&to=2012` opens the comparison. `view` accepts `AUS`, `USA`, `KOR`, `JPN`, `SGP`, `CHN`, `DEU`, `GBR`, or `compare`; without it the Australia tab opens.
+## Data sources
 
-The local server also handles `/api/chat` the same way the Vercel Function does. To try the assistant locally, set the key in the same PowerShell window before starting the server; it lives only in that terminal session and is never written to a file:
+### ABS: Australian quarterly prices and wages
 
-    $env:RADEON_API_KEY = "rc-your-key"
-    npm run dev
+| Indicator | Official series | Definition |
+|---|---|---|
+| CPI | Table 17, `A2325846C` | National All groups consumer price index, original quarterly series |
+| WPI | Table 1, `A2603609J` | Australia, private and public sectors, all industries, excluding bonuses, original quarterly series |
 
-Without a key the pages and charts work as usual and the assistant reports that it is not configured.
-
-If the default port is busy, set ECON_TAB_PORT to 0 in PowerShell before running npm run dev. The server will choose an available port and print its address. Press Ctrl+C in the server terminal to stop the preview.
-
-## Bilingual copy
-
-The manually maintained Chinese catalog is data/messages.zh.json. Its English counterpart is data/messages.en.json. Update the same keys in both files whenever interface or chart copy changes. The build checks that every Chinese key has an English translation, then generates the static English page and English chart messages. Visitors’ browsers do not call a translation service or receive API credentials.
-
-## Australian ABS snapshot
+Sources: [ABS CPI](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia) / [ABS WPI](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia). Compare only quarters published for both indicators; do not insert monthly CPI directly into a quarterly series.
 
 <!-- abs-data-status:start -->
-This snapshot was prepared on **2026-09-28**. It covers **116 consecutive paired quarters, 1997-Q3–2026-Q2**. It is a dated snapshot, not a live feed.
-- CPI: [ABS Consumer Price Index, Australia, June 2026](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia/jun-2026), Table 17, original national all-groups series **A2325846C**; final index **102.31**.
-- WPI: [ABS Wage Price Index, Australia, June 2026](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia/jun-2026), Table 1, original Australia private and public, all industries, excluding bonuses series **A2603609J**; final index **161.2**.
-- Official workbooks are retained in [data/sources](data/sources/). Their release details and SHA-256 hashes are in [data/source-manifest.json](data/source-manifest.json); the browser snapshot is [data/quarterly.json](data/quarterly.json).
+Prepared on **2026-09-28**; **116 consecutive paired quarters, 1997-Q3–2026-Q2**. Release details and workbook checksums are recorded in [the source manifest](data/source-manifest.json).
 <!-- abs-data-status:end -->
 
-Official publications and methods:
+### World Bank: annual prices and output per person
 
-- [CPI releases](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia) · [CPI methodology](https://www.abs.gov.au/methodologies/consumer-price-index-australia-methodology/jul-2026)
-- [WPI releases](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia) · [WPI methodology](https://www.abs.gov.au/methodologies/wage-price-index-australia-methodology/jun-2026)
-- [ABS Data API guide](https://www.abs.gov.au/statistics/application-programming-interfaces-apis/data-api-user-guide): the API is marked beta and can lag behind ABS release pages. This snapshot uses the official release workbooks.
+| Indicator | ID | Units and definition |
+|---|---|---|
+| Consumer price index | [`FP.CPI.TOTL`](https://data.worldbank.org/indicator/FP.CPI.TOTL) | Annual average, 2010 = 100 |
+| Nominal GDP per capita | [`NY.GDP.PCAP.CN`](https://data.worldbank.org/indicator/NY.GDP.PCAP.CN) | Current local currency, not adjusted for inflation |
 
-## Calculation and interpretation
-
-For a selected start and end quarter:
-
-    Normalized index(t) = 100 × index(t) / start index
-    Cumulative change = 100 × (end index / start index − 1)
-    CPI-indexed A$100 = A$100 × end CPI / start CPI
-    Percentage-point gap = WPI cumulative change − CPI cumulative change
-
-Both chart series are reset to 100 at the selected starting quarter because their published index reference periods differ. The A$100 amount illustrates CPI indexation; it is not a household bill or a fixed basket. CPI tracks household consumer prices with periodically updated weights. WPI tracks wage-price changes for comparable jobs while aiming to exclude changes in the quantity, quality, or composition of work; the series used here excludes bonuses. Neither national index determines an individual’s pay, after-tax income, hours, or spending.
-
-Starting with the December 2025 release, ABS rebased quarterly CPI to September 2025 = 100. The storyboard compares relative changes within each selected range. Results use the rounded quarterly index values published by ABS and may differ slightly from calculations using unrounded internal data.
-
-## Refresh the ABS snapshot
-
-Run **Update ABS data** in GitHub Actions to read the latest official CPI Table 17 and WPI Table 1 workbooks and validate the original series and continuous paired quarters. Only changed values produce a `data/abs-update` candidate branch. Review the sources and changes before merging. If ABS changes the workbook layout or series definition, the workflow fails for manual investigation. The steps below also work locally:
-
-1. Download the latest CPI Table 17 and WPI Table 1 workbooks from the corresponding ABS release pages and retain the original files in data/sources/.
-2. Update data/source-manifest.json with the release dates, page URLs, series IDs and descriptions, workbook paths, SHA-256 hashes, and snapshot date. Keep the national original CPI series and the national original WPI series for private and public sectors combined, all industries, excluding bonuses.
-3. With Python and openpyxl installed, run:
-
-       python tools/extract_abs_snapshot.py --snapshot-date YYYY-MM-DD
-
-   The extractor checks workbook hashes, series IDs, frequency, original/seasonally adjusted status, periods, and continuous coverage across the paired range. It allows CPI to have earlier history than WPI but does not accept missing quarters in their shared range.
-4. Validate and rebuild:
-
-       npm run verify
-       npm test
-       npm run build
-
-If ABS changes a workbook layout or series ID, compare the release page and workbook Index sheet before changing the extractor or its explicit checks. Do not keep an old series definition simply because extraction succeeds. A push to `main` builds and publishes the website.
-
-## World Bank: eight economies (annual)
-
-### Sources
+Economies and indicators are defined in [the World Bank source manifest](data/worldbank-manifest.json). Values come from the official API; non-null observations, source URLs, retrieval dates, source update dates and checksums are retained.
 
 <!-- worldbank-data-status:start -->
-- Prepared on **2026-10-04** from World Bank WDI. WDI last updated CPI on **2026-07-13** and nominal GDP per capita on **2026-07-13**. This is a dated snapshot, not a live feed.
+- Prepared on **2026-10-12** from World Bank WDI. WDI last updated CPI on **2026-10-08** and nominal GDP per capita on **2026-10-08**. This is a dated snapshot, not a live feed.
 <!-- worldbank-data-status:end -->
-- **CPI**: [`FP.CPI.TOTL`](https://data.worldbank.org/indicator/FP.CPI.TOTL), Consumer price index (2010 = 100), annual average; the World Bank cites the IMF International Financial Statistics as the original source.
-- **Nominal GDP per capita**: [`NY.GDP.PCAP.CN`](https://data.worldbank.org/indicator/NY.GDP.PCAP.CN), GDP per capita (current LCU), in current local currency and not adjusted for inflation.
-- Economies: Australia (AUS), United States (USA), South Korea (KOR), Japan (JPN), Singapore (SGP), China (CHN, mainland), Germany (DEU), United Kingdom (GBR).
 
 <!-- worldbank-coverage:start -->
-| Economy | Years with both series | Note |
-|---|---|---|
-| Australia | 1960–2025 | |
-| United States | 1960–2024 | |
-| South Korea | 1960–2025 | |
-| Japan | 1960–2025 | |
-| Singapore | 1960–2025 | |
-| China | 1986–2025 | |
-| Germany | 1960–2025 | |
-| United Kingdom | 1960–2025 | |
+| Economy | Years with both series |
+|---|---|
+| Australia | 1960–2025 |
+| United States | 1960–2024 |
+| South Korea | 1960–2025 |
+| Japan | 1960–2025 |
+| Singapore | 1960–2025 |
+| China | 1986–2025 |
+| Germany | 1960–2025 |
+| United Kingdom | 1960–2025 |
 
-All 8 economies have paired data for **1986–2024**. The comparison opens on 2000–2024. Years outside an economy's coverage are marked incomplete.
+The shared paired range is **1986–2024**. Comparisons require both indicators throughout the selected period.
 <!-- worldbank-coverage:end -->
 
-### Files and checks
+Data are provided as snapshots. Publication dates, retrieval dates and available observation periods are different concepts: a new release may revise historical values without adding a comparable quarter or year.
 
-- [`data/sources/worldbank-FP.CPI.TOTL.json`](data/sources/worldbank-FP.CPI.TOTL.json) and [`data/sources/worldbank-NY.GDP.PCAP.CN.json`](data/sources/worldbank-NY.GDP.PCAP.CN.json): every non-null value from the API response, with the API URL, retrieval date, WDI update date, SHA-256 of the raw response, and a canonical SHA-256 of the values (`canonicalSha256`).
-- [`data/worldbank-manifest.json`](data/worldbank-manifest.json): the economy list, indicator IDs, and source paths.
-- [`tools/extract_worldbank.mjs`](tools/extract_worldbank.mjs): checks the canonical SHA-256, keeps years where both CPI and GDP per capita exist, requires those years to be continuous, and writes [`data/worldbank.json`](data/worldbank.json) for the browser.
-- `npm run verify` rebuilds the snapshot from the sources and requires an exact match with `data/worldbank.json`. It also checks continuous years, positive values, and CPI = 100 in 2010 for every economy.
+## Calculations
 
-Canonical form: non-null values only, one `ISO3:year:value` line each (value serialized with `JSON.stringify`), sorted by ISO3 and then year, joined with newlines, then hashed with SHA-256.
+For an indicator with starting value `X₀` and ending value `X₁`:
 
-### Calculation and interpretation
+```text
+Rebased index(t) = 100 × X(t) / X₀
+Cumulative change (%) = 100 × (X₁ / X₀ − 1)
+Percentage-point gap = change in indicator A − change in indicator B
+CPI-indexed amount = starting amount × ending CPI / starting CPI
+```
 
-For a selected start and end year:
+The change in annual nominal GDP per capita after CPI inflation is:
 
-    Rebased index(t) = 100 × value(t) / start value
-    CPI cumulative change = 100 × (end CPI / start CPI − 1)
-    GDP per capita cumulative change = 100 × (end GDP per capita / start GDP per capita − 1)
-    Percentage-point gap = GDP per capita change − CPI change
-    Change after CPI inflation = 100 × [(end / start GDP per capita) / (end / start CPI) − 1]
-    CPI-indexed amount = 100 units of local currency × end CPI / start CPI
+```text
+Change (%) = 100 × [(ending GDP per capita / starting GDP per capita)
+                  / (ending CPI / starting CPI) − 1]
+```
 
-- **Why nominal rather than real GDP per capita**: CPI is a nominal price level. To ask whether income kept up with prices, the other line must also be nominal, just as the Australian page compares CPI with the WPI. Real GDP per capita (constant prices) has already been deflated by the GDP deflator, so comparing it with CPI would remove inflation twice.
-- **A ratio, not the percentage-point gap**: over long periods they differ a lot. If prices double and nominal income triples, the gap is 100 points but income after inflation is only 50% higher. The page shows both.
-- **Changes are comparable across economies; levels are not**: each economy's changes are measured in its own currency, so the percentages can sit side by side. GDP per capita levels are not converted by exchange rates or purchasing power parity (PPP) and should not be ranked.
-- **GDP per capita is not a wage**: it is output per person and includes company profits and government revenue. In economies with a large foreign-owned sector, such as Singapore, GDP per capita can sit well above what residents receive.
-- **Annual CPI differs from ABS quarterly CPI**: World Bank CPI is an annual average with 2010 = 100; the ABS quarterly index on the Australia tab uses September 2025 = 100. They will not match exactly.
+If prices double and nominal GDP per capita triples, the growth gap is 100 percentage points, while the CPI-adjusted increase is 50%. The ratio and the percentage-point gap answer different questions.
 
-### Refresh the World Bank snapshot
+- CPI is a weighted consumer price measure, not an individual household's bill.
+- WPI measures wage prices for a comparable mix of jobs, not individual pay, hours or after-tax income.
+- GDP per capita measures average output, not wages or household disposable income. Adjusting it by CPI also differs from real GDP per capita calculated using the GDP deflator.
+- Pair CPI with nominal GDP per capita; do not divide an already inflation-adjusted real GDP series by CPI again.
+- Compare each economy's own growth rates. Local-currency amounts cannot be ranked without exchange-rate or purchasing-power-parity conversion.
+- Do not mix quarterly and annual frequencies, invent missing observations or subtract the raw levels of indices with different definitions.
 
-The **Update World Bank data** GitHub Action checks both WDI indicators for all eight economies, including Germany and the United Kingdom, using the country list in `data/worldbank-manifest.json`. It runs in January, April, July, and October, and can also run manually. Changed values create a `data/worldbank-update` candidate branch. Review and merge it into `main` to update the site. GitHub may delay or miss scheduled runs, and may disable the schedule after 60 days without public-repository activity. If disabled, re-enable the workflow in Actions and run it manually. Locally, run `npm run refresh:worldbank`, then `npm run extract:worldbank` and the three checks below if data changed.
+## Refresh and validate data
 
-1. Open both URLs in a browser (the repository's command-line environment may not reach the API directly):
-   - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN;DEU;GBR/indicator/FP.CPI.TOTL?format=json&per_page=1000&date=1960:2026`
-   - `https://api.worldbank.org/v2/country/AUS;USA;KOR;JPN;SGP;CHN;DEU;GBR/indicator/NY.GDP.PCAP.CN?format=json&per_page=1000&date=1960:2026`
+The ABS updater needs Python and `openpyxl`. Prepare the environment and check data with:
 
-   Raise the end year in `date=1960:2026` when newer years are needed.
-2. Write each response's non-null values into `series` in `data/sources/worldbank-<indicator>.json` as `{"ISO3": {"year": value}}`, and update `retrievedOn`, `lastUpdated` (the response's `lastupdated`), `rawResponse`, and `canonicalSha256`. Compute `canonicalSha256` in the browser that fetched the data, using the canonical form above, so the transcription can be proven exact.
-3. Update `preparedOn` in `data/worldbank-manifest.json` if needed.
-4. Run:
+```sh
+python -m pip install openpyxl==3.1.5
+npm run refresh:abs
+npm run refresh:worldbank
+npm run extract:worldbank
+node tools/record_data_refresh.mjs both
+npm run verify
+npm test
+npm run build
+```
 
-       npm run extract:worldbank
-       npm run verify
-       npm test
-       npm run build
+The reusable process is: fetch official sources → validate series definitions and values → generate paired snapshots → refresh data notes → test and build → review before publishing. Existing snapshots are kept when source values do not change; refreshing notes updates only the current data overview.
 
-   The extractor stops if an economy has a gap in its years. Find out why before changing anything; do not drop years just to pass the checks.
+- The ABS extractor checks workbook hashes, series IDs, definitions, frequency, units and original-series adjustment type.
+- The World Bank extractor verifies `canonicalSha256`, then generates continuous paired years with both indicators present.
+- `npm run verify` checks continuity, positive values, source integrity and exact World Bank snapshot reconstruction.
+- If a source changes its definition, layout or coverage, investigate before adjusting extraction logic; do not bypass checks by editing generated snapshots.
 
-## AI assistant
+The [ABS workflow](.github/workflows/update-abs.yml) runs manually. The [World Bank workflow](.github/workflows/update-worldbank.yml) supports quarterly checks and manual runs. Changed values produce a candidate branch for review and merge before publication. Scheduled runs are not guaranteed to execute immediately; the same commands can be used for a manual check.
 
-The floating button in the bottom-right corner opens an economics helper that explains the concepts and numbers on the page.
+## Reusable implementation
 
-- **Model**: set by the Vercel environment variable `AI_MODEL`, currently `Qwen3.8-27B` from AMD Radeon Cloud Token Factory. The assistant header shows the configured model (read from `GET /api/chat`, which returns only the model name, never the key). Called through the OpenAI-compatible endpoint `https://developer.amd.com.cn/radeon/api/v1/chat/completions` with streaming and `reasoning_effort: low` by default for quicker answers (adjustable with `AI_REASONING_EFFORT`). The model's `<think>` reasoning is never shown.
-- **The API key stays on the server**: browsers call `/api/chat` on the same domain; the key lives in the Vercel environment variable `RADEON_API_KEY` and is added by [`server/ai-proxy.js`](server/ai-proxy.js). It is not in the page code, the repository, or the build output.
-- **The system prompt is set on the server**: use only page data or numbers the reader gives, never invent statistics, no investment, tax or legal advice, and answer in the reader's language. Browsers cannot change the prompt, model or parameters.
-- **Page context**: each question carries the current tab, years and the cumulative changes shown on the page (up to 1,400 characters) so answers can refer to what the reader is looking at. The server marks this as data and ignores any instructions inside it.
-- **Nothing is saved**: the conversation exists only in the page's memory — not in localStorage, cookies or any server — and a reload clears it. The server logs no message content and has no database.
-- **Interaction**: the button opens and closes the panel; moving the pointer or focus back to the page never closes it, only that button (or the × inside the panel) does. Answers are selectable text and each has a Copy button for the original text; generation can be stopped, and the conversation can be cleared. Enter sends, Shift+Enter adds a line, and Enter while choosing characters in an IME does not send.
-- **Abuse limits**: the server accepts requests only from the site's own pages (production domain, Vercel preview URLs and local preview); at most 6 questions per IP per minute (a best-effort limit within each function instance); up to 1,500 characters per question, 16 history messages, and 1,200 tokens per answer. The AMD free tier allows about 20 requests per minute per account, shared by all visitors; beyond that readers are asked to wait.
-- **Privacy note**: questions and page context are processed by the Vercel Function and AMD Radeon Cloud.
+The frontend reads pre-generated snapshots, calculates changes over a selected period and draws charts. Separating data retrieval and validation from presentation reduces external requests at runtime and makes results reproducible.
 
-### Deploy to Vercel (one-time setup)
+Chinese and English copy is maintained in `data/messages.zh.json` and `data/messages.en.json`. Update the same key in both catalogs when changing copy; the build generates separate static language pages.
 
-1. Sign in to [vercel.com](https://vercel.com/) with GitHub, choose **Add New → Project**, and import `AdenXie/everyday-economics`. Choose the **Other** framework preset; build settings come from `vercel.json`.
-2. On the import screen (or later in **Settings → Environment Variables**) add `RADEON_API_KEY` with the AMD Token Factory key (starting with `rc-`) for Production and Preview, then deploy.
-3. In **Settings → Domains**, add `econ.adenxie.com.cn` and update the domain's DNS as Vercel instructs (usually a CNAME for `econ` pointing to the address Vercel shows).
-4. In the GitHub repository, **Settings → Pages**, remove the custom domain and turn off Pages so the two platforms do not compete for the domain. Then edit `.github/workflows/pages.yml`: delete the whole `deploy` job and the `actions/configure-pages` and `actions/upload-pages-artifact` steps, keeping only the verify, test and build checks (otherwise every push reports a failed deployment once Pages is off).
-5. Every push to `main` then deploys automatically. After changing the key, redeploy on Vercel for it to take effect.
+Everyday readings translate the selected period's percentages into index and money illustrations, alongside clearly labelled fictional exercises. Maintainers curate historical phases from official sources and cite them individually; readers can switch the chart to the relevant period. Ranges and source links live in `src/story-chapters.js`, while bilingual prose remains in the message catalogs. When revising a narrative, check its sources and the snapshot's movements, distinguishing historical context from causation that the curves alone cannot establish.
 
-**Changing the model**: edit `AI_MODEL` in the Vercel project's **Settings → Environment Variables** (type Config, Production), then open **Deployments** and **Redeploy** the latest deployment; environment variables only apply to new deployments. The model ID must match the AMD Token Factory model list exactly, for example `Qwen3.8-27B`, `Qwen3.8-Flash-Next`, or `DeepSeek-V4-Flash`. Ask the assistant a question on the live site afterwards to confirm it works.
+Optional AI assistance should connect to model services through a server. Keep credentials, model settings, prompts and request limits on the server; the browser sends only the necessary question and data context. Current conversations exist only in page memory and clear on reload. When enabling an external service, explain how it processes user data.
 
-| Variable | Type | Purpose |
-|---|---|---|
-| `RADEON_API_KEY` | Secret (required) | AMD Token Factory key, starting with `rc-` |
-| `AI_MODEL` | Config | Model ID to call; falls back to `Qwen3.8-27B` when unset |
-| `AI_REASONING_EFFORT` | Config (optional) | Reasoning effort, default `low`; `none` omits the parameter for models that do not support it. `Qwen3.8-27B` accepts only `low`, `medium`, and `xhigh` |
-| `UPSTREAM_URL` | Config (optional) | Upstream endpoint, default: the AMD public endpoint |
-| `ALLOWED_ORIGINS` | Config (optional) | Comma-separated extra allowed origins |
+Preserve semantic labels, keyboard operation, narrow-screen layouts and clear units. Use text or line styles as well as color to distinguish indicators. If analytics are enabled, collect only necessary aggregate information and avoid logging conversation content or credentials.
 
-## Design and bundled fonts
+## Project structure
 
-The visual system is designed as an interactive editorial data sheet: the headline frames a question, quarter controls support precise comparison, and the chart carries the main explanation. The paper texture is drawn with local CSS; the site does not load remote images or web services.
+| Path | Purpose |
+|---|---|
+| `index.html`, `src/` | Pages, interaction, charts and calculations |
+| `data/sources/` | Official workbooks and checksummed source values |
+| `data/*manifest.json` | Series definitions, economies and source metadata |
+| `data/quarterly.json`, `data/worldbank.json` | Generated data snapshots |
+| `tools/` | Retrieval, extraction, data-note synchronization and build tools |
+| `server/`, `api/` | Optional AI server logic |
+| `tests/` | Calculation, bilingual-output and server-behavior tests |
+| `assets/fonts/` | Font assets and their licenses |
 
-- English interface, headings, and chart labels use a local Latin subset of Plus Jakarta Sans.
-- English body copy uses a local Latin subset of Newsreader.
-- Chinese UI uses Adobe Source Han Sans CN, an unmodified Simplified Chinese variable WOFF2 subset from Adobe’s official repository. The bundled file is 7,995,716 bytes (about 8.0 MB); its weight axis is 250–900.
-- Chinese body copy uses Adobe Source Han Serif CN, the bundled Simplified Chinese variable WOFF2 subset (10,421,244 bytes, about 10.4 MB).
-- Adobe uses CN to identify its Simplified Chinese regional subset; these correspond to the Source Han Sans SC / Source Han Serif SC variants commonly named by users.
-- Both Source Han fonts are distributed under the SIL Open Font License 1.1, with their license texts in assets/fonts/. Sources: [Source Han Sans CN WOFF2](https://github.com/adobe-fonts/source-han-sans/blob/release/Variable/WOFF2/OTF/Subset/SourceHanSansCN-VF.otf.woff2), [Source Han Sans license](https://github.com/adobe-fonts/source-han-sans/blob/master/LICENSE.txt), [Source Han Serif CN WOFF2](https://github.com/adobe-fonts/source-han-serif/blob/release/Variable/WOFF2/OTF/Subset/SourceHanSerifCN-VF.otf.woff2), and [Source Han Serif license](https://github.com/adobe-fonts/source-han-serif/blob/master/LICENSE.txt).
-- Plus Jakarta Sans and Newsreader are also distributed under the SIL Open Font License 1.1; their font files and license texts are in assets/fonts/. Their sources are [Google Fonts / Plus Jakarta Sans](https://github.com/google/fonts/tree/main/ofl/plusjakartasans) and [Production Type / Newsreader](https://github.com/productiontype/Newsreader).
+## Licensing and attribution
 
-**Chart colors**: the country tabs and the comparison use only two colors, CPI terracotta and income eucalyptus, with the same meaning as CPI and WPI on the Australia tab. The comparison avoids a separate colored line for each economy, which would be difficult to distinguish, especially for readers with color-vision differences. Instead each economy gets a row with two bars; the row label identifies the economy, the bars share one scale across the table, and a vertical rule marks 0. Annual charts show each year's values on hover.
+Original code is licensed under [Apache License 2.0](LICENSE). Fonts and data retain their own terms and are not automatically covered by the code license.
 
-All font files are served from this project; the page does not request fonts from Google Fonts or another font CDN. The page supports keyboard navigation, narrow screens, and prefers-reduced-motion.
-
-## Code, font, and data licenses
-
-The Apache License 2.0 in LICENSE applies only to this project’s original code. It does not apply to bundled fonts, ABS workbooks, the derived data snapshot, or other third-party material. Apache-2.0 includes an express contributor patent grant and redistribution notice requirements.
-
-The four bundled font families have their own license files in assets/fonts/. Both Source Han fonts are covered by the SIL Open Font License 1.1.
-
-World Bank WDI data are generally available under [CC BY 4.0](https://www.worldbank.org/en/about/legal/terms-of-use-for-datasets). When reusing the World Bank charts or derived data from this site, credit “Based on World Bank World Development Indicators data” and follow the original sources named on each indicator page.
-
-The ABS states that website material is generally available under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://www.abs.gov.au/privacy-and-legals), with exceptions including the Coat of Arms, ABS logo, microdata, third-party material, and material protected by trademarks, as well as any product-specific terms. The official CPI and WPI workbooks in data/sources/ and the derived snapshot are separate from the project’s Apache-2.0 code license. Reusers should follow the applicable ABS terms and retain attribution. For attribution of the transformed data used in this storyboard, use: “Based on Australian Bureau of Statistics data.”
-
-## Changelog
-
-### 4 October 2026 · Germany, United Kingdom and blog link
-
-- Retrieved annual CPI and nominal GDP per capita (current LCU) for Germany (DEU) and the United Kingdom (GBR) from the official World Bank API and rebuilt the checksummed eight-economy snapshot. Added country tabs, currency illustrations, reading notes and comparison rows in both languages.
-- Extended the World Bank refresh script, validator and generated bilingual data notes to cover Germany and the United Kingdom. The existing quarterly and manual GitHub Actions runs continue to use this script.
-- Added a header button labelled “My blog” (“我的博客” in Chinese) with the blog's directly linked avatar and home page, using the site's existing palette, fonts and fine borders, with a narrow-screen layout and keyboard focus.
-
-### 28 September 2026 · Vercel Web Analytics
-
-- Added Vercel's first-party analytics script to both static language pages for aggregate visitors and page views. No AI conversation custom events or npm dependency were added.
-
-### 28 September 2026 · Data update workflows
-
-- Added a manual ABS update and a quarterly World Bank check in GitHub Actions. Changed data produces a candidate branch after source and build checks; a maintainer reviews and merges it before the live site changes. Documented GitHub's inactivity limit for scheduled workflows.
-- Snapshot descriptions and bilingual changelogs update with candidate data. Removed fixed latest-quarter and US-year assumptions that would block later releases.
-
-### 28 September 2026 · Model set by a Vercel environment variable
-
-- The model is now chosen by the Vercel environment variable `AI_MODEL` (currently `Qwen3.8-27B`), so switching models needs no code change; added the optional `AI_REASONING_EFFORT`.
-- `GET /api/chat` returns the configured model name, which the assistant header shows instead of a hard-coded label.
-- Added matching tests in `tests/ai-proxy.test.mjs`.
-
-### 28 September 2026 · AI assistant and move to Vercel
-
-- Added a floating AI assistant in the bottom-right corner using `Qwen3.8-27B` from AMD Radeon Cloud Token Factory: streamed, copyable answers that can be stopped or cleared. It does not close when the pointer or focus returns to the page, and the conversation lives only in page memory, so a reload clears it.
-- Each question automatically includes the current tab, years and cumulative changes shown on the page.
-- Moved hosting from GitHub Pages to Vercel: added `vercel.json`, the Vercel Function `api/chat.js`, and the server-side proxy `server/ai-proxy.js` (origin check, per-IP limit, input limits, server-side system prompt). The API key is stored only in the Vercel environment variable `RADEON_API_KEY`.
-- GitHub Pages is turned off and `.github/workflows/pages.yml` is now check-only.
-- Vercel function region: Hong Kong `hkg1` could not reach the AMD endpoint, so Sydney `syd1` was used to confirm it works; `vercel.json` then stopped pinning a region and follows the project setting (Singapore, `sin1`).
-- The local preview server `tools/serve.mjs` now serves `/api/chat`; set `RADEON_API_KEY` to try the assistant locally.
-- Added `src/assistant.js`, `tests/ai-proxy.test.mjs`, and `ai.*` copy in both languages.
-
-### 28 September 2026 · World Bank data for six economies
-
-- Added tabs at the top of the page: Australia, United States, South Korea, Japan, Singapore, China, and Compare. The active tab and years are stored in the URL (`view`, `from`, `to`) and kept when switching language.
-- Added annual World Bank WDI data: CPI (`FP.CPI.TOTL`) and nominal GDP per capita (`NY.GDP.PCAP.CN`) for Australia, the United States, South Korea, Japan, Singapore, and China, retrieved on 28 September 2026 (WDI updated 13 July 2026).
-- New files: `data/sources/worldbank-*.json` (checksummed source values), `data/worldbank-manifest.json`, `data/worldbank.json`, `tools/extract_worldbank.mjs`, `src/world.js`, `tests/worldbank.test.mjs`.
-- `src/analysis.js` gains `calculateYearWindow` and `compareCountries`; `tools/verify-data.mjs` now rebuilds and compares the World Bank snapshot and checks continuity; `npm run extract:worldbank` regenerates the snapshot.
-- Annual charts gained a hover tooltip; the comparison can be sorted by change after inflation, price rise, or GDP per capita rise.
-- The site name is now “Everyday Economics · Prices and income”; new Chinese and English copy was added to both catalogs (`data/messages.zh.json` / `data/messages.en.json`).
-
-### 28 September 2026 · First release
-
-- Published the Australian CPI and WPI quarterly storyboard as static Chinese and English pages on GitHub Pages at `econ.adenxie.com.cn`, with the code under Apache-2.0.
+- Font license texts are kept in [assets/fonts/](assets/fonts/); retain the relevant notices when using or distributing them.
+- Follow the [ABS licensing and attribution requirements](https://www.abs.gov.au/privacy-and-legals), including exceptions for third-party material. Derived charts can be credited as “Based on Australian Bureau of Statistics data”.
+- Follow the [World Bank dataset terms](https://www.worldbank.org/en/about/legal/terms-of-use-for-datasets) and the original sources identified for each indicator. Retain World Bank World Development Indicators attribution for derived charts.
