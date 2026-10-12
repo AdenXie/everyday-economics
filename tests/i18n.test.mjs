@@ -26,7 +26,7 @@ test("English page preserves structural language controls and uses relative asse
   assert.match(english, /<span>End quarter<\/span>/);
   assert.match(english, /CPI · consumer prices/);
   assert.match(english, /WPI · wage prices/);
-  assert.match(english, /Swipe sideways to see later quarters/);
+  assert.match(english, /Swipe the bottom axis or move the slider to pan/);
   assert.match(english, /<nav class="country-tabs" role="tablist" aria-label="Choose an economy or the comparison"/);
   for (const label of ["Australia", "United States", "South Korea", "Japan", "Singapore", "China", "Germany", "United Kingdom", "Compare"]) {
     assert.match(english, new RegExp(`role="tab"[^>]*>${label}</button>`));

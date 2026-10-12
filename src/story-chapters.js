@@ -534,5 +534,63 @@ export const STORY_CHAPTERS = {
         ]
       }
     ]
+  },
+  "CHN_NBS": {
+    "events": [
+      {
+        "start": 2013,
+        "end": 2016,
+        "sources": [
+          {
+            "url": "https://www.stats.gov.cn/sj/sjjd/202302/t20230202_1896815.html"
+          }
+        ]
+      },
+      {
+        "start": 2017,
+        "end": 2019,
+        "sources": [
+          {
+            "url": "https://www.stats.gov.cn/xxgk/jd/sjjd2020/202001/t20200119_1764891.html"
+          }
+        ]
+      },
+      {
+        "start": 2020,
+        "end": 2021,
+        "sources": [
+          {
+            "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900970.html"
+          },
+          {
+            "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1901342.html"
+          }
+        ]
+      },
+      {
+        "start": 2022,
+        "end": 2023,
+        "sources": [
+          {
+            "url": "https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202301/t20230117_1892129.html"
+          },
+          {
+            "url": "https://www.stats.gov.cn/sj/sjjd/202401/t20240118_1946703.html"
+          }
+        ]
+      },
+      {
+        "start": 2024,
+        "end": 2025,
+        "sources": [
+          {
+            "url": "https://www.stats.gov.cn/sj/sjjd/202601/t20260119_1962345.html"
+          },
+          {
+            "url": "https://www.stats.gov.cn/sj/zxfb/202601/t20260119_1962321.html"
+          }
+        ]
+      }
+    ]
   }
 };

@@ -1,0 +1,190 @@
+{
+  "retrievedOn": "2026-10-13",
+  "institution": "National Bureau of Statistics of China",
+  "scope": "Mainland China; all residents; annual household survey income in current yuan per person",
+  "extraction": "Manually transcribed and checked against official yearbook tables and annual releases; no live API or scheduled refresh",
+  "sources": [
+    {
+      "id": "cpi",
+      "title": "中国统计年鉴2025：5-2 各种价格定基指数",
+      "url": "https://www.stats.gov.cn/sj/ndsj/2025/html/C05-02.jpg",
+      "retrievedOn": "2026-10-13",
+      "sourceContentSha256": "71D6E66F0E209FDF6D079BEAC9B6E5DCC9E1F07FBA6013978D1245C826F8BD33"
+    },
+    {
+      "id": "cpi-yoy",
+      "title": "中国统计年鉴2025：5-1 各种价格指数",
+      "url": "https://www.stats.gov.cn/sj/ndsj/2025/html/C05-01.jpg",
+      "retrievedOn": "2026-10-13",
+      "sourceContentSha256": "E8EE5E98D6E31F27D7395D4EA03640A2556CC19258DF88605E349E341B23046A"
+    },
+    {
+      "id": "disposable",
+      "title": "中国统计年鉴2025：6-16 居民人均可支配收入和指数",
+      "url": "https://www.stats.gov.cn/sj/ndsj/2025/html/C06-16.jpg",
+      "retrievedOn": "2026-10-13",
+      "sourceContentSha256": "99BFA8E7680F19DDED1B6D0F0560709BFF4DEDB521A7FB87743F9DB736ED49A6"
+    },
+    {
+      "id": "wage",
+      "title": "中国统计年鉴2025：6-1 全国居民人均收支情况",
+      "url": "https://www.stats.gov.cn/sj/ndsj/2025/html/C06-01.jpg",
+      "retrievedOn": "2026-10-13",
+      "sourceContentSha256": "C651C42FFE2225D649BD55CEB2FCEA100805DADC574E0F3E4BAF4BCC131D0D5B"
+    },
+    {
+      "id": "wage-early",
+      "title": "中国统计年鉴2019：6-1 全国居民人均收支情况",
+      "url": "https://www.stats.gov.cn/sj/ndsj/2019/html/C0601.jpg",
+      "retrievedOn": "2026-10-13",
+      "sourceContentSha256": "E93BA72D12C915B570E7C5E436D4C6F269B4E445E9EF47789DB6E4C8ED590C1F"
+    },
+    {
+      "id": "cpi-2025",
+      "title": "2025年12月份居民消费价格：全年与上年持平",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202601/t20260109_1962273.html",
+      "retrievedOn": "2026-10-13",
+      "sourceContentSha256": "029D16D76BA6C207B46BE0CF4A13CA2C88AE431540AEC335778644E97830DA7F"
+    },
+    {
+      "id": "income-2025",
+      "title": "2025年居民收入和消费支出情况",
+      "url": "https://www.stats.gov.cn/sj/zxfb/202601/t20260119_1962321.html",
+      "retrievedOn": "2026-10-13",
+      "sourceContentSha256": "E3C70C809C5C5672E30FBD7BBB084423C584397FA30DD8D09DE0691644430B4A"
+    }
+  ],
+  "canonicalSha256": "9789D989ECA3113D6817626E75E1342C17B72B2D66B4EB62B433D8CB82986284",
+  "observations": [
+    {
+      "year": 2013,
+      "cpi1978": 594.8,
+      "cpiPreviousYear": 102.6,
+      "disposableIncome": 18311,
+      "wageIncome": 10410.8,
+      "cpiSource": "cpi",
+      "disposableSource": "disposable",
+      "wageSource": "wage-early"
+    },
+    {
+      "year": 2014,
+      "cpi1978": 606.7,
+      "cpiPreviousYear": 102,
+      "disposableIncome": 20167,
+      "wageIncome": 11420.6,
+      "cpiSource": "cpi",
+      "disposableSource": "disposable",
+      "wageSource": "wage-early"
+    },
+    {
+      "year": 2015,
+      "cpi1978": 615.2,
+      "cpiPreviousYear": 101.4,
+      "disposableIncome": 21966,
+      "wageIncome": 12459,
+      "cpiSource": "cpi",
+      "disposableSource": "disposable",
+      "wageSource": "wage-early"
+    },
+    {
+      "year": 2016,
+      "cpi1978": 627.5,
+      "cpiPreviousYear": 102,
+      "disposableIncome": 23821,
+      "wageIncome": 13455.2,
+      "cpiSource": "cpi",
+      "disposableSource": "disposable",
+      "wageSource": "wage-early"
+    },
+    {
+      "year": 2017,
+      "cpi1978": 637.5,
+      "cpiPreviousYear": 101.6,
+      "disposableIncome": 25974,
+      "wageIncome": 14620.3,
+      "cpiSource": "cpi",
+      "disposableSource": "disposable",
+      "wageSource": "wage-early"
+    },
+    {
+      "year": 2018,
+      "cpi1978": 650.9,
+      "cpiPreviousYear": 102.1,
+      "disposableIncome": 28228,
+      "wageIncome": 15829,
+      "cpiSource": "cpi",
+      "disposableSource": "disposable",
+      "wageSource": "wage"
+    },
+    {
+      "year": 2019,
+      "cpi1978": 669.8,
+      "cpiPreviousYear": 102.9,
+      "disposableIncome": 30733,
+      "wageIncome": 17186,
+      "cpiSource": "cpi",
+      "disposableSource": "disposable",
+      "wageSource": "wage"
+    },
+    {
+      "year": 2020,
+      "cpi1978": 686.5,
+      "cpiPreviousYear": 102.5,
+      "disposableIncome": 32189,
+      "wageIncome": 17917,
+      "cpiSource": "cpi",
+      "disposableSource": "disposable",
+      "wageSource": "wage"
+    },
+    {
+      "year": 2021,
+      "cpi1978": 692.7,
+      "cpiPreviousYear": 100.9,
+      "disposableIncome": 35128,
+      "wageIncome": 19629,
+      "cpiSource": "cpi",
+      "disposableSource": "disposable",
+      "wageSource": "wage"
+    },
+    {
+      "year": 2022,
+      "cpi1978": 706.6,
+      "cpiPreviousYear": 102,
+      "disposableIncome": 36883,
+      "wageIncome": 20590,
+      "cpiSource": "cpi",
+      "disposableSource": "disposable",
+      "wageSource": "wage"
+    },
+    {
+      "year": 2023,
+      "cpi1978": 708,
+      "cpiPreviousYear": 100.2,
+      "disposableIncome": 39218,
+      "wageIncome": 22053,
+      "cpiSource": "cpi",
+      "disposableSource": "disposable",
+      "wageSource": "wage"
+    },
+    {
+      "year": 2024,
+      "cpi1978": 709.4,
+      "cpiPreviousYear": 100.2,
+      "disposableIncome": 41314,
+      "wageIncome": 23327,
+      "cpiSource": "cpi",
+      "disposableSource": "disposable",
+      "wageSource": "wage"
+    },
+    {
+      "year": 2025,
+      "cpi1978": null,
+      "cpiPreviousYear": 100,
+      "disposableIncome": 43377,
+      "wageIncome": 24555,
+      "cpiSource": "cpi-2025",
+      "disposableSource": "income-2025",
+      "wageSource": "income-2025"
+    }
+  ]
+}

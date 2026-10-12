@@ -1,17 +1,22 @@
 import { calculateYearWindow, compareCountries, comparisonScale } from "./analysis.js";
+import { loadChinaSnapshot, mapChinaObservations } from "./china.js";
+import { attachChartInspector } from "./chart-inspector.js";
 import { renderReading } from "./stories.js";
 
 const svgNS = "http://www.w3.org/2000/svg";
-const VIEWS = ["AUS", "USA", "KOR", "JPN", "SGP", "CHN", "DEU", "GBR", "RUS", "CAN", "compare"];
+const VIEWS = [...document.querySelectorAll(".country-tabs [role=tab]")].map(tab => tab.dataset.view);
 const DEFAULT_START = 2000;
 
 let messages = {};
 let locale = "zh";
 let snapshot = null;
+let chinaSnapshot = null;
+let chinaReady = false;
 let number;
 let money;
 let currentView = "AUS";
 let baseTitle = document.title;
+let updateLanguageLinks = () => {};
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -58,6 +63,7 @@ function writeParams(view, from, to) {
   url.searchParams.set("from", from);
   url.searchParams.set("to", to);
   window.history.replaceState({}, "", url);
+  updateLanguageLinks();
 }
 
 // ---------- year selects ----------
@@ -94,22 +100,24 @@ function linkSelects(startSelect, endSelect, onChange) {
 
 // ---------- country chart ----------
 
-function renderCountryChart(country, analysis) {
-  const svg = $("#world-chart");
-  const tooltip = $("#world-tooltip");
+function renderCountryChart(country, analysis, options = {}) {
+  const svg = $(options.svgSelector ?? "#world-chart");
+  const tooltip = $(options.tooltipSelector ?? "#world-tooltip");
   const rows = analysis.rows;
-  const countryName = message(`country.${country.iso3}`);
+  const countryName = options.countryName ?? message(`country.${country.iso3}`);
+  const incomeLabel = options.incomeLabel ?? message("world.tooltipIncome");
   svg.replaceChildren();
   tooltip.hidden = true;
-  svg.setAttribute("aria-label", message("world.chartAria", {
+  svg.setAttribute("aria-label", message(options.ariaKey ?? "world.chartAria", {
     country: countryName,
     start: yearLabel(analysis.start.year),
     end: yearLabel(analysis.end.year),
     cpi: signedPct(analysis.cpiGrowthPct),
     income: signedPct(analysis.incomeGrowthPct),
+    incomeLabel,
   }));
-  appendSvg(svg, "title", {}, message("world.svgTitle", { country: countryName }));
-  appendSvg(svg, "desc", {}, message("world.svgDesc"));
+  appendSvg(svg, "title", {}, message(options.titleKey ?? "world.svgTitle", { country: countryName, incomeLabel }));
+  appendSvg(svg, "desc", {}, message(options.descriptionKey ?? "world.svgDesc"));
 
   const width = 1000;
   const height = 390;
@@ -166,7 +174,7 @@ function renderCountryChart(country, analysis) {
   const lastIndex = rows.length - 1;
   const endpoints = [
     ["cpiNormalized", "cpi-point", "CPI"],
-    ["incomeNormalized", "wpi-point", "GDP"],
+    ["incomeNormalized", "wpi-point", options.endpointIncome ?? "GDP"],
   ];
   const endY = endpoints.map(([key]) => y(rows[lastIndex][key]));
   const labelY = [...endY];
@@ -181,69 +189,21 @@ function renderCountryChart(country, analysis) {
     appendSvg(svg, "text", { x: x(lastIndex) + 12, y: labelY[index] + 4, class: `endpoint-label ${className}` }, label);
   });
 
-  // Hover layer: crosshair, markers and a tooltip for the nearest year.
-  const hover = appendSvg(svg, "g", { class: "hover-layer", visibility: "hidden" });
-  const crosshair = appendSvg(hover, "line", { y1: margin.top, y2: margin.top + plotHeight, class: "crosshair" });
-  const cpiMarker = appendSvg(hover, "circle", { r: 5, class: "series-point cpi-point" });
-  const incomeMarker = appendSvg(hover, "circle", { r: 5, class: "series-point wpi-point" });
-  const target = appendSvg(svg, "rect", {
-    x: margin.left - 10, y: margin.top, width: plotWidth + 20, height: plotHeight, class: "hover-target",
+  const rawNumber = new Intl.NumberFormat(locale === "en" ? "en-AU" : "zh-CN", { maximumFractionDigits: 2 });
+  attachChartInspector({
+    svg, tooltip, rows, x, y, width, height, margin,
+    periodLabel: row => yearLabel(row.year),
+    note: message("chart.inspectNote"),
+    gapLabel: message("chart.inspectGap"),
+    formatIndex: value => number.format(value),
+    formatGap: value => `${value > 0 ? "+" : ""}${number.format(value)}`,
+    series: [
+      { normalizedKey: "cpiNormalized", rawKey: "cpi", label: message("world.tooltipCpi"), className: "cpi",
+        rawLabel: options.rawCpiLabel ?? message("chart.rawAnnualCpi"), formatRaw: value => rawNumber.format(value) },
+      { normalizedKey: "incomeNormalized", rawKey: "gdpPerCapita", label: incomeLabel, className: "wpi",
+        rawLabel: options.rawIncomeLabel ?? message("chart.rawGdp"), formatRaw: value => message("format.money", { amount: rawNumber.format(value), currency: message(`currency.${country.iso3}`) }) },
+    ],
   });
-
-  const index1 = new Intl.NumberFormat(locale === "en" ? "en-AU" : "zh-CN", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-  const showAt = (clientX) => {
-    const matrix = svg.getScreenCTM();
-    if (!matrix) return;
-    const point = new DOMPoint(clientX, 0).matrixTransform(matrix.inverse());
-    const ratio = rows.length === 1 ? 0 : (point.x - margin.left) / plotWidth;
-    const index = Math.min(rows.length - 1, Math.max(0, Math.round(ratio * (rows.length - 1))));
-    const row = rows[index];
-    const cx = x(index);
-    crosshair.setAttribute("x1", cx);
-    crosshair.setAttribute("x2", cx);
-    cpiMarker.setAttribute("cx", cx);
-    cpiMarker.setAttribute("cy", y(row.cpiNormalized));
-    incomeMarker.setAttribute("cx", cx);
-    incomeMarker.setAttribute("cy", y(row.incomeNormalized));
-    hover.setAttribute("visibility", "visible");
-
-    tooltip.replaceChildren();
-    const heading = document.createElement("strong");
-    heading.textContent = yearLabel(row.year);
-    const note = document.createElement("span");
-    note.className = "tooltip-note";
-    note.textContent = message("world.tooltipNote");
-    tooltip.append(heading, note);
-    for (const [className, label, value] of [
-      ["cpi", message("world.tooltipCpi"), row.cpiNormalized],
-      ["wpi", message("world.tooltipIncome"), row.incomeNormalized],
-    ]) {
-      const line = document.createElement("span");
-      line.className = `tooltip-row tooltip-${className}`;
-      const swatch = document.createElement("i");
-      swatch.setAttribute("aria-hidden", "true");
-      const name = document.createElement("span");
-      name.textContent = label;
-      const figure = document.createElement("b");
-      figure.textContent = index1.format(value);
-      line.append(swatch, name, figure);
-      tooltip.append(line);
-    }
-    tooltip.hidden = false;
-    const wrapper = tooltip.parentElement.getBoundingClientRect();
-    const svgBox = svg.getBoundingClientRect();
-    const pixelX = svgBox.left - wrapper.left + tooltip.parentElement.scrollLeft + (cx / width) * svgBox.width;
-    const flip = pixelX + tooltip.offsetWidth + 18 > tooltip.parentElement.scrollLeft + wrapper.width;
-    tooltip.style.left = `${flip ? pixelX - tooltip.offsetWidth - 14 : pixelX + 14}px`;
-    tooltip.style.top = `${(margin.top / height) * svgBox.height + 4}px`;
-  };
-  const hide = () => {
-    hover.setAttribute("visibility", "hidden");
-    tooltip.hidden = true;
-  };
-  target.addEventListener("pointermove", (event) => showAt(event.clientX));
-  target.addEventListener("pointerdown", (event) => showAt(event.clientX));
-  target.addEventListener("pointerleave", hide);
 }
 
 // ---------- country view ----------
@@ -294,6 +254,166 @@ function setupCountry(iso3, requested) {
   $("#world-start").value = String(start);
   $("#world-end").value = String(end);
   renderCountry(iso3);
+}
+
+// ---------- China NBS resident-income view ----------
+
+function readChinaParams() {
+  const parameters = new URLSearchParams(window.location.search);
+  const from = Number.parseInt(parameters.get("chinaFrom"), 10);
+  const to = Number.parseInt(parameters.get("chinaTo"), 10);
+  const income = ["disposableIncome", "wageIncome"].includes(parameters.get("chinaIncome"))
+    ? parameters.get("chinaIncome")
+    : "disposableIncome";
+  return { from: Number.isFinite(from) ? from : null, to: Number.isFinite(to) ? to : null, income };
+}
+
+function writeChinaParams(from, to, income) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("chinaFrom", from);
+  url.searchParams.set("chinaTo", to);
+  url.searchParams.set("chinaIncome", income);
+  window.history.replaceState({}, "", url);
+  updateLanguageLinks();
+}
+
+function renderChina() {
+  if (!chinaSnapshot || !chinaReady) return;
+  const start = Number($("#china-start").value);
+  const end = Number($("#china-end").value);
+  const incomeField = $("#china-income").value;
+  const incomeLabel = message(incomeField === "wageIncome" ? "china.incomeWage" : "china.incomeDisposable");
+  const observations = mapChinaObservations(chinaSnapshot, incomeField);
+  const analysis = calculateYearWindow(observations, start, end);
+  const countryName = message("country.CHN");
+  const currency = message("currency.CHN");
+
+  $("#china-range").textContent = message("world.range", { start: yearLabel(start), end: yearLabel(end), country: countryName });
+  $("#china-period").textContent = $("#china-range").textContent;
+  $("#china-income-legend").textContent = incomeLabel;
+  $("#china-income-label").textContent = incomeLabel;
+  $("#china-income-detail").textContent = message(incomeField === "wageIncome" ? "china.incomeDetailWage" : "china.incomeDetailDisposable");
+  renderCountryChart({ iso3: "CHN" }, analysis, {
+    svgSelector: "#china-chart",
+    tooltipSelector: "#china-tooltip",
+    countryName,
+    incomeLabel,
+    ariaKey: "china.chartAria",
+    titleKey: "china.svgTitle",
+    descriptionKey: "china.svgDesc",
+    endpointIncome: message("china.endpointIncome"),
+    rawCpiLabel: message("chart.rawChinaCpi"),
+    rawIncomeLabel: message("chart.rawResidentIncome"),
+  });
+
+  $("#china-cpi-growth").textContent = signedPct(analysis.cpiGrowthPct);
+  $("#china-income-growth").textContent = signedPct(analysis.incomeGrowthPct);
+  $("#china-basket-label").textContent = message("china.basketLabel", {
+    money: message("format.money", { amount: "100", currency }),
+  });
+  $("#china-basket").textContent = message("format.money", { amount: money.format(analysis.cpiIndexed100), currency });
+  const real = analysis.cpiDeflatedIncomeGrowthPct;
+  const gap = analysis.differencePp;
+  $("#china-real").textContent = message("china.realUp", { value: signedPct(real) });
+  if (Math.abs(gap) < 0.05) $("#china-real-detail").textContent = message("china.realSameDetail");
+  else if (gap > 0) $("#china-real-detail").textContent = message("china.realUpDetail", { gap: number.format(gap) });
+  else $("#china-real-detail").textContent = message("china.realDownDetail", { gap: number.format(Math.abs(gap)) });
+
+  renderReading($("#china-reading"), {
+    id: "CHN_NBS", analysis, kind: "annual", locale, message,
+    incomeMode: incomeField === "wageIncome" ? "wage" : "disposable",
+    start: yearLabel(start), end: yearLabel(end), currency,
+    first: chinaSnapshot.firstYear, last: chinaSnapshot.lastYear,
+    selectRange(from, to) {
+      $("#china-start").value = String(from);
+      $("#china-end").value = String(to);
+      renderChina();
+      $("#china-chart").scrollIntoView({ behavior: "instant", block: "center" });
+    },
+  });
+  writeChinaParams(start, end, incomeField);
+}
+
+function setupChina(requested = readChinaParams()) {
+  if (!chinaSnapshot || chinaReady) return;
+  fillYears($("#china-start"), chinaSnapshot.firstYear, chinaSnapshot.lastYear);
+  fillYears($("#china-end"), chinaSnapshot.firstYear, chinaSnapshot.lastYear);
+  const [start, end] = clampRange(requested.from, requested.to, chinaSnapshot.firstYear, chinaSnapshot.lastYear, chinaSnapshot.firstYear);
+  $("#china-start").value = String(start);
+  $("#china-end").value = String(end);
+  $("#china-income").value = requested.income;
+  $("#china-start").addEventListener("change", () => {
+    if (Number($("#china-start").value) > Number($("#china-end").value)) $("#china-end").value = $("#china-start").value;
+    renderChina();
+  });
+  $("#china-end").addEventListener("change", () => {
+    if (Number($("#china-end").value) < Number($("#china-start").value)) $("#china-start").value = $("#china-end").value;
+    renderChina();
+  });
+  $("#china-income").addEventListener("change", renderChina);
+  $("#china-snapshot-date").textContent = message("china.snapshotDate", { date: chinaSnapshot.snapshotDate });
+  renderChinaSources(chinaSnapshot.sources ?? []);
+  renderChinaTable();
+  $("#china-loading").hidden = true;
+  $("#china-error").hidden = true;
+  $("#china-content").hidden = false;
+  chinaReady = true;
+  renderChina();
+}
+
+function renderChinaSources(sources) {
+  const container = $("#china-sources");
+  container.replaceChildren();
+  for (const source of sources) {
+    const sourceId = String(source.id ?? "").toLowerCase();
+    const key = sourceId.includes("cpi") ? "china.sourceKeyCpi"
+      : sourceId.includes("disposable") || sourceId.includes("income") ? "china.sourceKeyDisposable"
+        : sourceId.includes("wage") ? "china.sourceKeyWage" : "china.sourceKeyOther";
+    const row = document.createElement("article");
+    row.className = "source-item";
+    const badge = document.createElement("span");
+    badge.className = `source-key ${sourceId.includes("cpi") ? "cpi-source-key" : "wpi-source-key"}`;
+    badge.textContent = message(key);
+    const details = document.createElement("div");
+    const link = document.createElement("a");
+    link.href = source.url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = messages[`china.sourceTitle.${source.id}`] ?? source.title;
+    details.append(link);
+    const detail = document.createElement("p");
+    detail.textContent = source.publishedOn
+      ? message("china.sourceDate", { published: source.publishedOn, retrieved: source.retrievedOn ?? chinaSnapshot.snapshotDate })
+      : message("china.retrievedDate", { date: source.retrievedOn ?? chinaSnapshot.snapshotDate });
+    details.append(detail);
+    row.append(badge, details);
+    container.append(row);
+  }
+}
+
+function renderChinaTable() {
+  const body = $("#china-data-rows");
+  const amount = new Intl.NumberFormat(locale === "en" ? "en-AU" : "zh-CN", { maximumFractionDigits: 1 });
+  for (const row of chinaSnapshot.observations) {
+    const tr = document.createElement("tr");
+    const year = document.createElement("th");
+    year.scope = "row";
+    year.textContent = yearLabel(row.year);
+    tr.append(year);
+    for (const text of [number.format(row.cpi), signedPct(row.cpiPreviousYear - 100), amount.format(row.disposableIncome), amount.format(row.wageIncome)]) {
+      const td = document.createElement("td");
+      td.textContent = text;
+      tr.append(td);
+    }
+    body.append(tr);
+  }
+}
+
+function showChinaError(error) {
+  console.error(error);
+  $("#china-loading").hidden = true;
+  $("#china-content").hidden = true;
+  $("#china-error").hidden = false;
 }
 
 // ---------- comparison view ----------
@@ -402,6 +522,7 @@ function selectView(view, { focus = false, keepYears = true } = {}) {
   }
   $("#story").setAttribute("aria-labelledby", `tab-${view}`);
   $("#abs-view").hidden = view !== "AUS";
+  $("#china-nbs").hidden = view !== "CHN";
   $("#world-country").hidden = view === "compare";
   $("#world-compare").hidden = view !== "compare";
 
@@ -409,6 +530,7 @@ function selectView(view, { focus = false, keepYears = true } = {}) {
   else if (view === "compare") document.title = message("compare.documentTitle");
   else document.title = message("world.documentTitle", { country: message(`country.${view}`) });
 
+  if (view === "CHN" && chinaSnapshot && !chinaReady) setupChina();
   if (!snapshot) return;
   if (view === "compare") setupCompare(years);
   else setupCountry(view, years);
@@ -434,9 +556,10 @@ function setupTabs() {
   }
 }
 
-export async function startWorld(localeMessages, activeLocale) {
+export async function startWorld(localeMessages, activeLocale, onUrlChange = () => {}) {
   messages = localeMessages;
   locale = activeLocale;
+  updateLanguageLinks = onUrlChange;
   baseTitle = messages["metadata.title"] ?? document.title;
   number = new Intl.NumberFormat(locale === "en" ? "en-AU" : "zh-CN", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   money = new Intl.NumberFormat("en-AU", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -444,6 +567,13 @@ export async function startWorld(localeMessages, activeLocale) {
   const initial = readParams();
   setupTabs();
   selectView(initial.view, { keepYears: false });
+
+  loadChinaSnapshot()
+    .then((china) => {
+      chinaSnapshot = china;
+      if (currentView === "CHN") setupChina();
+    })
+    .catch(showChinaError);
 
   const response = await fetch(new URL("../data/worldbank.json", import.meta.url), { cache: "no-store" });
   if (!response.ok) throw new Error(`World Bank snapshot request failed: ${response.status}`);

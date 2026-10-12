@@ -34,6 +34,15 @@ Sources: [ABS CPI](https://www.abs.gov.au/statistics/economy/price-indexes-and-i
 Prepared on **2026-09-28**; **116 consecutive paired quarters, 1997-Q3–2026-Q2**. Release details and workbook checksums are recorded in [the source manifest](data/source-manifest.json).
 <!-- abs-data-status:end -->
 
+### NBS: annual Chinese prices and resident income
+
+The China topic uses a free official static snapshot for **2013–2025**, starting with the unified urban/rural household survey. Both income measures are nominal annual income per resident (yuan/person/year), including non-workers in the denominator. They are neither average employee earnings nor a wage price index for a fixed mix of jobs.
+
+- Disposable income includes wages, net business income, net property income and net transfers; wage income is one component.
+- CPI uses the national fixed-base price index (1978 = 100) from the China Statistical Yearbook 2025, rebased to 2013 = 100. The 2025 level is extended using the officially published unchanged annual CPI. Rounded source values make CPI-adjusted calculations approximate.
+- The [manual source extract](data/sources/china-nbs-annual.json) retains values, per-year provenance, official URLs, retrieval dates and checksums; the [generated snapshot](data/china-nbs.json) feeds the page. Early wage income retains published decimal precision; later values use the sources’ whole-yuan precision.
+- To update, manually check new official yearbooks or annual releases, maintain the extract and checksum, then run `npm run extract:china` and the complete validation gate. There is no paid API or scheduled China refresh.
+
 ### World Bank: annual prices and output per person
 
 | Indicator | ID | Units and definition |
@@ -113,7 +122,7 @@ The reusable process is: fetch official sources → validate series definitions 
 
 - The ABS extractor checks workbook hashes, series IDs, definitions, frequency, units and original-series adjustment type.
 - The World Bank extractor verifies `canonicalSha256`, then generates continuous paired years with both indicators present.
-- `npm run verify` checks continuity, positive values, source integrity and exact World Bank snapshot reconstruction.
+- `npm run verify` checks continuity, positive values, source integrity and exact reconstruction of the World Bank and China NBS snapshots.
 - If a source changes its definition, layout or coverage, investigate before adjusting extraction logic; do not bypass checks by editing generated snapshots.
 
 The [ABS workflow](.github/workflows/update-abs.yml) runs manually. The [World Bank workflow](.github/workflows/update-worldbank.yml) supports quarterly checks and manual runs. Changed values produce a candidate branch for review and merge before publication. Scheduled runs are not guaranteed to execute immediately; the same commands can be used for a manual check.
@@ -128,6 +137,8 @@ Everyday readings translate the selected period's percentages into index and mon
 
 Optional AI assistance should connect to model services through a server. Keep credentials, model settings, prompts and request limits on the server; the browser sends only the necessary question and data context. Current conversations exist only in page memory and clear on reload. When enabling an external service, explain how it processes user data.
 
+Line charts support hover, press and keyboard arrows to inspect a quarter or year, showing rebased indices alongside original source values. On mobile, pan using the bottom axis or the separate slider; the plot is reserved for inspection. Browser long-press menus are suppressed within charts. Original index references and amount units differ, so gaps use the common-start rebased indices.
+
 Preserve semantic labels, keyboard operation, narrow-screen layouts and clear units. Use text or line styles as well as color to distinguish indicators. If analytics are enabled, collect only necessary aggregate information and avoid logging conversation content or credentials.
 
 ## Project structure
@@ -137,7 +148,7 @@ Preserve semantic labels, keyboard operation, narrow-screen layouts and clear un
 | `index.html`, `src/` | Pages, interaction, charts and calculations |
 | `data/sources/` | Official workbooks and checksummed source values |
 | `data/*manifest.json` | Series definitions, economies and source metadata |
-| `data/quarterly.json`, `data/worldbank.json` | Generated data snapshots |
+| `data/quarterly.json`, `data/worldbank.json`, `data/china-nbs.json` | Generated data snapshots |
 | `tools/` | Retrieval, extraction, data-note synchronization and build tools |
 | `server/`, `api/` | Optional AI server logic |
 | `tests/` | Calculation, bilingual-output and server-behavior tests |

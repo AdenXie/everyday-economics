@@ -1,6 +1,7 @@
 import { calculateWindow } from "./analysis.js";
 import { startWorld } from "./world.js";
 import { startAssistant } from "./assistant.js";
+import { attachChartInspector } from "./chart-inspector.js";
 import { renderReading } from "./stories.js";
 
 const svgNS = "http://www.w3.org/2000/svg";
@@ -247,6 +248,21 @@ function renderChart(rows, analysis) {
       class: `endpoint-label ${className}`,
     }, label));
   }
+  const rawNumber = new Intl.NumberFormat(locale === "en" ? "en-AU" : "zh-CN", { maximumFractionDigits: 2 });
+  attachChartInspector({
+    svg, tooltip: document.querySelector("#abs-tooltip"), rows, x, y, width, height, margin,
+    periodLabel: row => formatQuarter(row.period),
+    note: message("chart.inspectNote"), gapLabel: message("chart.inspectGap"),
+    formatIndex: value => number.format(value),
+    formatGap: value => `${value > 0 ? "+" : ""}${number.format(value)}`,
+    series: [
+      { normalizedKey: "cpiNormalized", rawKey: "cpiIndex", label: message("world.tooltipCpi"), className: "cpi",
+        rawLabel: message("chart.rawAbsCpi"), formatRaw: value => rawNumber.format(value) },
+      { normalizedKey: "wpiNormalized", rawKey: "wpiIndex", label: message("chart.legendWpi"), className: "wpi",
+        rawLabel: message("chart.rawAbsWpi"), formatRaw: value => rawNumber.format(value) },
+    ],
+  });
+
 }
 
 function render(snapshot) {
@@ -285,7 +301,23 @@ function render(snapshot) {
   });
 }
 
+function setupChartPanning() {
+  for (const control of document.querySelectorAll("[data-chart-scroll]")) {
+    const wrapper = document.getElementById(control.dataset.chartScroll);
+    const sync = () => {
+      const extent = wrapper.scrollWidth - wrapper.clientWidth;
+      control.value = extent > 0 ? String(100 * wrapper.scrollLeft / extent) : "0";
+    };
+    control.addEventListener("input", () => {
+      wrapper.scrollLeft = Number(control.value) / 100 * (wrapper.scrollWidth - wrapper.clientWidth);
+    });
+    wrapper.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", sync);
+  }
+}
+
 async function start() {
+  setupChartPanning();
   try {
     const localeResponse = await fetch(new URL(`../data/messages.${locale}.json`, import.meta.url), { cache: "no-store" });
     if (!localeResponse.ok) throw new Error(`Language data request failed: ${localeResponse.status}`);
@@ -303,7 +335,7 @@ async function start() {
     console.error(error);
   }
 
-  startWorld(messages, locale).catch((error) => {
+  startWorld(messages, locale, updateLanguageLinks).catch((error) => {
     console.error(error);
     elements.error.hidden = false;
     elements.error.textContent = message("world.error");

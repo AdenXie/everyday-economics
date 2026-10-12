@@ -83,3 +83,12 @@ for (const country of worldBank.countries) {
   console.log(`World Bank ${country.iso3}: ${country.firstYear}–${country.lastYear}; CPI ${full.cpiGrowthPct.toFixed(1)}%, nominal GDP per capita ${full.incomeGrowthPct.toFixed(1)}%.`);
 }
 console.log(`World Bank common range ${worldBank.commonFirstYear}–${worldBank.commonLastYear}; source checksums verified.`);
+
+// China is a manually collected official snapshot; verification never fetches new values.
+const { buildChinaSnapshot } = await import("./extract_china.mjs");
+const china = JSON.parse(await readFile(new URL("../data/china-nbs.json", import.meta.url), "utf8"));
+assert.deepEqual(china, buildChinaSnapshot(), "China snapshot must match the checked manual source values (run npm run extract:china)");
+assert.equal(china.frequency, "Annual");
+assert.equal(china.firstYear, 2013);
+assert.equal(china.observations[0].cpi, 100);
+console.log(`NBS China: ${china.firstYear}–${china.lastYear}; ${china.observations.length} annual observations; manual snapshot verified.`);

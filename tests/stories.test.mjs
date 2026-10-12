@@ -25,19 +25,21 @@ test("every chart has bilingual authored stories, sourced chapters and usable sh
   const en = JSON.parse(readFileSync(new URL("../data/messages.en.json", import.meta.url), "utf8"));
   const wb = JSON.parse(readFileSync(new URL("../data/worldbank.json", import.meta.url), "utf8"));
   const abs = JSON.parse(readFileSync(new URL("../data/quarterly.json", import.meta.url), "utf8"));
-  assert.deepEqual(Object.keys(STORY_CHAPTERS), ["ABS", ...wb.countries.map(c => c.iso3)]);
+  const china = JSON.parse(readFileSync(new URL("../data/china-nbs.json", import.meta.url), "utf8"));
+  assert.deepEqual(Object.keys(STORY_CHAPTERS), ["ABS", ...wb.countries.map(c => c.iso3), "CHN_NBS"]);
   for (const [id, story] of Object.entries(STORY_CHAPTERS)) {
     const prefix = `story.${id}`;
     for (const name of ["title", "intro", "vignette", "takeaway"]) {
       for (const messages of [zh, en]) assert.ok(messages[`${prefix}.${name}`]?.trim());
     }
-    const country = id === "ABS" ? null : wb.countries.find(c => c.iso3 === id);
+    const country = id === "CHN_NBS" ? china : id === "ABS" ? null : wb.countries.find(c => c.iso3 === id);
     assert.ok(story.events.length >= 4);
     for (const [index, event] of story.events.entries()) {
       assert.ok(event.start <= event.end);
       const range = chapterRange(event, country?.firstYear ?? abs.firstQuarter, country?.lastYear ?? abs.latestQuarter, country ? "annual" : "quarterly");
       assert.ok(range, `${id} chapter ${index} should intersect available data`);
-      if (country) calculateYearWindow(country.observations, ...range);
+      if (id === "CHN_NBS") calculateYearWindow(china.observations.map(row => ({ ...row, gdpPerCapita: row.disposableIncome })), ...range);
+      else if (country) calculateYearWindow(country.observations, ...range);
       else calculateWindow(abs.observations, ...range);
       for (const name of ["title", "body"]) {
         for (const messages of [zh, en]) assert.ok(messages[`${prefix}.event.${index}.${name}`]?.trim());

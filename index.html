@@ -66,11 +66,11 @@
 
       <nav class="country-tabs" role="tablist" aria-label="选择经济体或对比" data-i18n="tabs.aria" data-i18n-attr="aria-label">
         <button type="button" role="tab" id="tab-AUS" data-view="AUS" aria-controls="story" aria-selected="true" data-i18n="country.AUS">澳洲</button>
+        <button type="button" role="tab" id="tab-CHN" data-view="CHN" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.CHN">中国</button>
         <button type="button" role="tab" id="tab-USA" data-view="USA" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.USA">美国</button>
         <button type="button" role="tab" id="tab-KOR" data-view="KOR" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.KOR">韩国</button>
         <button type="button" role="tab" id="tab-JPN" data-view="JPN" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.JPN">日本</button>
         <button type="button" role="tab" id="tab-SGP" data-view="SGP" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.SGP">新加坡</button>
-        <button type="button" role="tab" id="tab-CHN" data-view="CHN" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.CHN">中国</button>
         <button type="button" role="tab" id="tab-DEU" data-view="DEU" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.DEU">德国</button>
         <button type="button" role="tab" id="tab-GBR" data-view="GBR" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.GBR">英国</button>
         <button type="button" role="tab" id="tab-RUS" data-view="RUS" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.RUS">俄罗斯</button>
@@ -122,12 +122,14 @@
                 <span><i class="legend-swatch wpi-swatch" aria-hidden="true"></i><span data-i18n="chart.legendWpi">WPI · 工资价格</span></span>
               </div>
             </div>
-            <div class="chart-scroll" id="chart-scroll">
-              <svg id="trend-chart" viewBox="0 0 1000 390" role="img" aria-label="季度 CPI 与 WPI 指数对比图，加载中" data-i18n="chart.loadingAria" data-i18n-attr="aria-label"></svg>
+            <div class="chart-scroll chart-hover-area" id="chart-scroll">
+              <svg id="trend-chart" aria-describedby="chart-note" viewBox="0 0 1000 390" role="img" aria-label="季度 CPI 与 WPI 指数对比图，加载中" data-i18n="chart.loadingAria" data-i18n-attr="aria-label"></svg>
+              <div id="abs-tooltip" class="chart-tooltip" hidden></div>
             </div>
-            <p class="chart-scroll-hint" data-i18n="chart.scrollHint">左右滑动查看后续季度</p>
+            <label class="chart-pan-control"><span data-i18n="chart.panLabel">左右移动图表</span><input type="range" min="0" max="100" value="0" data-chart-scroll="chart-scroll" aria-label="左右移动季度图表" data-i18n="chart.panQuarterAria" data-i18n-attr="aria-label" /></label>
+            <p class="chart-scroll-hint" data-i18n="chart.scrollHint">从下方坐标轴左右滑动，或拖动滚动条；按住折线区域查看季度数值。</p>
             <figcaption id="chart-note" class="chart-caption">
-              <span data-i18n="chart.caption">纵轴是归一化指数；季度点使用 ABS 发布的原始值。</span>
+              <span data-i18n="chart.caption">纵轴是按所选起点重标的指数；悬停或按住折线查看具体季度与原值。 键盘方向键切换观测点，Esc 关闭提示。</span>
             </figcaption>
           </figure>
 
@@ -206,6 +208,119 @@
           <p class="source-footnote" data-i18n="sources.note">CPI 原始指数自 2025 年 12 月发布起按 2025 年 9 月 = 100 重新定基；图中两线则都按你选的起点重设为 100。快照整理日与两份发布表各自发布日期分开标注。</p>
         </section>
         </div>
+        <section id="china-nbs" class="story-panel china-panel" aria-labelledby="china-title" hidden>
+          <div class="panel-heading">
+            <div class="heading-copy">
+              <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-i18n="china.eyebrow">国家统计局 · 居民收入 · 年度数据</span></p>
+              <h2 id="china-title" data-i18n="china.title">物价涨了多少？居民收入跟上了吗？</h2>
+              <p class="heading-caption"><span data-i18n="china.caption">居民消费价格与居民收入都以所选起点年份 = 100 重新标尺。</span> <span id="china-range">—</span></p>
+            </div>
+            <div class="china-controls">
+              <form class="period-controls" aria-label="选择中国居民收入比较年份" data-i18n="china.controlsAria" data-i18n-attr="aria-label" onsubmit="return false">
+                <label class="period-field" for="china-start">
+                  <span data-i18n="world.startLabel">从哪一年</span>
+                  <select id="china-start" name="china-start"></select>
+                </label>
+                <span class="period-arrow" aria-hidden="true">→</span>
+                <label class="period-field" for="china-end">
+                  <span data-i18n="world.endLabel">到哪一年</span>
+                  <select id="china-end" name="china-end"></select>
+                </label>
+              </form>
+              <label class="period-field china-income-field" for="china-income">
+                <span data-i18n="china.incomeSelectLabel">收入指标</span>
+                <select id="china-income" name="china-income">
+                  <option value="disposableIncome" data-i18n="china.incomeDisposable">居民人均可支配收入</option>
+                  <option value="wageIncome" data-i18n="china.incomeWage">居民人均工资性收入</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <p id="china-loading" class="calculation-note" data-i18n="china.loading">正在读取中国国家统计局快照…</p>
+          <p id="china-error" class="load-error" role="alert" hidden data-i18n="china.error">中国国家统计局专题快照无法读取；世界银行年度视图仍可使用。</p>
+          <div id="china-content" hidden>
+            <figure class="chart-paper" aria-labelledby="china-title" aria-describedby="china-chart-note">
+              <div class="chart-topline">
+                <p id="china-period" class="selected-range">—</p>
+                <div class="legend" aria-label="图例" data-i18n="chart.legendAria" data-i18n-attr="aria-label">
+                  <span><i class="legend-swatch cpi-swatch" aria-hidden="true"></i><span data-i18n="world.legendCpi">CPI · 消费价格</span></span>
+                  <span><i class="legend-swatch wpi-swatch" aria-hidden="true"></i><span id="china-income-legend" data-i18n="china.incomeDisposable">居民人均可支配收入</span></span>
+                </div>
+              </div>
+              <div class="chart-scroll chart-hover-area" id="china-chart-scroll">
+                <svg id="china-chart" aria-describedby="china-chart-note" class="annual-chart" viewBox="0 0 1000 390" role="img" aria-label="中国居民 CPI 与收入年度归一化指数图，加载中" data-i18n="china.loadingAria" data-i18n-attr="aria-label"></svg>
+                <div id="china-tooltip" class="chart-tooltip" hidden></div>
+              </div>
+              <label class="chart-pan-control"><span data-i18n="chart.panLabel">左右移动图表</span><input type="range" min="0" max="100" value="0" data-chart-scroll="china-chart-scroll" aria-label="左右移动中国年度图表" data-i18n="chart.panChinaAria" data-i18n-attr="aria-label" /></label>
+              <p class="chart-scroll-hint" data-i18n="world.scrollHint">从下方坐标轴左右滑动，或拖动滚动条；按住折线区域查看每年数值。</p>
+              <figcaption id="china-chart-note" class="chart-caption"><span data-i18n="china.chartCaption">纵轴是按所选起点归一化的指数；悬停或按住可查看每年的指数与收入原值。 键盘方向键切换观测点，Esc 关闭提示。</span></figcaption>
+            </figure>
+
+            <div class="results-row" aria-live="polite" aria-atomic="true">
+              <article class="result-block result-cpi">
+                <div class="result-label"><span class="result-dot" aria-hidden="true"></span><span data-i18n="world.cpiLabel">消费价格 · CPI</span></div>
+                <div class="result-main"><strong id="china-cpi-growth">—</strong><span data-i18n="result.windowChange">所选区间累计变化</span></div>
+                <p class="result-detail"><span id="china-basket-label">—</span> <strong id="china-basket">—</strong></p>
+              </article>
+              <article class="result-block result-wpi">
+                <div class="result-label"><span class="result-dot" aria-hidden="true"></span><span id="china-income-label" data-i18n="china.incomeDisposable">居民人均可支配收入</span></div>
+                <div class="result-main"><strong id="china-income-growth">—</strong><span data-i18n="result.windowChange">所选区间累计变化</span></div>
+                <p class="result-detail" id="china-income-detail">—</p>
+              </article>
+              <div class="comparison-note">
+                <span class="comparison-label" data-i18n="china.realLabel">扣除 CPI 后的收入变化</span>
+                <strong id="china-real">—</strong>
+                <p id="china-real-detail" data-i18n="china.realInitial">收入增长倍数 ÷ CPI 增长倍数。</p>
+              </div>
+            </div>
+            <p class="calculation-note" data-i18n="china.calculationNote">扣除 CPI 后的变化 = 收入终点与起点之比 ÷ CPI 终点与起点之比 − 1。由于指数公布精度有限，结果为近似值；它是全国平均收入变化，不等于每户实际体验。</p>
+            <section id="china-reading" class="life-reading" aria-label="把居民收入图表读成生活" data-i18n="china.readingAria" data-i18n-attr="aria-label"></section>
+            <details class="china-data-table">
+              <summary data-i18n="china.tableSummary">查看逐年数据表</summary>
+              <p class="calculation-note" data-i18n="china.tableNote">表格使用固定的 2013 = 100 CPI 标尺，收入为名义元/人/年；与上方按所选起点重标的图表不同。2025 年 CPI 按全年持平衔接。</p>
+              <div class="china-table-scroll" tabindex="0" role="region" aria-label="中国逐年数据表，可横向滚动" data-i18n="china.tableRegion" data-i18n-attr="aria-label">
+                <table class="china-table">
+                  <thead><tr>
+                    <th scope="col" data-i18n="china.tableYear">年份</th>
+                    <th scope="col" data-i18n="china.tableCpi">CPI（2013 = 100）</th>
+                    <th scope="col" data-i18n="china.tableInflation">全年 CPI 涨幅</th>
+                    <th scope="col" data-i18n="china.incomeDisposable">居民人均可支配收入</th>
+                    <th scope="col" data-i18n="china.incomeWage">居民人均工资性收入</th>
+                  </tr></thead>
+                  <tbody id="china-data-rows"></tbody>
+                </table>
+              </div>
+            </details>
+
+            <div class="learning-grid china-learning">
+              <article class="learning-card">
+                <p class="learning-index"><span data-i18n="china.methodCpiIndex">消费端</span> <span>01</span></p>
+                <h3 data-i18n="china.methodCpiTitle">居民消费价格指数</h3>
+                <p data-i18n="china.methodCpiBody">2013—2024 年使用国家统计局公布的全国定基指数重标到 2013 = 100；2025 年按全年 CPI 公布的 0.0% 涨幅衔接。公布精度会影响计算结果。</p>
+              </article>
+              <article class="learning-card">
+                <p class="learning-index"><span data-i18n="china.methodIncomeIndex">居民收入</span> <span>02</span></p>
+                <h3 data-i18n="china.methodIncomeTitle">可支配收入与工资性收入</h3>
+                <p data-i18n="china.methodIncomeBody">可支配收入包括工资、经营、财产和转移收入等；工资性收入是其中一部分。工资性收入按全体居民平均，分母包括儿童和非就业者，不是职工平均工资。两项均为名义元/人/年。</p>
+              </article>
+              <article class="learning-card learning-why">
+                <p class="learning-index"><span data-i18n="china.methodRealIndex">实际变化</span> <span>03</span></p>
+                <h3 data-i18n="china.methodRealTitle">除以物价变化，再读收入变化</h3>
+                <p data-i18n="china.methodRealBody">将居民收入的增长倍数除以 CPI 增长倍数，可估算所选区间收入扣除消费价格后的变化。全国平均数不描述地区、群体或家庭之间的差异。</p>
+              </article>
+            </div>
+            <section class="china-source-section" aria-labelledby="china-sources-title">
+              <div class="sources-title">
+                <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-i18n="china.sourcesEyebrow">出处与口径</span></p>
+                <h3 id="china-sources-title" data-i18n="china.sourcesTitle">中国国家统计局官方数据</h3>
+                <p id="china-snapshot-date">—</p>
+              </div>
+              <div id="china-sources" class="source-list"></div>
+              <p class="source-footnote" data-i18n="china.sourceNote">此处使用一次整理的官方静态快照，不会自动更新。CPI 使用官方定基指数重标，2025 年按公布涨幅衔接；舍入会使扣价结果近似。金额为名义元/人/年，下方列出来源页面与取数日期。</p>
+            </section>
+          </div>
+        </section>
         <section id="world-country" class="story-panel world-panel" aria-labelledby="world-title">
           <div class="panel-heading">
             <div class="heading-copy">
@@ -234,13 +349,14 @@
                 <span><i class="legend-swatch wpi-swatch" aria-hidden="true"></i><span data-i18n="world.legendIncome">名义人均 GDP · 本币现价</span></span>
               </div>
             </div>
-            <div class="chart-scroll chart-hover-area">
-              <svg id="world-chart" viewBox="0 0 1000 390" role="img" aria-label="年度 CPI 与名义人均 GDP 对比图，加载中" data-i18n="world.loadingAria" data-i18n-attr="aria-label"></svg>
+            <div class="chart-scroll chart-hover-area" id="world-chart-scroll">
+              <svg id="world-chart" aria-describedby="world-chart-note" class="annual-chart" viewBox="0 0 1000 390" role="img" aria-label="年度 CPI 与名义人均 GDP 对比图，加载中" data-i18n="world.loadingAria" data-i18n-attr="aria-label"></svg>
               <div id="world-tooltip" class="chart-tooltip" hidden></div>
             </div>
-            <p class="chart-scroll-hint" data-i18n="world.scrollHint">左右滑动查看后续年份</p>
+            <label class="chart-pan-control"><span data-i18n="chart.panLabel">左右移动图表</span><input type="range" min="0" max="100" value="0" data-chart-scroll="world-chart-scroll" aria-label="左右移动世界银行年度图表" data-i18n="chart.panWorldAria" data-i18n-attr="aria-label" /></label>
+            <p class="chart-scroll-hint" data-i18n="world.scrollHint">从下方坐标轴左右滑动，或拖动滚动条；按住折线区域查看每年数值。</p>
             <figcaption id="world-chart-note" class="chart-caption">
-              <span data-i18n="world.chartCaption">纵轴是归一化指数；年度数值来自世界银行 World Development Indicators。把鼠标移到图上可看每一年的数值。</span>
+              <span data-i18n="world.chartCaption">纵轴是归一化指数；年度数值来自世界银行 WDI。悬停或按住折线可查看每年的指数与原值。 键盘方向键切换观测点，Esc 关闭提示。</span>
             </figcaption>
           </figure>
 

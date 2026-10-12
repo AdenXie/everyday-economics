@@ -22,8 +22,14 @@ function element(tag, className, text) {
   return node;
 }
 
-export function renderReading(container, { id, analysis, kind, locale, message, start, end, currency, first, last, selectRange }) {
+export function renderReading(container, { id, analysis, kind, locale, message, start, end, currency, first, last, selectRange, incomeMode }) {
   const story = STORY_CHAPTERS[id];
+  if (!story) {
+    container.replaceChildren();
+    container.hidden = true;
+    return;
+  }
+  container.hidden = false;
   const sameStory = container.dataset.story === id;
   const expanded = sameStory && container.querySelector("details")?.open;
   const activeEvent = container.contains(document.activeElement) ? document.activeElement.dataset.event : null;
@@ -42,7 +48,13 @@ export function renderReading(container, { id, analysis, kind, locale, message, 
   const numbers = element("div", "reading-numbers");
   numbers.append(element("p", "reading-period", message("story.selected", { start, end })));
   const list = element("ul", "reading-values");
-  for (const [role, key] of [["prices", "story.priceReading"], ["income", kind === "quarterly" ? "story.wageReading" : "story.outputReading"], ["adjusted", kind === "quarterly" ? "story.wageAdjusted" : "story.outputAdjusted"]]) {
+  const incomeReadingKey = kind === "quarterly" ? "story.wageReading"
+    : incomeMode === "disposable" ? "story.residentDisposableReading"
+      : incomeMode === "wage" ? "story.residentWageReading" : "story.outputReading";
+  const adjustedReadingKey = kind === "quarterly" ? "story.wageAdjusted"
+    : incomeMode === "disposable" ? "story.residentDisposableAdjusted"
+      : incomeMode === "wage" ? "story.residentWageAdjusted" : "story.outputAdjusted";
+  for (const [role, key] of [["prices", "story.priceReading"], ["income", incomeReadingKey], ["adjusted", adjustedReadingKey]]) {
     const item = element("li", `reading-value reading-${role}`);
     item.append(element("strong", "reading-label", message(`story.label.${role}`)));
     item.append(element("span", "", message(key, {

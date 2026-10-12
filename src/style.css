@@ -381,6 +381,9 @@ select:focus-visible {
 
 .chart-scroll { overflow-x: auto; overflow-y: hidden; scrollbar-color: var(--rule-dark) transparent; scrollbar-width: thin; }
 #trend-chart { display: block; width: 100%; min-width: 700px; height: auto; overflow: visible; }
+.annual-chart { display: block; width: 100%; min-width: 700px; height: auto; overflow: visible; }
+.chart-scroll svg { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.chart-pan-control { display: none; }
 
 .chart-grid { stroke: #ddd4c4; stroke-width: 1; }
 .baseline-grid { stroke: #aa9d88; stroke-dasharray: 3 5; }
@@ -509,6 +512,7 @@ select:focus-visible {
   row-gap: 12px;
   padding: 56px 0 52px;
 }
+.china-source-section .sources-title h3 { max-width: 300px; margin: 0; font: 600 25px/1.25 var(--font-ui); letter-spacing: -.035em; text-wrap: balance; }
 
 .sources-title h2 { max-width: 300px; font-size: 25px; }
 .sources-title > p:last-child { margin: 11px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
@@ -536,6 +540,28 @@ select:focus-visible {
 .page-footer a { color: #425c56; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .load-error { padding: 12px; border: 1px solid var(--cpi); color: #762f1d; background: #fff1e9; font: 500 14px/1.5 var(--font-ui); }
 
+.china-controls { display: flex; align-items: end; justify-content: space-between; gap: 18px; }
+.china-controls .period-controls { flex-wrap: wrap; }
+.china-income-field select { width: 245px; }
+.china-learning { margin-top: 36px; }
+.china-data-table { margin-top: 24px; }
+.china-data-table summary { cursor: pointer; color: var(--wpi); font: 600 13px/1.5 var(--font-ui); }
+.china-table-scroll { overflow-x: auto; }
+.china-table { width: 100%; min-width: 620px; border-collapse: collapse; font: 500 12px/1.6 var(--font-ui); font-variant-numeric: tabular-nums; }
+.china-table th, .china-table td { padding: 10px 12px; border-bottom: 1px solid var(--rule); text-align: right; }
+.china-table th:first-child { text-align: left; }
+.china-table thead th { color: var(--muted); font-weight: 600; }
+.china-source-section {
+  display: grid;
+  grid-template-columns: minmax(220px, .75fr) minmax(0, 1.4fr);
+  column-gap: 55px;
+  row-gap: 12px;
+  margin-top: 38px;
+}
+.china-source-section .source-list { align-self: start; }
+.china-source-section .source-footnote { grid-column: 2; margin: 1px 0 0; color: var(--muted); font-size: 11px; line-height: 1.7; }
+
+
 @media (max-width: 950px) {
   .page-shell { width: min(100% - 36px, 850px); padding: 0 28px; }
   .hero { grid-template-columns: minmax(0, 1.4fr) minmax(210px, .7fr); gap: 34px; padding: 60px 0; }
@@ -543,6 +569,8 @@ select:focus-visible {
   .period-controls { align-self: end; }
   .learning-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .learning-why { grid-column: 1 / -1; }
+  .china-controls { align-items: start; flex-direction: column; }
+  .china-income-field select { width: 245px; }
 }
 
 @media (max-width: 640px) {
@@ -575,7 +603,11 @@ select:focus-visible {
   .chart-paper { padding: 13px 12px 10px; }
   .chart-topline { align-items: start; flex-direction: column; gap: 10px; }
   .legend { gap: 12px; font-size: 10px; }
-  #trend-chart { min-width: 700px; }
+  #trend-chart, .annual-chart { min-width: 1000px; }
+  .chart-scroll .axis-label { font-size: 13px; }
+  .chart-scroll .endpoint-label { font-size: 13px; }
+  .chart-pan-control { display: flex; align-items: center; gap: 12px; margin-top: 12px; font: 500 11px/1.5 var(--font-ui); color: var(--muted); }
+  .chart-pan-control input { flex: 1; min-width: 0; height: 28px; accent-color: var(--wpi); }
   .chart-caption { align-items: start; flex-direction: column; gap: 3px; font-size: 11px; }
   .chart-scroll-hint { display: block; }
   .results-row { grid-template-columns: 1fr; }
@@ -590,7 +622,14 @@ select:focus-visible {
   .learning-card h3 { font-size: 17px; }
   .learning-card > p:not(.learning-index) { font-size: 14px; }
   .sources-section { grid-template-columns: 1fr; gap: 16px; padding: 42px 0 38px; }
+  .china-controls { width: 100%; gap: 12px; }
+  .china-controls .period-controls { width: 100%; }
+  .china-income-field { width: 100%; }
+  .china-income-field select { width: 100%; }
+  .china-source-section { grid-template-columns: 1fr; gap: 16px; margin-top: 31px; }
+  .china-source-section .source-footnote { grid-column: 1; }
   .sources-title h2 { max-width: none; font-size: 23px; }
+  .china-source-section .sources-title h3 { max-width: none; font-size: 23px; }
   .source-item { grid-template-columns: 36px minmax(0, 1fr); gap: 10px; }
   .source-key { width: 32px; height: 25px; }
   .source-date { grid-column: 2; margin-top: -5px; font-size: 9px; }
@@ -664,12 +703,13 @@ button:focus-visible {
 /* ---------- World Bank country view ---------- */
 
 .world-panel { border-bottom: 1px solid var(--rule); }
-#abs-view + .world-panel { padding-top: 56px; }
+#abs-view + .china-panel + .world-panel { padding-top: 56px; }
 .world-panel .learning-grid { margin-top: 36px; }
 .world-sources { margin-top: 30px; }
 
+
 .chart-hover-area { position: relative; }
-.hover-target { fill: transparent; cursor: crosshair; }
+.hover-target { fill: transparent; cursor: crosshair; touch-action: none; }
 .crosshair { stroke: #938873; stroke-width: 1; stroke-dasharray: 2 4; vector-effect: non-scaling-stroke; }
 
 .chart-tooltip {
@@ -677,6 +717,8 @@ button:focus-visible {
   z-index: 3;
   display: grid;
   min-width: 190px;
+  width: min(280px, calc(100% - 16px));
+  box-sizing: border-box;
   gap: 4px;
   padding: 9px 11px;
   border: 1px solid var(--rule-dark);
@@ -689,11 +731,13 @@ button:focus-visible {
 
 .chart-tooltip strong { font-size: 12px; }
 .tooltip-note { margin-top: -3px; color: var(--muted); font-size: 10px; }
-.tooltip-row { display: grid; grid-template-columns: 12px 1fr auto; align-items: center; gap: 7px; color: var(--muted); }
+.tooltip-row { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; align-items: center; gap: 7px; color: var(--muted); }
 .tooltip-row i { width: 10px; height: 3px; border-radius: 2px; }
 .tooltip-cpi i { background: var(--cpi); }
 .tooltip-wpi i { background: var(--wpi); }
 .tooltip-row b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.tooltip-raw { color: var(--muted); font-size: 10px; overflow-wrap: anywhere; }
+.tooltip-gap { margin-top: 4px; padding-top: 5px; border-top: 1px solid var(--rule); color: var(--ink); }
 
 /* ---------- comparison view ---------- */
 
@@ -756,7 +800,8 @@ button:focus-visible {
   .bar-row + .bar-row { margin-top: 7px; }
   .bar-value { font-size: 10px; white-space: normal; }
   .is-unavailable td { font-size: 11px; line-height: 1.45; }
-  .chart-tooltip { min-width: 160px; }
+  .chart-tooltip { min-width: 160px; font-size: 12px; }
+  .tooltip-raw { font-size: 11px; }
 }
 
 /* ---------- AI assistant ---------- */
