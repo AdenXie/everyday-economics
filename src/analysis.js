@@ -97,4 +97,3 @@ export function comparisonScale(values) {
     width: value => (Math.abs(project(value)) / range) * 100,
   };
 }
-
