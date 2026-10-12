@@ -1,4 +1,3 @@
-// Curated historical reading periods. Bilingual prose and source labels live in data/messages.*.json.
 export const STORY_CHAPTERS = {
   "ABS": {
     "events": [
@@ -418,6 +417,119 @@ export const STORY_CHAPTERS = {
         "sources": [
           {
             "url": "https://www.bankofengland.co.uk/monetary-policy-report/2022/may-2022"
+          }
+        ]
+      }
+    ]
+  },
+  "RUS": {
+    "events": [
+      {
+        "start": 1992,
+        "end": 1998,
+        "sources": [
+          {
+            "url": "https://www.imf.org/en/Publications/WP/Issues/2016/12/30/Price-Liberalization-in-Russia-The-Early-Record-843"
+          },
+          {
+            "url": "https://www.imf.org/en/news/articles/2015/09/28/04/53/pn9967"
+          },
+          {
+            "url": "https://www.cbr.ru/collection/collection/file/8332/ar_1998_e.pdf"
+          }
+        ]
+      },
+      {
+        "start": 1999,
+        "end": 2007,
+        "sources": [
+          {
+            "url": "https://documents1.worldbank.org/curated/en/477441484190095052/pdf/FINAL-Russia-SCD-Dec-22-ENG-12222016.pdf"
+          }
+        ]
+      },
+      {
+        "start": 2008,
+        "end": 2010,
+        "sources": [
+          {
+            "url": "https://documents1.worldbank.org/curated/en/477441484190095052/pdf/FINAL-Russia-SCD-Dec-22-ENG-12222016.pdf"
+          }
+        ]
+      },
+      {
+        "start": 2014,
+        "end": 2016,
+        "sources": [
+          {
+            "url": "https://www.cbr.ru/eng/press/pr/?file=07112014_195354eng2014-11-07t19_50_55.htm"
+          }
+        ]
+      },
+      {
+        "start": 2020,
+        "end": 2024,
+        "sources": [
+          {
+            "url": "https://www.cbr.ru/eng/press/pr/?file=24042020_133000Key-eng.htm"
+          },
+          {
+            "url": "https://www.imf.org/en/news/articles/2022/03/05/pr2261-imf-staff-statement-on-the-economic-impact-of-war-in-ukraine"
+          },
+          {
+            "url": "https://www.cbr.ru/eng/press/pr/?file=20122024_133000key_eng.htm"
+          }
+        ]
+      }
+    ]
+  },
+  "CAN": {
+    "events": [
+      {
+        "start": 1960,
+        "end": 1982,
+        "sources": [
+          {
+            "url": "https://www.bankofcanada.ca/2023/11/ending-the-pain-of-high-inflation/"
+          }
+        ]
+      },
+      {
+        "start": 1983,
+        "end": 2007,
+        "sources": [
+          {
+            "url": "https://www.bankofcanada.ca/2015/10/inflation-targeting-matter-time/"
+          }
+        ]
+      },
+      {
+        "start": 2008,
+        "end": 2010,
+        "sources": [
+          {
+            "url": "https://www150.statcan.gc.ca/n1/pub/65-208-x/2009000/trend-tend-eng.htm"
+          }
+        ]
+      },
+      {
+        "start": 2014,
+        "end": 2016,
+        "sources": [
+          {
+            "url": "https://www.bankofcanada.ca/wp-content/uploads/2014/07/mpr-2015-01-21.pdf"
+          }
+        ]
+      },
+      {
+        "start": 2020,
+        "end": 2024,
+        "sources": [
+          {
+            "url": "https://www.bankofcanada.ca/2022/03/economic-progress-report-controlling-inflation/"
+          },
+          {
+            "url": "https://www150.statcan.gc.ca/n1/pub/62f0014m/62f0014m2021010-eng.htm"
           }
         ]
       }

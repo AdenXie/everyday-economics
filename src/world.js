@@ -1,8 +1,8 @@
-import { calculateYearWindow, compareCountries } from "./analysis.js";
+import { calculateYearWindow, compareCountries, comparisonScale } from "./analysis.js";
 import { renderReading } from "./stories.js";
 
 const svgNS = "http://www.w3.org/2000/svg";
-const VIEWS = ["AUS", "USA", "KOR", "JPN", "SGP", "CHN", "DEU", "GBR", "compare"];
+const VIEWS = ["AUS", "USA", "KOR", "JPN", "SGP", "CHN", "DEU", "GBR", "RUS", "CAN", "compare"];
 const DEFAULT_START = 2000;
 
 let messages = {};
@@ -313,10 +313,9 @@ function renderCompare() {
 
   const available = rows.filter((row) => row.available);
   const extent = available.flatMap((row) => [row.cpiGrowthPct, row.incomeGrowthPct]);
-  const low = Math.min(0, ...extent);
-  const high = Math.max(0, ...extent);
-  const range = high - low || 1;
-  const zero = (-low / range) * 100;
+  const scale = comparisonScale(extent);
+  const zero = scale.zero;
+  $("#compare-note").textContent = message(scale.compressed ? "compare.compressedNote" : "compare.note");
 
   const body = $("#compare-rows");
   body.replaceChildren();
@@ -346,7 +345,7 @@ function renderCompare() {
         track.className = "bar-track";
         const bar = document.createElement("span");
         bar.className = `bar bar-${className}`;
-        const widthPct = (Math.abs(value) / range) * 100;
+        const widthPct = scale.width(value);
         bar.style.width = `${widthPct}%`;
         bar.style.left = value >= 0 ? `${zero}%` : `${zero - widthPct}%`;
         if (value < 0) bar.classList.add("is-negative");

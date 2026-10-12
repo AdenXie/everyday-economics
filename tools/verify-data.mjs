@@ -65,7 +65,7 @@ const { buildSnapshot } = await import("./extract_worldbank.mjs");
 const { calculateYearWindow } = await import("../src/analysis.js");
 const worldBank = JSON.parse(await readFile(new URL("../data/worldbank.json", import.meta.url), "utf8"));
 assert.deepEqual(worldBank, buildSnapshot(), "data/worldbank.json must match a rebuild from data/sources (run node tools/extract_worldbank.mjs)");
-assert.deepEqual(worldBank.countries.map((country) => country.iso3), ["AUS", "USA", "KOR", "JPN", "SGP", "CHN", "DEU", "GBR"]);
+assert.deepEqual(worldBank.countries.map((country) => country.iso3), ["AUS", "USA", "KOR", "JPN", "SGP", "CHN", "DEU", "GBR", "RUS", "CAN"]);
 assert.equal(worldBank.indicators.cpi.id, "FP.CPI.TOTL");
 assert.equal(worldBank.indicators.income.id, "NY.GDP.PCAP.CN");
 for (const country of worldBank.countries) {

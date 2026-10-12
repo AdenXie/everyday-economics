@@ -82,3 +82,19 @@ export function compareCountries(countries, startYear, endYear) {
     };
   });
 }
+
+export function comparisonScale(values) {
+  // Preserve proportional lengths normally; compress extreme historical inflation.
+  const compressed = values.some(value => Math.abs(value) > 10000);
+  const project = value => compressed ? Math.sign(value) * Math.log1p(Math.abs(value)) : value;
+  const extent = values.map(project);
+  const low = Math.min(0, ...extent);
+  const high = Math.max(0, ...extent);
+  const range = high - low || 1;
+  return {
+    compressed,
+    zero: (-low / range) * 100,
+    width: value => (Math.abs(project(value)) / range) * 100,
+  };
+}
+

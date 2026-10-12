@@ -15,6 +15,7 @@ const names = {
   KOR: ["韩国", "South Korea"], JPN: ["日本", "Japan"],
   SGP: ["新加坡", "Singapore"], CHN: ["中国", "China"],
   DEU: ["德国", "Germany"], GBR: ["英国", "United Kingdom"],
+  RUS: ["俄罗斯", "Russia"], CAN: ["加拿大", "Canada"],
 };
 
 function replaceBlock(document, key, content) {

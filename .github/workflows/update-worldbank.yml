@@ -23,9 +23,18 @@ jobs:
         with:
           node-version: '22'
           package-manager-cache: false
-      # The manifest includes all eight economies, including Germany and the UK.
+      # Countries are read from the manifest, including Russia and Canada.
       - name: Fetch and validate both WDI indicators for all configured economies
         run: npm run refresh:worldbank
+      - name: Record configured coverage
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, appendFileSync } from "node:fs";
+          const manifest = JSON.parse(readFileSync("data/worldbank-manifest.json", "utf8"));
+          appendFileSync(process.env.GITHUB_STEP_SUMMARY,
+            "Checked " + manifest.countries.length + " economies: " + manifest.countries.join(", ") +
+            "\n\nIndicators: " + manifest.indicators.cpi.id + " / " + manifest.indicators.income.id + "\n");
+          NODE
       - name: Check for changed observations
         id: changes
         shell: bash

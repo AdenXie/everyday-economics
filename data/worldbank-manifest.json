@@ -8,7 +8,9 @@
     "SGP",
     "CHN",
     "DEU",
-    "GBR"
+    "GBR",
+    "RUS",
+    "CAN"
   ],
   "indicators": {
     "cpi": {

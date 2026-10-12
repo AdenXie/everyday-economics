@@ -46,7 +46,7 @@ test("every chart has bilingual authored stories, sourced chapters and usable sh
       for (const [sourceIndex, source] of event.sources.entries()) {
         const url = new URL(source.url);
         assert.equal(url.protocol, "https:");
-        assert.match(url.hostname, /(?:^|\.)(?:rba\.gov\.au|abs\.gov\.au|federalreservehistory\.org|federalreserve\.gov|bankofengland\.co\.uk|ons\.gov\.uk|bundesbank\.de|imf\.org|worldbank\.org|bok\.or\.kr|kdi\.re\.kr|boj\.or\.jp|mti\.gov\.sg|meti\.gov\.sg|mas\.gov\.sg|singstat\.gov\.sg|stats\.gov\.cn|wto\.org)$/);
+        assert.match(url.hostname, /(?:^|\.)(?:rba\.gov\.au|abs\.gov\.au|federalreservehistory\.org|federalreserve\.gov|bankofengland\.co\.uk|ons\.gov\.uk|bundesbank\.de|imf\.org|worldbank\.org|bok\.or\.kr|kdi\.re\.kr|boj\.or\.jp|mti\.gov\.sg|meti\.gov\.sg|mas\.gov\.sg|singstat\.gov\.sg|stats\.gov\.cn|wto\.org|bankofcanada\.ca|statcan\.gc\.ca|cbr\.ru)$/);
         for (const messages of [zh, en]) assert.ok(messages[`${prefix}.event.${index}.source.${sourceIndex}`]?.trim());
       }
     }

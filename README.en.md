@@ -5,7 +5,7 @@
 An open-source economic data explorer built on official statistics. Rebased indices and changes over shared periods help readers understand consumer prices, wage prices and output per person.
 
 - Compare Australian consumer prices and wage prices using quarterly ABS CPI and WPI.
-- Explore long-term changes in eight economies using annual World Bank CPI and nominal GDP per capita.
+- Explore long-term changes in ten economies using annual World Bank CPI and nominal GDP per capita.
 - Use separate Chinese and English pages with reproducible sources and calculations.
 
 ## Run locally
@@ -58,8 +58,10 @@ Economies and indicators are defined in [the World Bank source manifest](data/wo
 | China | 1986–2025 |
 | Germany | 1960–2025 |
 | United Kingdom | 1960–2025 |
+| Russia | 1992–2025 |
+| Canada | 1960–2025 |
 
-The shared paired range is **1986–2024**. Comparisons require both indicators throughout the selected period.
+The shared paired range is **1992–2024**. Comparisons require both indicators throughout the selected period.
 <!-- worldbank-coverage:end -->
 
 Data are provided as snapshots. Publication dates, retrieval dates and available observation periods are different concepts: a new release may revise historical values without adding a comparable quarter or year.
@@ -89,6 +91,7 @@ If prices double and nominal GDP per capita triples, the growth gap is 100 perce
 - GDP per capita measures average output, not wages or household disposable income. Adjusting it by CPI also differs from real GDP per capita calculated using the GDP deflator.
 - Pair CPI with nominal GDP per capita; do not divide an already inflation-adjusted real GDP series by CPI again.
 - Compare each economy's own growth rates. Local-currency amounts cannot be ranked without exchange-rate or purchasing-power-parity conversion.
+- If any cumulative change exceeds 10,000% in absolute value, comparison bars use a signed `ln(1 + |change|)` compressed scale to keep other economies visible. Labels retain actual percentages; compressed lengths cannot establish growth ratios, and the page identifies the scale.
 - Do not mix quarterly and annual frequencies, invent missing observations or subtract the raw levels of indices with different definitions.
 
 ## Refresh and validate data
