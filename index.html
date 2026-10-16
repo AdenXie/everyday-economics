@@ -76,6 +76,7 @@
         <button type="button" role="tab" id="tab-RUS" data-view="RUS" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.RUS">俄罗斯</button>
         <button type="button" role="tab" id="tab-CAN" data-view="CAN" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.CAN">加拿大</button>
         <button type="button" role="tab" id="tab-wage" class="tool-tab" data-view="wage" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="tabs.wage">我的工资</button>
+        <button type="button" role="tab" id="tab-timemachine" class="tool-tab-next" data-view="timemachine" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="tabs.timemachine">物价时光机</button>
         <button type="button" role="tab" id="tab-compare" class="compare-tab" data-view="compare" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="tabs.compare">对比</button>
       </nav>
 
@@ -621,6 +622,145 @@
           </div>
 
           <p class="wage-privacy" data-i18n="wage.privacy">隐私：计算全部在你的浏览器本地完成。工资数字不会发送到任何地方，也不会写进网址或浏览器存储；AI 助手不会读取这里的输入。刷新页面后即清空。</p>
+          <p class="tool-crosslink"><a href="?view=timemachine" data-view-link="timemachine" data-i18n="wage.toTimeMachine">用物价时光机折算一笔钱 →</a></p>
+        </section>
+
+        <section id="tm-view" class="story-panel tm-panel" aria-labelledby="tm-title" hidden>
+          <div class="panel-heading">
+            <div class="heading-copy">
+              <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-i18n="tm.eyebrow">物价时光机 · 用 CPI 折算一笔钱</span></p>
+              <h2 id="tm-title" data-i18n="tm.title">那时候的 100 块，现在值多少？</h2>
+              <p class="heading-caption" data-i18n="tm.caption">选地区、金额和两个时间点，用官方 CPI 折算等值金额；交换起点和终点，就能反过来看现在的钱放回过去相当于多少。</p>
+            </div>
+          </div>
+
+          <p id="tm-loading" class="calculation-note" data-i18n="wage.loading">正在读取物价数据…</p>
+          <p id="tm-load-error" class="load-error" role="alert" hidden data-i18n="wage.loadError">物价数据无法读取，计算器暂时不可用。</p>
+          <form id="tm-form" class="wage-form tm-form" aria-label="选择地区、金额与时间" data-i18n="tm.formAria" data-i18n-attr="aria-label" onsubmit="return false" autocomplete="off" hidden>
+            <div class="tm-top">
+              <label class="period-field" for="tm-region">
+                <span data-i18n="wage.regionLabel">地区</span>
+                <select id="tm-region" name="tm-region">
+                  <option value="AUS" data-i18n="country.AUS">澳洲</option>
+                  <option value="CHN" data-i18n="country.CHN">中国</option>
+                  <option value="USA" data-i18n="country.USA">美国</option>
+                  <option value="KOR" data-i18n="country.KOR">韩国</option>
+                  <option value="JPN" data-i18n="country.JPN">日本</option>
+                  <option value="SGP" data-i18n="country.SGP">新加坡</option>
+                  <option value="DEU" data-i18n="country.DEU">德国</option>
+                  <option value="GBR" data-i18n="country.GBR">英国</option>
+                  <option value="RUS" data-i18n="country.RUS">俄罗斯</option>
+                  <option value="CAN" data-i18n="country.CAN">加拿大</option>
+                </select>
+              </label>
+              <label class="period-field" for="tm-source" id="tm-source-field" hidden>
+                <span data-i18n="tm.sourceLabel">中国数据来源</span>
+                <select id="tm-source" name="tm-source">
+                  <option value="WB" data-i18n="tm.sourceWB">世界银行（年份更长）</option>
+                  <option value="NBS" data-i18n="tm.sourceNBS">国家统计局（2013 年起）</option>
+                </select>
+              </label>
+              <label class="period-field wage-amount-field tm-amount-field" for="tm-amount">
+                <span data-i18n="tm.amountLabel">金额</span>
+                <span class="wage-amount-box"><input id="tm-amount" name="tm-amount" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="100" /><span class="wage-currency" id="tm-amount-unit" aria-hidden="true">—</span></span>
+              </label>
+            </div>
+            <fieldset id="tm-unit" class="tm-unit" hidden>
+              <legend data-i18n="tm.unitLegend">起点金额的单位</legend>
+              <label><input type="radio" name="tm-unit" value="old" checked /> <span id="tm-unit-old">—</span></label>
+              <label><input type="radio" name="tm-unit" value="new" /> <span id="tm-unit-new">—</span></label>
+              <p id="tm-reform-note" class="tm-reform-note">—</p>
+            </fieldset>
+            <div class="tm-sliders">
+              <label class="tm-slider" for="tm-from">
+                <span class="tm-slider-head"><span data-i18n="tm.fromLabel">起点</span> <output id="tm-from-label" for="tm-from">—</output></span>
+                <input id="tm-from" type="range" min="0" max="1" step="1" value="0" />
+              </label>
+              <button type="button" id="tm-swap" class="reading-view tm-swap" data-i18n="tm.swap">⇄ 交换起点和终点</button>
+              <label class="tm-slider" for="tm-to">
+                <span class="tm-slider-head"><span data-i18n="tm.toLabel">终点</span> <output id="tm-to-label" for="tm-to">—</output></span>
+                <input id="tm-to" type="range" min="0" max="1" step="1" value="1" />
+              </label>
+            </div>
+            <p id="tm-notice" class="wage-cutoff" role="status" hidden>—</p>
+          </form>
+
+          <p id="tm-error" class="wage-error" role="alert" hidden>—</p>
+          <div id="tm-result" class="tm-result" hidden>
+            <p id="tm-headline" class="tm-headline">—</p>
+            <p id="tm-status" class="visually-hidden" aria-live="polite" aria-atomic="true"></p>
+            <p id="tm-converted" class="calculation-note" hidden>—</p>
+            <p id="tm-old-equivalent" class="calculation-note" hidden>—</p>
+            <div class="results-row tm-results">
+              <article class="result-block result-cpi">
+                <div class="result-label"><span class="result-dot" aria-hidden="true"></span><span data-i18n="tm.cumulativeLabel">累计物价变化</span></div>
+                <div class="result-main"><strong id="tm-cumulative">—</strong></div>
+                <p class="result-detail" id="tm-span">—</p>
+              </article>
+              <article class="result-block result-cpi">
+                <div class="result-label"><span class="result-dot" aria-hidden="true"></span><span data-i18n="tm.annualLabel">年均通胀率（复合）</span></div>
+                <div class="result-main"><strong id="tm-annual">—</strong></div>
+                <p class="result-detail" data-i18n="tm.annualDetail">(较晚 CPI ÷ 较早 CPI)^(1 ÷ 年数) − 1</p>
+              </article>
+              <div class="comparison-note tm-idle" id="tm-idle-box">
+                <span class="comparison-label" data-i18n="tm.idleLabel">一笔不动的现金，购买力变化</span>
+                <strong id="tm-idle">—</strong>
+                <p id="tm-story">—</p>
+              </div>
+            </div>
+            <p id="tm-formula" class="calculation-note">—</p>
+
+            <figure class="chart-paper tm-chart-paper" aria-labelledby="tm-chart-title" aria-describedby="tm-chart-note">
+              <div class="chart-topline">
+                <p id="tm-chart-title" class="selected-range">—</p>
+                <div class="legend" aria-label="图例" data-i18n="chart.legendAria" data-i18n-attr="aria-label">
+                  <span><i class="legend-swatch wpi-swatch" aria-hidden="true"></i><span data-i18n="tm.legend">不动现金的购买力（以起点时的钱计）</span></span>
+                </div>
+              </div>
+              <div class="chart-scroll chart-hover-area" id="tm-chart-scroll">
+                <svg id="tm-chart" class="annual-chart" aria-describedby="tm-chart-note" viewBox="0 0 1000 390" role="img" aria-label="—"></svg>
+                <div id="tm-tooltip" class="chart-tooltip" hidden></div>
+              </div>
+              <label class="chart-pan-control"><span data-i18n="chart.panLabel">左右移动图表</span><input type="range" min="0" max="100" value="0" data-chart-scroll="tm-chart-scroll" aria-label="左右移动时光机图表" data-i18n="tm.panAria" data-i18n-attr="aria-label" /></label>
+              <p class="chart-scroll-hint" data-i18n="tm.scrollHint">从下方坐标轴左右滑动，或拖动滚动条；按住折线区域查看每期数值。</p>
+              <figcaption id="tm-chart-note" class="chart-caption"><span data-i18n="tm.chartCaption">曲线 = 起点金额 × 起点 CPI ÷ 当期 CPI，即同一笔现金按当期物价能买到的东西，以起点时的钱计。低于起点表示购买力减少；通缩时曲线会上升。悬停或按住查看每期数值，键盘方向键切换观测点，Esc 关闭提示。</span></figcaption>
+            </figure>
+
+            <ul class="wage-notes">
+              <li id="tm-note-frequency">—</li>
+              <li id="tm-note-extra" hidden>—</li>
+              <li id="tm-note-reform" hidden>—</li>
+              <li data-i18n="wage.notePersonal">CPI 是全国平均的消费篮子。房租、通勤和消费结构不同，你个人感受到的通胀可能更高或更低。</li>
+              <li><span data-i18n="wage.sourceLabel">来源：</span> <span id="tm-sources">—</span></li>
+            </ul>
+
+            <section class="wage-share" aria-labelledby="tm-share-title">
+              <h3 id="tm-share-title" data-i18n="wage.share.title">分享结果</h3>
+              <p class="calculation-note" data-i18n="tm.share.intro">卡片在你的浏览器里生成。时光机的金额不涉及个人隐私，分享链接会包含地区、金额和起止时间。</p>
+              <div class="wage-share-controls">
+                <label class="period-field" for="tm-card-language">
+                  <span data-i18n="wage.share.language">卡片语言</span>
+                  <select id="tm-card-language">
+                    <option value="zh" data-i18n="wage.share.languageZh">中文</option>
+                    <option value="en" data-i18n="wage.share.languageEn">英文</option>
+                  </select>
+                </label>
+                <button type="button" id="tm-card-create" class="reading-view wage-button" data-i18n="wage.share.create">生成分享卡片</button>
+              </div>
+              <div id="tm-card-output" class="wage-card-output" hidden>
+                <img id="tm-card-preview" alt="分享卡片预览" data-i18n="wage.share.previewAlt" data-i18n-attr="alt" width="540" height="675" />
+                <a id="tm-card-download" class="reading-view wage-button" href="#" download="price-time-machine.png" data-i18n="wage.share.download">下载 PNG</a>
+              </div>
+              <div class="wage-link-row">
+                <label class="period-field wage-link-field" for="tm-share-link">
+                  <span data-i18n="tm.share.linkLabel">分享链接（地区、金额与起止时间）</span>
+                  <input id="tm-share-link" type="text" readonly />
+                </label>
+                <button type="button" id="tm-copy-link" class="reading-view wage-button" data-i18n="wage.share.copy">复制链接</button>
+              </div>
+            </section>
+          </div>
+          <p class="tool-crosslink"><a href="?view=wage" data-view-link="wage" data-i18n="tm.toWage">算算你的工资跑赢通胀了吗 →</a></p>
         </section>
       </main>
 

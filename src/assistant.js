@@ -146,7 +146,9 @@ export function pageContext() {
     const value = textOf(selector);
     if (value && value !== "—") lines.push(`${label}: ${value}`);
   };
-  if (view === "wage") {
+  if (view === "timemachine") {
+    add(t("ai.contextTimeMachine"), "#tm-headline");
+  } else if (view === "wage") {
     // Pay amounts entered in the calculator never reach the assistant.
     lines.push(t("ai.contextWage"));
   } else if (view === "compare") {

@@ -7,6 +7,7 @@ An open-source economic data explorer built on official statistics. Rebased indi
 - Compare Australian consumer prices and wage prices using quarterly ABS CPI and WPI.
 - Explore long-term changes in ten economies using annual World Bank CPI and nominal GDP per capita.
 - Check whether your pay beat inflation: a calculator compares two pay figures with official CPI for the chosen region, entirely in the browser.
+- Move an amount of money through time with the price time machine: convert it with CPI between two dates in either direction, with cumulative price change and average annual inflation.
 - Use separate Chinese and English pages with reproducible sources and calculations.
 
 ## Run locally
@@ -104,6 +105,15 @@ Pay needed to keep up with prices = starting pay × ending CPI / starting CPI
 ```
 
 Pay is treated as the chosen region's local currency, with no exchange-rate conversion; both inputs must use the same basis (both before or after tax, both annual or monthly). A period later than the newest release stops at the latest available observation, with a notice. WPI and resident disposable income appear only as references: neither is average employee pay, and nominal GDP per capita is not used as a pay comparison. Pay amounts are not written to the URL, browser storage or the AI assistant context; share links carry only the region and periods.
+
+The price time machine uses the same CPI sources (China defaults to World Bank CPI and can switch to NBS 2013–2025; one calculation never mixes them):
+
+```text
+Converted amount = amount × ending CPI / starting CPI
+Average annual inflation (%) = 100 × [(later CPI / earlier CPI)^(1 / years) − 1]
+```
+
+When prices fall, untouched cash gains purchasing power. Currency changes inside the coverage use the official fixed ratios: Germany up to 2001 accepts Deutsche Marks (€1 = DM 1.95583), Russia up to 1997 accepts old rubles (1,000 old = 1 new) and South Korea up to 1961 accepts hwan (10 hwan = 1 won); results are shown in the current currency. The other economies have no redenomination inside the data used, with the reasons recorded in the tests. Time-machine amounts are not personal, so share links include the region, amount and dates, and every value is validated when read.
 
 - CPI is a weighted consumer price measure, not an individual household's bill.
 - WPI measures wage prices for a comparable mix of jobs, not individual pay, hours or after-tax income.

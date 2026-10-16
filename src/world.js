@@ -3,6 +3,7 @@ import { loadChinaSnapshot, mapChinaObservations } from "./china.js";
 import { attachChartInspector } from "./chart-inspector.js";
 import { renderReading } from "./stories.js";
 import { showWage } from "./wage.js";
+import { showTimeMachine } from "./tm.js";
 
 const svgNS = "http://www.w3.org/2000/svg";
 const VIEWS = [...document.querySelectorAll(".country-tabs [role=tab]")].map(tab => tab.dataset.view);
@@ -506,7 +507,7 @@ function setupCompare(requested) {
 // ---------- tabs ----------
 
 function currentYears() {
-  if (currentView === "wage") return readParams();
+  if (currentView === "wage" || currentView === "timemachine") return readParams();
   const prefix = currentView === "compare" ? "#compare" : "#world";
   const start = Number($(`${prefix}-start`).value);
   const end = Number($(`${prefix}-end`).value);
@@ -526,17 +527,24 @@ function selectView(view, { focus = false, keepYears = true } = {}) {
   $("#story").setAttribute("aria-labelledby", `tab-${view}`);
   $("#abs-view").hidden = view !== "AUS";
   $("#china-nbs").hidden = view !== "CHN";
-  $("#world-country").hidden = view === "compare" || view === "wage";
+  const toolView = view === "wage" || view === "timemachine";
+  $("#world-country").hidden = view === "compare" || toolView;
   $("#world-compare").hidden = view !== "compare";
   $("#wage-view").hidden = view !== "wage";
+  $("#tm-view").hidden = view !== "timemachine";
 
   if (view === "AUS") document.title = baseTitle;
   else if (view === "compare") document.title = message("compare.documentTitle");
   else if (view === "wage") document.title = message("wage.documentTitle");
+  else if (view === "timemachine") document.title = message("tm.documentTitle");
   else document.title = message("world.documentTitle", { country: message(`country.${view}`) });
 
   if (view === "wage") {
     showWage({ messages, locale, region: previousView, onUrlChange: updateLanguageLinks }).catch(error => console.error(error));
+    return;
+  }
+  if (view === "timemachine") {
+    showTimeMachine({ messages, locale, region: previousView, onUrlChange: updateLanguageLinks }).catch(error => console.error(error));
     return;
   }
   if (view === "CHN" && chinaSnapshot && !chinaReady) setupChina();
@@ -546,6 +554,14 @@ function selectView(view, { focus = false, keepYears = true } = {}) {
 }
 
 function setupTabs() {
+  // The pay calculator and the time machine link to each other without leaving the page.
+  document.addEventListener("click", (event) => {
+    const link = event.target instanceof Element ? event.target.closest("[data-view-link]") : null;
+    if (!link || !VIEWS.includes(link.dataset.viewLink)) return;
+    event.preventDefault();
+    selectView(link.dataset.viewLink, { focus: true });
+    $("#story").scrollIntoView({ block: "start" });
+  });
   const tabs = [...document.querySelectorAll(".country-tabs [role=tab]")];
   for (const tab of tabs) {
     tab.addEventListener("click", () => {

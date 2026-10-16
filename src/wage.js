@@ -55,6 +55,14 @@ function formatPeriodWith(period, text) {
   return formatPeriod(period, series.kind, (key, values) => format(text[key], values));
 }
 
+let priceData = null;
+
+// Shared by the pay calculator and the price time machine so each snapshot loads once.
+export function loadPriceData() {
+  priceData ??= loadData();
+  return priceData;
+}
+
 async function loadData() {
   const fetchJson = async file => {
     const response = await fetch(new URL(`../data/${file}`, import.meta.url), { cache: "no-store" });
@@ -415,7 +423,7 @@ function bind() {
 
 async function setup(preferredRegion) {
   try {
-    data = await loadData();
+    data = await loadPriceData();
   } catch (error) {
     console.error(error);
     $("#wage-loading").hidden = true;

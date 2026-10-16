@@ -19,6 +19,8 @@ const files = [
   ["src/wage.js", "src/wage.js"],
   ["src/wage-calculator.js", "src/wage-calculator.js"],
   ["src/wage-card.js", "src/wage-card.js"],
+  ["src/time-machine.js", "src/time-machine.js"],
+  ["src/tm.js", "src/tm.js"],
   ["src/scrolly.js", "src/scrolly.js"],
   ["src/scrolly-stories.js", "src/scrolly-stories.js"],
   ["src/style.css", "src/style.css"],

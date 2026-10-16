@@ -38,7 +38,7 @@ export async function loadCardFonts(lang) {
 }
 
 // card: { lang, kicker, region, period, verdict, verdictKind, real, realLabel,
-//         rows: [{ label, value, pct, tone }], amounts?, source, note, url }
+//         rows: [{ label, value, pct, tone }], bars?, amounts?, source, note, url }
 export function drawWageCard(canvas, card) {
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
@@ -46,7 +46,7 @@ export function drawWageCard(canvas, card) {
   const left = 96;
   const right = WIDTH - 96;
   const width = right - left;
-  const tone = { ahead: COLORS.wpi, behind: COLORS.cpi, flat: COLORS.ink }[card.verdictKind];
+  const tone = { ahead: COLORS.wpi, behind: COLORS.cpi, flat: COLORS.ink }[card.verdictKind] ?? COLORS.ink;
 
   context.fillStyle = COLORS.paper;
   context.fillRect(0, 0, WIDTH, HEIGHT);
@@ -119,7 +119,12 @@ export function drawWageCard(canvas, card) {
   context.font = `500 28px ${UI}`;
   const amountLines = card.amounts ? wrap(context, card.amounts, width) : [];
   const rest = 56 + 70 + card.rows.length * 108 + (amountLines.length ? 78 + (amountLines.length - 1) * 40 : 0);
-  const numeral = [210, 184, 160, 136, 112].find(size => y + size * .81 + rest <= footer - 36) ?? 96;
+  // The big figure must fit both the remaining height and the card width (long amounts, e.g. ₽528,000).
+  const fits = size => {
+    context.font = `600 ${size}px ${UI}`;
+    return y + size * .81 + rest <= footer - 36 && context.measureText(card.real).width <= width + size * .04;
+  };
+  const numeral = [210, 184, 160, 136, 112, 96, 84, 72].find(fits) ?? 64;
 
   context.fillStyle = tone;
   context.font = `600 ${verdictSize}px ${SERIF[card.lang]}`;
@@ -151,10 +156,13 @@ export function drawWageCard(canvas, card) {
     context.fillText(row.value, right, y);
     context.textAlign = "left";
     y += 26;
+    // Bars compare like with like; cards mixing cumulative and annual rates draw a plain rule.
     context.fillStyle = "rgba(201, 189, 169, .45)";
-    context.fillRect(left, y, width, 18);
-    context.fillStyle = row.tone === "cpi" ? COLORS.cpi : COLORS.wpi;
-    context.fillRect(left, y, Math.max(4, width * Math.abs(row.pct) / largest), 18);
+    context.fillRect(left, y, width, card.bars === false ? 2 : 18);
+    if (card.bars !== false) {
+      context.fillStyle = row.tone === "cpi" ? COLORS.cpi : COLORS.wpi;
+      context.fillRect(left, y, Math.max(4, width * Math.abs(row.pct) / largest), 18);
+    }
     y += 18;
   }
 

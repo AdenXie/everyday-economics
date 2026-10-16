@@ -874,6 +874,49 @@ button:focus-visible {
   .wage-button { justify-content: center; }
 }
 
+/* ---------- price time machine ---------- */
+.country-tabs .tool-tab-next { color: #425c56; }
+.country-tabs .tool-tab-next + .compare-tab { margin-left: 0; }
+.tool-crosslink { margin: 18px 0 0; font: 600 13px/1.5 var(--font-ui); }
+.tool-crosslink a { color: #425c56; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.tm-top { display: flex; flex-wrap: wrap; align-items: end; gap: 14px 22px; }
+.tm-top select { width: 200px; }
+.tm-amount-field { min-width: 220px; }
+.tm-unit { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin: 0; padding: 12px 14px; border: 1px solid var(--rule); background: var(--paper-white); }
+.tm-unit legend { padding: 0 6px; color: var(--brass); font: 600 11px/1.3 var(--font-ui); letter-spacing: .06em; }
+.tm-unit label { display: inline-flex; align-items: center; gap: 7px; min-height: 36px; font: 500 13px/1.4 var(--font-ui); cursor: pointer; }
+.tm-unit input { width: 17px; height: 17px; accent-color: var(--wpi); }
+.tm-reform-note { flex-basis: 100%; margin: 0; color: var(--muted); font: 400 12px/1.65 var(--font-reading); }
+.tm-sliders { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: end; gap: 18px; }
+.tm-slider { display: grid; gap: 6px; min-width: 0; }
+.tm-slider-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 10px; color: var(--muted); font: 600 10px/1.3 var(--font-ui); letter-spacing: .08em; }
+.tm-slider-head output { color: var(--ink); font: 600 15px/1.3 var(--font-ui); letter-spacing: 0; font-variant-numeric: tabular-nums; }
+.tm-slider input { width: 100%; height: 30px; accent-color: var(--cpi); }
+.tm-swap { justify-self: center; min-height: 42px; }
+.tm-headline { margin: 22px 0 6px; font: 600 clamp(24px, 3.2vw, 38px)/1.3 var(--font-reading); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.tm-results { margin-top: 10px; }
+.tm-results .result-block:first-child { padding-left: 0; }
+.tm-idle > strong { font-size: clamp(26px, 2.8vw, 34px) !important; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.tm-idle[data-trend="inflation"] > strong { color: var(--cpi); }
+.tm-idle[data-trend="deflation"] > strong { color: var(--wpi); }
+.tm-chart-paper { margin-top: 22px; }
+.tm-mark { fill: var(--brass); font: 600 11px var(--font-ui); }
+.tm-mark-line { stroke: var(--brass); stroke-width: 1; stroke-dasharray: 2 4; opacity: .6; }
+.tm-mark-reform { fill: var(--cpi); }
+.tm-mark.tm-mark-reform-line, .tm-mark-reform-line { stroke: var(--cpi); stroke-width: 1; stroke-dasharray: 4 3; opacity: .7; }
+@media (max-width: 950px) {
+  .tm-sliders { grid-template-columns: 1fr; }
+  .tm-swap { justify-self: start; }
+}
+@media (max-width: 640px) {
+  .tm-top { align-items: stretch; flex-direction: column; }
+  .tm-top select, .tm-amount-field { width: 100%; }
+  .tm-headline { font-size: 23px; }
+  .country-tabs .tool-tab-next { padding: 0 12px; }
+  #tm-chart { min-width: 1000px; }
+  .tm-chart-paper .tm-mark { font-size: 13px; }
+}
+
 /* ---------- AI assistant ---------- */
 
 .ai-fab {
