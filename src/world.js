@@ -2,6 +2,7 @@ import { calculateYearWindow, compareCountries, comparisonScale } from "./analys
 import { loadChinaSnapshot, mapChinaObservations } from "./china.js";
 import { attachChartInspector } from "./chart-inspector.js";
 import { renderReading } from "./stories.js";
+import { showWage } from "./wage.js";
 
 const svgNS = "http://www.w3.org/2000/svg";
 const VIEWS = [...document.querySelectorAll(".country-tabs [role=tab]")].map(tab => tab.dataset.view);
@@ -505,6 +506,7 @@ function setupCompare(requested) {
 // ---------- tabs ----------
 
 function currentYears() {
+  if (currentView === "wage") return readParams();
   const prefix = currentView === "compare" ? "#compare" : "#world";
   const start = Number($(`${prefix}-start`).value);
   const end = Number($(`${prefix}-end`).value);
@@ -513,6 +515,7 @@ function currentYears() {
 
 function selectView(view, { focus = false, keepYears = true } = {}) {
   const years = keepYears && snapshot ? currentYears() : readParams();
+  const previousView = currentView;
   currentView = view;
   for (const tab of document.querySelectorAll(".country-tabs [role=tab]")) {
     const selected = tab.dataset.view === view;
@@ -523,13 +526,19 @@ function selectView(view, { focus = false, keepYears = true } = {}) {
   $("#story").setAttribute("aria-labelledby", `tab-${view}`);
   $("#abs-view").hidden = view !== "AUS";
   $("#china-nbs").hidden = view !== "CHN";
-  $("#world-country").hidden = view === "compare";
+  $("#world-country").hidden = view === "compare" || view === "wage";
   $("#world-compare").hidden = view !== "compare";
+  $("#wage-view").hidden = view !== "wage";
 
   if (view === "AUS") document.title = baseTitle;
   else if (view === "compare") document.title = message("compare.documentTitle");
+  else if (view === "wage") document.title = message("wage.documentTitle");
   else document.title = message("world.documentTitle", { country: message(`country.${view}`) });
 
+  if (view === "wage") {
+    showWage({ messages, locale, region: previousView, onUrlChange: updateLanguageLinks }).catch(error => console.error(error));
+    return;
+  }
   if (view === "CHN" && chinaSnapshot && !chinaReady) setupChina();
   if (!snapshot) return;
   if (view === "compare") setupCompare(years);

@@ -687,12 +687,14 @@ select:focus-visible {
   color: var(--ink);
 }
 
-.country-tabs .compare-tab {
+.country-tabs .compare-tab,
+.country-tabs .tool-tab {
   margin-left: auto;
   border-left: 1px solid var(--rule);
   padding-left: 22px;
   color: #425c56;
 }
+.country-tabs .tool-tab + .compare-tab { margin-left: 0; }
 
 .country-tabs button:focus-visible,
 button:focus-visible {
@@ -786,7 +788,8 @@ button:focus-visible {
 @media (max-width: 640px) {
   .country-tabs { margin: 0 -19px; padding: 0 19px; }
   .country-tabs button { min-height: 44px; padding: 0 12px; font-size: 12px; }
-  .country-tabs .compare-tab { margin-left: 6px; padding-left: 14px; }
+  .country-tabs .compare-tab, .country-tabs .tool-tab { margin-left: 6px; padding-left: 14px; }
+  .country-tabs .tool-tab + .compare-tab { margin-left: 0; }
   .compare-controls { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
   .sort-field { grid-column: 1 / -1; margin-left: 0; }
   .sort-field select { width: 100%; }
@@ -802,6 +805,73 @@ button:focus-visible {
   .is-unavailable td { font-size: 11px; line-height: 1.45; }
   .chart-tooltip { min-width: 160px; font-size: 12px; }
   .tooltip-raw { font-size: 11px; }
+}
+
+/* ---------- pay calculator ---------- */
+.wage-form { display: grid; gap: 18px; padding: 22px 23px; border: 1px solid var(--rule); background: var(--paper); font-family: var(--font-ui); }
+.wage-region-field select { width: 220px; }
+.wage-points { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 16px; }
+.wage-point { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; min-width: 0; margin: 0; padding: 14px 16px 16px; border: 1px solid var(--rule); background: var(--paper-white); }
+.wage-point legend { padding: 0 6px; color: var(--brass); font: 600 11px/1.3 var(--font-ui); letter-spacing: .08em; }
+.wage-point .period-field select { width: 100%; }
+.wage-amount-box { display: flex; align-items: center; min-height: 42px; border: 1px solid var(--rule-dark); border-radius: 2px; background: var(--paper-white); }
+.wage-amount-box:focus-within { outline: 3px solid var(--brass); outline-offset: 2px; }
+.wage-amount-box input { flex: 1; width: 100%; min-width: 0; min-height: 40px; padding: 7px 10px; border: 0; color: var(--ink); background: transparent; font: 600 15px/1.2 var(--font-ui); font-variant-numeric: tabular-nums; outline: 0; }
+.wage-amount-box input::placeholder { color: var(--rule-dark); font-weight: 500; }
+.wage-currency { flex: 0 0 auto; padding: 0 10px; color: var(--muted); font: 600 11px/1 var(--font-ui); }
+.wage-arrow { padding: 18px 0 0; }
+.wage-cutoff { margin: 0; padding: 10px 13px; border-left: 3px solid var(--brass); color: var(--ink); background: var(--paper-white); font: 500 13px/1.55 var(--font-ui); }
+.wage-form-notes { display: grid; gap: 4px; }
+.wage-form-notes p { margin: 0; color: var(--muted); font: 400 12px/1.6 var(--font-reading); }
+.wage-error { margin: 16px 0 0; padding: 10px 13px; border-left: 3px solid var(--cpi); color: #762f1d; background: #fff1e9; font: 500 13px/1.5 var(--font-ui); }
+.wage-empty { margin: 16px 0 0; color: var(--muted); font-size: 14px; }
+.wage-result { margin-top: 10px; }
+.wage-results .result-block:first-child { padding-left: 0; }
+.wage-verdict > strong { font-size: clamp(28px, 3vw, 38px) !important; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.wage-verdict[data-verdict="ahead"] > strong { color: var(--wpi); }
+.wage-verdict[data-verdict="behind"] > strong { color: var(--cpi); }
+.wage-verdict #wage-verdict { color: var(--ink); font: 600 15px/1.5 var(--font-ui); }
+.wage-verdict .wage-verdict-rule { margin-top: 2px; font-size: 11px; }
+.wage-explain { max-width: 820px; margin: 20px 0 0; font-size: 17px; line-height: 1.8; }
+.wage-chart-paper { margin-top: 22px; }
+.wage-chart-box { margin-top: 8px; }
+#wage-chart { display: block; width: 100%; height: auto; overflow: visible; }
+.wage-dash { stroke-dasharray: 7 6; }
+.wage-dash-swatch { background: repeating-linear-gradient(90deg, var(--wpi) 0 6px, transparent 6px 9px); }
+.wage-gap-line { stroke: var(--brass); stroke-width: 1.5; stroke-dasharray: 2 3; }
+.wage-endpoint-amount { font-weight: 600; font-variant-numeric: tabular-nums; }
+.wage-reference { max-width: 820px; margin: 18px 0 0; padding: 14px 16px; border-left: 3px solid var(--wpi); background: var(--paper); font-size: 14px; line-height: 1.75; }
+.wage-notes { max-width: 820px; margin: 16px 0 0; padding-left: 18px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+.wage-notes li + li { margin-top: 3px; }
+.wage-notes a { color: #425c56; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.wage-share { margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--rule); font-family: var(--font-ui); }
+.wage-share h3 { margin: 0; font: 600 19px/1.4 var(--font-ui); }
+.wage-share-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 14px 22px; margin-top: 14px; }
+.wage-share-controls select { width: 140px; }
+.wage-check { display: inline-flex; align-items: center; gap: 8px; min-height: 42px; font: 500 13px/1.4 var(--font-ui); cursor: pointer; }
+.wage-check input { width: 17px; height: 17px; accent-color: var(--wpi); }
+.wage-button { display: inline-flex; align-items: center; min-height: 42px; text-decoration: none; }
+.wage-card-output { display: flex; flex-wrap: wrap; align-items: end; gap: 16px; margin-top: 16px; }
+.wage-card-output img { width: min(360px, 100%); height: auto; border: 1px solid var(--rule); box-shadow: 0 8px 22px rgba(76, 62, 40, .12); }
+.wage-link-row { display: flex; flex-wrap: wrap; align-items: end; gap: 10px 12px; margin-top: 18px; }
+.wage-link-field { flex: 1 1 360px; }
+.wage-link-field input { width: 100%; min-height: 42px; padding: 7px 10px; border: 1px solid var(--rule-dark); border-radius: 2px; color: var(--muted); background: var(--paper-white); font: 500 12px/1.2 var(--font-ui); }
+.wage-privacy { max-width: 820px; margin: 28px 0 0; padding: 13px 16px; border: 1px dashed var(--rule-dark); color: var(--muted); font: 400 13px/1.7 var(--font-reading); }
+@media (max-width: 950px) {
+  .wage-points { grid-template-columns: 1fr; }
+  .wage-arrow { display: none; }
+}
+@media (max-width: 640px) {
+  .wage-form { padding: 16px 14px; }
+  .wage-region-field select { width: 100%; }
+  .wage-point { grid-template-columns: 1fr; padding: 12px 12px 14px; }
+  .wage-amount-box input { font-size: 16px; }
+  .wage-results .result-block:first-child { padding-top: 17px; }
+  .wage-explain { font-size: 15px; }
+  #wage-chart .axis-label { font-size: 11px; }
+  .wage-share-controls { align-items: stretch; flex-direction: column; }
+  .wage-share-controls select { width: 100%; }
+  .wage-button { justify-content: center; }
 }
 
 /* ---------- AI assistant ---------- */
@@ -1005,4 +1075,118 @@ button:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+/* ---------- scroll story ---------- */
+.scrolly-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 20px;
+  margin-top: 28px;
+  padding: 20px 23px;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--brass);
+  color: var(--ink);
+  background: var(--paper);
+  text-decoration: none;
+}
+.scrolly-entry:hover { border-color: var(--brass); background: var(--paper-shade); }
+.scrolly-entry:focus-visible { outline: 3px solid var(--brass); outline-offset: 3px; }
+.scrolly-entry-kicker { grid-column: 1; color: var(--brass); font: 600 11px/1.4 var(--font-ui); letter-spacing: .08em; }
+.scrolly-entry strong { grid-column: 1; font: 600 clamp(19px, 2.2vw, 24px)/1.4 var(--font-reading); }
+.scrolly-entry-body { grid-column: 1; color: var(--muted); font-size: 14px; }
+.scrolly-entry-arrow { grid-column: 2; grid-row: 1 / span 3; align-self: center; color: var(--brass); font: 400 28px/1 var(--font-ui); }
+
+.scrolly-back { color: #425c56; font: 600 11px/1.3 var(--font-ui); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.scrolly-page .masthead-meta { gap: 18px; }
+.scrolly-hero { max-width: 860px; padding: 64px 0 40px; }
+.scrolly-hero h1 { margin: 0; font: 600 clamp(34px, 4.4vw, 56px)/1.22 var(--font-ui); letter-spacing: -.045em; text-wrap: balance; }
+.scrolly-lede { margin: 22px 0 0; color: #56584f; font-size: 18px; line-height: 1.85; }
+.scrolly-hint { margin: 16px 0 0; color: var(--muted); font: 500 12px/1.6 var(--font-ui); }
+
+.scrolly { position: relative; display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.3fr); gap: 0 44px; border-top: 1px solid var(--rule); }
+.scrolly-graphic {
+  position: sticky;
+  top: 0;
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  height: 100vh;
+  height: 100svh;
+  margin: 0;
+  padding: 28px 0;
+  flex-direction: column;
+}
+.scrolly-figure-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 15px; padding-bottom: 10px; }
+.scrolly-chart-box {
+  flex: 1;
+  min-height: 0;
+  border: 1px solid var(--rule);
+  background:
+    linear-gradient(0deg, rgba(146, 119, 75, .035) 1px, transparent 1px) 0 0 / 100% 26px,
+    var(--paper-white);
+}
+#scrolly-chart { display: block; width: 100%; height: 100%; }
+.scrolly-band { fill: rgba(146, 119, 75, .13); stroke: rgba(146, 119, 75, .45); stroke-width: 1; stroke-dasharray: 3 3; }
+.scrolly-band-label { fill: var(--brass); font: 700 12px var(--font-ui); }
+.scrolly-origin { fill: var(--ink); }
+
+.scrolly-steps { grid-column: 1; grid-row: 1; margin: 0; padding: 30vh 0 40vh; list-style: none; }
+.scrolly-step { display: flex; min-height: 78vh; align-items: center; outline: 0; }
+.scrolly-step:last-child { min-height: 60vh; }
+.scrolly-card {
+  width: 100%;
+  padding: 22px 24px 20px;
+  border: 1px solid var(--rule);
+  background: var(--paper-white);
+  opacity: .5;
+  transition: opacity .3s ease, border-color .3s ease;
+}
+.scrolly-step.is-active .scrolly-card { border-color: var(--rule-dark); opacity: 1; }
+.scrolly-step:focus-visible .scrolly-card { outline: 3px solid var(--brass); outline-offset: 3px; opacity: 1; }
+.scrolly-meta { margin: 0 0 10px; color: var(--brass); font: 600 11px/1.4 var(--font-ui); letter-spacing: .05em; }
+.scrolly-card h2 { margin: 0 0 12px; font: 600 clamp(21px, 2.2vw, 26px)/1.4 var(--font-reading); }
+.scrolly-body { margin: 0; line-height: 1.85; }
+.scrolly-numbers { margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid var(--wpi); background: var(--paper); font: 500 13px/1.6 var(--font-ui); font-variant-numeric: tabular-nums; }
+.scrolly-step-sources { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 12px 0 0; color: var(--muted); font: 500 11px/1.6 var(--font-ui); }
+.scrolly-step-sources a { text-decoration-thickness: 1px; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.scrolly-cta { display: inline-flex; min-height: 44px; align-items: center; margin-top: 16px; padding: 9px 16px; border-radius: 2px; color: var(--paper-white); background: var(--ink); font: 600 13px/1.4 var(--font-ui); text-decoration: none; }
+.scrolly-cta:hover { background: #425c56; }
+.scrolly-cta:focus-visible { outline: 3px solid var(--brass); outline-offset: 3px; }
+.scrolly-sources { max-width: 820px; padding: 44px 0 52px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 13px; line-height: 1.75; }
+.scrolly-sources h2 { margin: 0 0 10px; color: var(--ink); font: 600 20px/1.4 var(--font-ui); }
+.scrolly-sources p { margin: 0 0 8px; }
+.scrolly-source-links { margin: 8px 0 0; padding-left: 18px; font: 500 12px/1.7 var(--font-ui); }
+.scrolly-source-links a { color: #425c56; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+@media (max-width: 899px) {
+  .scrolly { display: block; }
+  /* The chart keeps a fixed share of the screen so switching steps never shifts layout. */
+  .scrolly-graphic {
+    z-index: 4;
+    height: 44vh;
+    height: 44svh;
+    margin: 0 -28px;
+    padding: 8px 28px 10px;
+    border-bottom: 1px solid var(--rule);
+    background: rgba(251, 248, 241, .97);
+  }
+  .scrolly-figure-head { padding-bottom: 6px; }
+  .scrolly-figure-head .legend { gap: 12px; font-size: 10px; }
+  .scrolly-steps { padding: 6vh 0 30vh; }
+  .scrolly-step { min-height: 62vh; min-height: 62svh; align-items: flex-start; padding-top: 4vh; scroll-margin-top: 46svh; }
+  .scrolly-step:last-child { min-height: 50svh; }
+}
+@media (max-width: 640px) {
+  .scrolly-hero { padding: 40px 0 28px; }
+  .scrolly-lede { font-size: 16px; }
+  .scrolly-graphic { margin: 0 -19px; padding: 6px 19px 8px; }
+  .scrolly-card { padding: 16px 16px 15px; }
+  .scrolly-body { font-size: 15px; line-height: 1.8; }
+  .scrolly-entry { padding: 16px; }
+  .scrolly-page .masthead-meta { flex-wrap: wrap; gap: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scrolly-card { transition: none; }
+  html { scroll-behavior: auto; }
 }

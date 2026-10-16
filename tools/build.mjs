@@ -7,6 +7,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = path.join(root, "dist");
 const files = [
   ["index.html", "index.html"],
+  ["story/index.html", "story/index.html"],
   ["src/app.js", "src/app.js"],
   ["src/analysis.js", "src/analysis.js"],
   ["src/chart-inspector.js", "src/chart-inspector.js"],
@@ -15,6 +16,11 @@ const files = [
   ["src/stories.js", "src/stories.js"],
   ["src/story-chapters.js", "src/story-chapters.js"],
   ["src/assistant.js", "src/assistant.js"],
+  ["src/wage.js", "src/wage.js"],
+  ["src/wage-calculator.js", "src/wage-calculator.js"],
+  ["src/wage-card.js", "src/wage-card.js"],
+  ["src/scrolly.js", "src/scrolly.js"],
+  ["src/scrolly-stories.js", "src/scrolly-stories.js"],
   ["src/style.css", "src/style.css"],
   ["assets/favicon.svg", "assets/favicon.svg"],
   ["data/quarterly.json", "data/quarterly.json"],

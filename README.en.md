@@ -6,6 +6,7 @@ An open-source economic data explorer built on official statistics. Rebased indi
 
 - Compare Australian consumer prices and wage prices using quarterly ABS CPI and WPI.
 - Explore long-term changes in ten economies using annual World Bank CPI and nominal GDP per capita.
+- Check whether your pay beat inflation: a calculator compares two pay figures with official CPI for the chosen region, entirely in the browser.
 - Use separate Chinese and English pages with reproducible sources and calculations.
 
 ## Run locally
@@ -95,6 +96,15 @@ Change (%) = 100 × [(ending GDP per capita / starting GDP per capita)
 
 If prices double and nominal GDP per capita triples, the growth gap is 100 percentage points, while the CPI-adjusted increase is 50%. The ratio and the percentage-point gap answer different questions.
 
+The pay calculator uses the same ratio. Australia uses ABS quarterly CPI, China uses NBS annual CPI and other economies use World Bank annual CPI; annual CPI is the average price level across the year:
+
+```text
+Change in purchasing power (%) = 100 × [(ending pay / starting pay) / (ending CPI / starting CPI) − 1]
+Pay needed to keep up with prices = starting pay × ending CPI / starting CPI
+```
+
+Pay is treated as the chosen region's local currency, with no exchange-rate conversion; both inputs must use the same basis (both before or after tax, both annual or monthly). A period later than the newest release stops at the latest available observation, with a notice. WPI and resident disposable income appear only as references: neither is average employee pay, and nominal GDP per capita is not used as a pay comparison. Pay amounts are not written to the URL, browser storage or the AI assistant context; share links carry only the region and periods.
+
 - CPI is a weighted consumer price measure, not an individual household's bill.
 - WPI measures wage prices for a comparable mix of jobs, not individual pay, hours or after-tax income.
 - GDP per capita measures average output, not wages or household disposable income. Adjusting it by CPI also differs from real GDP per capita calculated using the GDP deflator.
@@ -135,6 +145,8 @@ Chinese and English copy is maintained in `data/messages.zh.json` and `data/mess
 
 Everyday readings translate the selected period's percentages into index and money illustrations, alongside clearly labelled fictional exercises. Maintainers curate historical phases from official sources and cite them individually; readers can switch the chart to the relevant period. Ranges and source links live in `src/story-chapters.js`, while bilingual prose remains in the message catalogs. When revising a narrative, check its sources and the snapshot's movements, distinguishing historical context from causation that the curves alone cannot establish.
 
+The scroll story (`story/`, English at `en/story/`) reuses the same historical phases: a chart stays fixed beside the text or at the top of the screen, switches to and highlights each part's period as it is read, and every part states its key numbers in the text before leading to the pay calculator. Stories are defined in `src/scrolly-stories.js`; adding another economy needs a snapshot, sourced phases and bilingual copy. Animation respects the reduced-motion setting, parts can be stepped through with the keyboard, and changes are announced through an aria-live region.
+
 Optional AI assistance should connect to model services through a server. Keep credentials, model settings, prompts and request limits on the server; the browser sends only the necessary question and data context. Current conversations exist only in page memory and clear on reload. When enabling an external service, explain how it processes user data.
 
 Line charts support hover, press and keyboard arrows to inspect a quarter or year, showing rebased indices alongside original source values. On mobile, pan using the bottom axis or the separate slider; the plot is reserved for inspection. Browser long-press menus are suppressed within charts. Original index references and amount units differ, so gaps use the common-start rebased indices.
@@ -145,7 +157,7 @@ Preserve semantic labels, keyboard operation, narrow-screen layouts and clear un
 
 | Path | Purpose |
 |---|---|
-| `index.html`, `src/` | Pages, interaction, charts and calculations |
+| `index.html`, `story/`, `src/` | Pages, interaction, charts and calculations |
 | `data/sources/` | Official workbooks and checksummed source values |
 | `data/*manifest.json` | Series definitions, economies and source metadata |
 | `data/quarterly.json`, `data/worldbank.json`, `data/china-nbs.json` | Generated data snapshots |

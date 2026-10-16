@@ -23,7 +23,7 @@ function escapeAttribute(value) {
   return escapeHtml(value).replaceAll('"', "&quot;");
 }
 
-export function renderEnglishPage(sourceHtml, messages) {
+function translateSlots(sourceHtml, messages) {
   const slots = [...sourceHtml.matchAll(/<([a-z][\w:-]*)\b[^>]*\bdata-i18n="([^"]+)"[^>]*>/gi)];
   const replacements = [];
   const lowerHtml = sourceHtml.toLowerCase();
@@ -56,28 +56,47 @@ export function renderEnglishPage(sourceHtml, messages) {
     return tag.replace(attributePattern, `${attribute}="${escapeAttribute(messages[key])}"`);
   });
 
-  html = html
+  return html
     .replace(/\sdata-i18n-attr="[^"]*"/g, "")
     .replace(/\sdata-i18n="[^"]*"/g, "")
-    .replace('<html lang="zh-CN">', '<html lang="en">')
+    .replace('<html lang="zh-CN">', '<html lang="en">');
+}
+
+function markEnglishCurrent(html, zhHref, enHref) {
+  html = html.replace(/<a\b[^>]*\bid="language-zh"[^>]*>/, (tag) => tag.replace(/href="[^"]*"/, `href="${zhHref}"`).replace(/\saria-current="page"/, ""));
+  return html.replace(/<a\b[^>]*\bid="language-en"[^>]*>/, (tag) => tag.replace(/href="[^"]*"/, `href="${enHref}"`).replace(/\saria-current="page"/, "")
+    .replace('lang="en"', 'lang="en" aria-current="page"'));
+}
+
+export function renderEnglishPage(sourceHtml, messages) {
+  const html = translateSlots(sourceHtml, messages)
     .replace('href="./assets/favicon.svg"', 'href="../assets/favicon.svg"')
     .replace('href="./src/style.css"', 'href="../src/style.css"')
     .replace('src="./src/app.js"', 'src="../src/app.js"');
+  return markEnglishCurrent(html, "../", "./");
+}
 
-  html = html.replace(/<a\b[^>]*\bid="language-zh"[^>]*>/, (tag) => tag.replace('href="./"', 'href="../"').replace(/\saria-current="page"/, ""));
-  html = html.replace(/<a\b[^>]*\bid="language-en"[^>]*>/, (tag) => tag.replace('href="./en/"', 'href="./"').replace(/\saria-current="page"/, "")
-    .replace('lang="en"', 'lang="en" aria-current="page"'));
-  return html;
+// story/index.html sits one level down and its English copy (en/story/) two levels down.
+// Home links ("../") already resolve to /en/ from there, so only shared assets move.
+export function renderEnglishStoryPage(sourceHtml, messages) {
+  const html = translateSlots(sourceHtml, messages)
+    .replace(/(href|src)="\.\.\/(assets|src)\//g, '$1="../../$2/');
+  return markEnglishCurrent(html, "../../story/", "./");
 }
 
 export function writeEnglishOutput(root, output) {
   const messages = loadEnglishMessages(root);
-  const source = readFileSync(path.join(root, "index.html"), "utf8");
-  const englishPage = renderEnglishPage(source, messages);
-  const pagePath = path.join(output, "en/index.html");
+  const pages = [
+    ["index.html", "en/index.html", renderEnglishPage],
+    ["story/index.html", "en/story/index.html", renderEnglishStoryPage],
+  ];
+  const pagePaths = pages.map(([source, destination, render]) => {
+    const pagePath = path.join(output, destination);
+    mkdirSync(path.dirname(pagePath), { recursive: true });
+    writeFileSync(pagePath, render(readFileSync(path.join(root, source), "utf8"), messages), "utf8");
+    return pagePath;
+  });
   const messagePath = path.join(output, "data/messages.en.json");
-  mkdirSync(path.dirname(pagePath), { recursive: true });
-  writeFileSync(pagePath, englishPage, "utf8");
   writeFileSync(messagePath, `${JSON.stringify(messages, null, 2)}\n`, "utf8");
-  return { pagePath, messagePath, messageCount: Object.keys(messages).length };
+  return { pagePath: pagePaths[0], pagePaths, messagePath, messageCount: Object.keys(messages).length };
 }

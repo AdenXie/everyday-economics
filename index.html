@@ -75,6 +75,7 @@
         <button type="button" role="tab" id="tab-GBR" data-view="GBR" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.GBR">英国</button>
         <button type="button" role="tab" id="tab-RUS" data-view="RUS" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.RUS">俄罗斯</button>
         <button type="button" role="tab" id="tab-CAN" data-view="CAN" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="country.CAN">加拿大</button>
+        <button type="button" role="tab" id="tab-wage" class="tool-tab" data-view="wage" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="tabs.wage">我的工资</button>
         <button type="button" role="tab" id="tab-compare" class="compare-tab" data-view="compare" aria-controls="story" aria-selected="false" tabindex="-1" data-i18n="tabs.compare">对比</button>
       </nav>
 
@@ -152,6 +153,12 @@
           </div>
           <p class="calculation-note" data-i18n="result.calculationNote">A$100 示意 = A$100 × 终点 CPI ÷ 起点 CPI。它是指数化金额，不代表某个家庭实际花费，也不是一份永不变化的商品清单。</p>
           <section id="abs-reading" class="life-reading" aria-label="把图表读成生活" data-i18n="story.aria" data-i18n-attr="aria-label"></section>
+          <a class="scrolly-entry" href="./story/">
+            <span class="scrolly-entry-kicker" data-i18n="scrolly.entryKicker">滚动阅读</span>
+            <strong data-i18n="scrolly.entryTitle">从 100 出发：一路读完澳洲近三十年的物价与工资</strong>
+            <span class="scrolly-entry-body" data-i18n="scrolly.entryBody">跟着五个历史阶段看两条线怎样拉开又靠近，最后算算你自己的工资。</span>
+            <span class="scrolly-entry-arrow" aria-hidden="true">→</span>
+          </a>
         </section>
 
         <section class="learning-section" aria-labelledby="learn-heading">
@@ -476,6 +483,144 @@
             <p data-i18n="story.compareBody">把竖线看作 0：红条表示消费价格的累计变化，绿条表示名义人均产出的累计变化。向右是上涨，向左是下降，离 0 越远，变化幅度越大。绿条更长不等于当地每个人工资更高。右侧先把产出的增长倍数除以价格的增长倍数，再减去 1，帮助区分“金额变大”和“扣除物价后变多”。</p>
             <p data-i18n="story.compareExample">例如物价涨 100%、名义人均 GDP 涨 200%，两项都在涨，但经 CPI 调整后只增加 50%。这张表比较各地的变化，不比较你去哪里能赚得最多。进入各国标签页，可以查看这些变化背后的历史故事。</p>
           </aside>
+        </section>
+
+        <section id="wage-view" class="story-panel wage-panel" aria-labelledby="wage-title" hidden>
+          <div class="panel-heading">
+            <div class="heading-copy">
+              <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-i18n="wage.eyebrow">工资计算器 · 只在你的浏览器里计算</span></p>
+              <h2 id="wage-title" data-i18n="wage.title">我的工资跑赢通胀了吗？</h2>
+              <p class="heading-caption" data-i18n="wage.caption">填入两个时间点的工资，用官方 CPI 换算同期物价，看看购买力变多还是变少。</p>
+            </div>
+          </div>
+
+          <p id="wage-loading" class="calculation-note" data-i18n="wage.loading">正在读取物价数据…</p>
+          <p id="wage-load-error" class="load-error" role="alert" hidden data-i18n="wage.loadError">物价数据无法读取，计算器暂时不可用。</p>
+          <form id="wage-form" class="wage-form" aria-label="输入地区、时间与工资" data-i18n="wage.formAria" data-i18n-attr="aria-label" onsubmit="return false" autocomplete="off" hidden>
+            <label class="period-field wage-region-field" for="wage-region">
+              <span data-i18n="wage.regionLabel">地区</span>
+              <select id="wage-region" name="wage-region">
+                <option value="AUS" data-i18n="country.AUS">澳洲</option>
+                <option value="CHN" data-i18n="country.CHN">中国</option>
+                <option value="USA" data-i18n="country.USA">美国</option>
+                <option value="KOR" data-i18n="country.KOR">韩国</option>
+                <option value="JPN" data-i18n="country.JPN">日本</option>
+                <option value="SGP" data-i18n="country.SGP">新加坡</option>
+                <option value="DEU" data-i18n="country.DEU">德国</option>
+                <option value="GBR" data-i18n="country.GBR">英国</option>
+                <option value="RUS" data-i18n="country.RUS">俄罗斯</option>
+                <option value="CAN" data-i18n="country.CAN">加拿大</option>
+              </select>
+            </label>
+            <div class="wage-points">
+              <fieldset class="wage-point">
+                <legend data-i18n="wage.startLegend">起点</legend>
+                <label class="period-field" for="wage-start">
+                  <span class="wage-period-label" data-i18n="wage.periodLabel">时间</span>
+                  <select id="wage-start" name="wage-start"></select>
+                </label>
+                <label class="period-field wage-amount-field" for="wage-start-amount">
+                  <span data-i18n="wage.startAmountLabel">当时的工资</span>
+                  <span class="wage-amount-box"><input id="wage-start-amount" name="wage-start-amount" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="70,000" aria-describedby="wage-currency wage-basis" /><span class="wage-currency" data-wage-currency aria-hidden="true">—</span></span>
+                </label>
+              </fieldset>
+              <span class="period-arrow wage-arrow" aria-hidden="true">→</span>
+              <fieldset class="wage-point">
+                <legend data-i18n="wage.endLegend">终点</legend>
+                <label class="period-field" for="wage-end">
+                  <span class="wage-period-label" data-i18n="wage.periodLabel">时间</span>
+                  <select id="wage-end" name="wage-end"></select>
+                </label>
+                <label class="period-field wage-amount-field" for="wage-end-amount">
+                  <span data-i18n="wage.endAmountLabel">现在的工资</span>
+                  <span class="wage-amount-box"><input id="wage-end-amount" name="wage-end-amount" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="85,000" aria-describedby="wage-currency wage-basis" /><span class="wage-currency" data-wage-currency aria-hidden="true">—</span></span>
+                </label>
+              </fieldset>
+            </div>
+            <p id="wage-cutoff" class="wage-cutoff" role="status" hidden>—</p>
+            <div class="wage-form-notes">
+              <p id="wage-basis" data-i18n="wage.sameBasis">两次请用同一种口径：都填税前或都填税后，也都用年薪、月薪或时薪。只要口径一致，结论就成立。</p>
+              <p id="wage-currency">—</p>
+            </div>
+          </form>
+
+          <p id="wage-error" class="wage-error" role="alert" hidden>—</p>
+          <p id="wage-empty" class="wage-empty" hidden data-i18n="wage.empty">填入两次工资后，这里会显示结果。</p>
+          <p id="wage-status" class="visually-hidden" aria-live="polite" aria-atomic="true"></p>
+
+          <div id="wage-result" class="wage-result" hidden>
+            <div class="results-row wage-results">
+              <article class="result-block result-wpi">
+                <div class="result-label"><span class="result-dot" aria-hidden="true"></span><span data-i18n="wage.nominalLabel">你的工资 · 名义涨幅</span></div>
+                <div class="result-main"><strong id="wage-nominal">—</strong><span data-i18n="wage.nominalDetail">现在 ÷ 当时 − 1</span></div>
+                <p class="result-detail" id="wage-nominal-detail">—</p>
+              </article>
+              <article class="result-block result-cpi">
+                <div class="result-label"><span class="result-dot" aria-hidden="true"></span><span data-i18n="wage.cpiLabel">同期物价涨幅 · CPI</span></div>
+                <div class="result-main"><strong id="wage-cpi">—</strong><span data-i18n="wage.cpiDetail">终点 CPI ÷ 起点 CPI − 1</span></div>
+                <p class="result-detail" id="wage-cpi-detail">—</p>
+              </article>
+              <div class="comparison-note wage-verdict" id="wage-verdict-box">
+                <span class="comparison-label" data-i18n="wage.realLabel">实际购买力变化</span>
+                <strong id="wage-real">—</strong>
+                <p id="wage-verdict">—</p>
+                <p class="wage-verdict-rule" data-i18n="wage.verdictRule">变化在 ±1% 以内视为基本持平。</p>
+              </div>
+            </div>
+            <p id="wage-explain" class="wage-explain">—</p>
+            <p id="wage-formula" class="calculation-note">—</p>
+
+            <figure class="chart-paper wage-chart-paper" aria-labelledby="wage-chart-title" aria-describedby="wage-chart-note">
+              <div class="chart-topline">
+                <p id="wage-chart-title" class="selected-range">—</p>
+                <div class="legend" aria-label="图例" data-i18n="chart.legendAria" data-i18n-attr="aria-label">
+                  <span><i class="legend-swatch wpi-swatch wage-dash-swatch" aria-hidden="true"></i><span data-i18n="wage.legendWage">你的工资</span></span>
+                  <span><i class="legend-swatch cpi-swatch" aria-hidden="true"></i><span data-i18n="wage.legendNeeded">按物价折算需要达到的水平</span></span>
+                </div>
+              </div>
+              <div id="wage-chart-box" class="wage-chart-box">
+                <svg id="wage-chart" role="img" aria-describedby="wage-chart-note" aria-label="—"></svg>
+              </div>
+              <figcaption id="wage-chart-note" class="chart-caption"><span data-i18n="wage.chartCaption">红线 = 起点工资 × 当期 CPI ÷ 起点 CPI，逐期跟随官方 CPI；绿色虚线只连接你填写的两个数字，不代表中间每期的工资。</span></figcaption>
+            </figure>
+
+            <p id="wage-reference" class="wage-reference" hidden>—</p>
+            <ul class="wage-notes">
+              <li id="wage-note-frequency">—</li>
+              <li id="wage-note-approx" hidden data-i18n="wage.noteApprox">来源数值有舍入，结果为近似值。</li>
+              <li data-i18n="wage.notePersonal">CPI 是全国平均的消费篮子。房租、通勤和消费结构不同，你个人感受到的通胀可能更高或更低。</li>
+              <li><span data-i18n="wage.sourceLabel">来源：</span> <a id="wage-source-link" href="#" target="_blank" rel="noopener noreferrer">—</a></li>
+            </ul>
+
+            <section class="wage-share" aria-labelledby="wage-share-title">
+              <h3 id="wage-share-title" data-i18n="wage.share.title">分享结果</h3>
+              <p class="calculation-note" data-i18n="wage.share.intro">卡片在你的浏览器里生成。默认只显示百分比和时间段，不显示工资金额。</p>
+              <div class="wage-share-controls">
+                <label class="wage-check"><input id="wage-share-amounts" type="checkbox" /> <span data-i18n="wage.share.showAmounts">在卡片上显示金额</span></label>
+                <label class="period-field" for="wage-card-language">
+                  <span data-i18n="wage.share.language">卡片语言</span>
+                  <select id="wage-card-language">
+                    <option value="zh" data-i18n="wage.share.languageZh">中文</option>
+                    <option value="en" data-i18n="wage.share.languageEn">英文</option>
+                  </select>
+                </label>
+                <button type="button" id="wage-card-create" class="reading-view wage-button" data-i18n="wage.share.create">生成分享卡片</button>
+              </div>
+              <div id="wage-card-output" class="wage-card-output" hidden>
+                <img id="wage-card-preview" alt="分享卡片预览" data-i18n="wage.share.previewAlt" data-i18n-attr="alt" width="540" height="675" />
+                <a id="wage-card-download" class="reading-view wage-button" href="#" download="wage-vs-inflation.png" data-i18n="wage.share.download">下载 PNG</a>
+              </div>
+              <div class="wage-link-row">
+                <label class="period-field wage-link-field" for="wage-share-link">
+                  <span data-i18n="wage.share.linkLabel">分享链接（只包含地区和起止时间，不含工资）</span>
+                  <input id="wage-share-link" type="text" readonly />
+                </label>
+                <button type="button" id="wage-copy-link" class="reading-view wage-button" data-i18n="wage.share.copy">复制链接</button>
+              </div>
+            </section>
+          </div>
+
+          <p class="wage-privacy" data-i18n="wage.privacy">隐私：计算全部在你的浏览器本地完成。工资数字不会发送到任何地方，也不会写进网址或浏览器存储；AI 助手不会读取这里的输入。刷新页面后即清空。</p>
         </section>
       </main>
 

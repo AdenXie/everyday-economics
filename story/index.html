@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#e9e1d1" />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" sizes="any" />
+    <meta name="description" content="滚动阅读澳大利亚 1997 年以来的季度 CPI 与 WPI：五个历史阶段，两条从 100 出发的线，最后算算你自己的工资。" data-i18n="scrolly.metadata.description" data-i18n-attr="content" />
+    <title data-i18n="scrolly.metadata.title">滚动阅读：澳洲的物价与工资｜日常经济学</title>
+    <script>
+      (() => {
+        document.addEventListener("click", (event) => {
+          const target = event.target instanceof Element ? event.target : event.target?.parentElement;
+          const choice = target?.closest("[data-language-choice]");
+          if (!choice) return;
+          try { localStorage.setItem("econ-tab-language", choice.dataset.languageChoice); } catch {}
+        });
+        if (!document.documentElement.lang.toLowerCase().startsWith("zh")) return;
+        let preferred;
+        try { preferred = localStorage.getItem("econ-tab-language"); } catch {}
+        if (preferred !== "zh" && (preferred === "en" || !/^zh(?:[-_]|$)/i.test((navigator.languages?.[0] || navigator.language || "en")))) {
+          const target = new URL("../en/story/", window.location.href);
+          target.hash = window.location.hash;
+          window.location.replace(target);
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="../src/style.css" />
+    <script type="module" src="../src/scrolly.js"></script>
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+  </head>
+  <body class="scrolly-page">
+    <a class="skip-link" href="#scrolly-steps" data-i18n="scrolly.skip">跳到正文</a>
+    <div class="page-shell">
+      <header class="masthead">
+        <a class="identity" href="../" aria-label="日常经济学，返回首页" data-i18n="scrolly.homeAria" data-i18n-attr="aria-label">
+          <span class="identity-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="identity-copy">
+            <span class="identity-kicker">ECONOMIC FIELDNOTE</span>
+            <span class="identity-name" data-i18n="brand.name">日常经济学 · 价格与收入</span>
+          </span>
+        </a>
+        <div class="masthead-meta">
+          <a class="scrolly-back" href="../" data-i18n="scrolly.back">← 返回数据故事板</a>
+          <nav class="language-switch" aria-label="切换语言" data-i18n="switch.aria" data-i18n-attr="aria-label">
+            <a id="language-zh" href="./" lang="zh-CN" data-language-choice="zh" aria-current="page" data-i18n="switch.zh">中文</a>
+            <a id="language-en" href="../en/story/" lang="en" data-language-choice="en" data-i18n="switch.en">English</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section class="scrolly-hero" aria-labelledby="scrolly-title">
+          <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-i18n="scrolly.ABS.eyebrow">滚动阅读 · 澳洲 · 季度 CPI 与 WPI</span></p>
+          <h1 id="scrolly-title" data-i18n="story.ABS.title">工资条和购物小票，为什么不总是一起变？</h1>
+          <p class="scrolly-lede" data-i18n="story.ABS.intro">这张季度图更接近一场工资条与生活开销的赛跑：红线是平均消费价格，绿线是可比岗位的工资价格。换个起点，两条线的领先关系可能改变。关注它们各自的变化，能帮助理解“加薪了，为什么却没觉得宽裕”。</p>
+          <p class="scrolly-hint" data-i18n="scrolly.hint">向下滚动阅读；也可以用 Tab 键逐段跳转，在段落上按 ↑ ↓ 切换。每段文字本身就包含该段的关键数字。</p>
+        </section>
+
+        <div class="scrolly" data-story="ABS">
+          <figure class="scrolly-graphic" aria-labelledby="scrolly-figure-title">
+            <div class="scrolly-figure-head">
+              <p id="scrolly-figure-title" class="selected-range">—</p>
+              <div class="legend" aria-label="图例" data-i18n="chart.legendAria" data-i18n-attr="aria-label">
+                <span><i class="legend-swatch cpi-swatch" aria-hidden="true"></i><span data-i18n="chart.legendCpi">CPI · 家庭消费价格</span></span>
+                <span><i class="legend-swatch wpi-swatch" aria-hidden="true"></i><span data-i18n="chart.legendWpi">WPI · 工资价格</span></span>
+              </div>
+            </div>
+            <div class="scrolly-chart-box" id="scrolly-chart-box">
+              <svg id="scrolly-chart" role="img" aria-label="—"></svg>
+            </div>
+          </figure>
+          <ol id="scrolly-steps" class="scrolly-steps" aria-label="故事段落" data-i18n="scrolly.stepsAria" data-i18n-attr="aria-label"></ol>
+        </div>
+        <p id="scrolly-live" class="visually-hidden" aria-live="polite" aria-atomic="true"></p>
+        <p id="scrolly-error" class="load-error" role="alert" hidden data-i18n="scrolly.error">故事数据无法读取。请确认已完成本地构建，再通过本地预览地址打开页面。</p>
+
+        <section class="scrolly-sources" aria-labelledby="scrolly-sources-title">
+          <h2 id="scrolly-sources-title" data-i18n="scrolly.sourcesTitle">数据与读法</h2>
+          <p data-i18n="scrolly.method">两条线都以快照中最早的季度 = 100 重新标尺：CPI 为 ABS Table 17 全国原始季度指数（A2325846C），WPI 为 Table 1 私营与公共部门合计、不含奖金的原始指数（A2603609J）。每段的数字是该时期首尾季度之间的累计变化。</p>
+          <p data-i18n="scrolly.contextNote">历史阶段的讲解依据所附官方资料。多种因素通常一起起作用，曲线本身不能证明某一事件是唯一原因。</p>
+          <ul id="scrolly-source-links" class="scrolly-source-links"></ul>
+        </section>
+      </main>
+
+      <footer class="page-footer">
+        <span data-i18n="footer.name">日常经济学 · 价格与收入</span>
+        <span data-i18n="footer.note">静态官方快照 · 非实时 · 仅作统计学习</span>
+        <a href="../" data-i18n="scrolly.footerHome">回到数据故事板 ↑</a>
+      </footer>
+    </div>
+  </body>
+</html>

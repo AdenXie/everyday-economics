@@ -146,7 +146,10 @@ export function pageContext() {
     const value = textOf(selector);
     if (value && value !== "—") lines.push(`${label}: ${value}`);
   };
-  if (view === "compare") {
+  if (view === "wage") {
+    // Pay amounts entered in the calculator never reach the assistant.
+    lines.push(t("ai.contextWage"));
+  } else if (view === "compare") {
     add(t("ai.contextRange"), "#compare-range");
     for (const row of document.querySelectorAll("#compare-rows tr")) {
       const name = row.querySelector("th")?.textContent.trim() ?? "";
