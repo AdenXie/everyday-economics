@@ -18,6 +18,8 @@ test("English page preserves structural language controls and uses relative asse
   assert.match(english, /<link rel="icon" type="image\/svg\+xml" href="\.\.\/assets\/favicon\.svg" sizes="any"/);
   assert.match(english, /href="\.\.\/src\/style\.css"/);
   assert.match(english, /src="\.\.\/src\/app\.js"/);
+  assert.match(english, /<link rel="describedby" href="\/llms\.txt"/);
+  assert.match(english, /<a href="\/en\/data\/">Data and methods<\/a>/);
   assert.match(english, /<nav class="language-switch" aria-label="Choose language">[\s\S]*?id="language-en"[^>]*aria-current="page"/);
   assert.match(english, /<form class="period-controls" aria-label="Choose the comparison period"/);
   assert.match(english, /id="start-quarter"/);

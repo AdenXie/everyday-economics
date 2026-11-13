@@ -2,6 +2,7 @@ import { mkdir, copyFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { writeEnglishOutput } from "./i18n.mjs";
+import { writeDataGuide } from "./data-guide.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = path.join(root, "dist");
@@ -46,4 +47,5 @@ for (const [source, destination] of files) {
 }
 
 const english = writeEnglishOutput(root, output);
+await writeDataGuide(output);
 console.log(`Built Chinese and English static storyboards into ${output} (${english.messageCount} shared messages).`);

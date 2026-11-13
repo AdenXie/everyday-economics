@@ -538,6 +538,11 @@ select:focus-visible {
 }
 
 .page-footer a { color: #425c56; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.data-guide { max-width: 850px; padding: 22px 0 36px; }
+.data-guide section { margin-top: 32px; padding-top: 10px; border-top: 1px solid var(--rule); }
+.data-guide-table { width: 100%; border-collapse: collapse; font: 500 13px/1.5 var(--font-ui); font-variant-numeric: tabular-nums; }
+.data-guide-table th, .data-guide-table td { padding: 8px 4px; border-bottom: 1px solid var(--rule); text-align: right; }
+.data-guide-table th:first-child { text-align: left; }
 .load-error { padding: 12px; border: 1px solid var(--cpi); color: #762f1d; background: #fff1e9; font: 500 14px/1.5 var(--font-ui); }
 
 .china-controls { display: flex; align-items: end; justify-content: space-between; gap: 18px; }

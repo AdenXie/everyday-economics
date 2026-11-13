@@ -15,11 +15,11 @@ export function loadEnglishMessages(root) {
   return english;
 }
 
-function escapeHtml(value) {
+export function escapeHtml(value) {
   return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }
 
-function escapeAttribute(value) {
+export function escapeAttribute(value) {
   return escapeHtml(value).replaceAll('"', "&quot;");
 }
 
@@ -72,6 +72,7 @@ export function renderEnglishPage(sourceHtml, messages) {
   const html = translateSlots(sourceHtml, messages)
     .replace('href="./assets/favicon.svg"', 'href="../assets/favicon.svg"')
     .replace('href="./src/style.css"', 'href="../src/style.css"')
+    .replace('href="/data/"', 'href="/en/data/"')
     .replace('src="./src/app.js"', 'src="../src/app.js"');
   return markEnglishCurrent(html, "../", "./");
 }
