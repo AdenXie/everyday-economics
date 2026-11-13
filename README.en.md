@@ -33,7 +33,7 @@ Open the local address printed by the server. Chinese is served at the root and 
 Sources: [ABS CPI](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia) / [ABS WPI](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia). Compare only quarters published for both indicators; do not insert monthly CPI directly into a quarterly series.
 
 <!-- abs-data-status:start -->
-Prepared on **2026-09-28**; **116 consecutive paired quarters, 1997-Q3–2026-Q2**. Release details and workbook checksums are recorded in [the source manifest](data/source-manifest.json).
+Prepared on **2026-11-13**; **116 consecutive paired quarters, 1997-Q3–2026-Q2**. Release details and workbook checksums are recorded in [the source manifest](data/source-manifest.json).
 <!-- abs-data-status:end -->
 
 ### NBS: annual Chinese prices and resident income

@@ -33,7 +33,7 @@ npm run dev
 来源：[ABS CPI](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia) / [ABS WPI](https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/wage-price-index-australia)。仅比较两项均已发布的季度，不将月度 CPI 直接混入季度序列。
 
 <!-- abs-data-status:start -->
-快照整理于 **2026-09-28**，覆盖 **1997-Q3—2026-Q2，116 个连续配对季度**。发布日期和工作簿校验值见[来源清单](data/source-manifest.json)。
+快照整理于 **2026-11-13**，覆盖 **1997-Q3—2026-Q2，116 个连续配对季度**。发布日期和工作簿校验值见[来源清单](data/source-manifest.json)。
 <!-- abs-data-status:end -->
 
 ### 国家统计局：中国年度物价与居民收入

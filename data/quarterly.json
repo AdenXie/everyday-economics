@@ -1,20 +1,20 @@
 {
-  "snapshotDate": "2026-09-28",
+  "snapshotDate": "2026-11-13",
   "firstQuarter": "1997-Q3",
   "latestQuarter": "2026-Q2",
   "observationCount": 116,
   "series": {
     "cpi": {
-      "publication": "Consumer Price Index, Australia, June 2026",
-      "releaseDate": "2026-07-29",
+      "publication": "Consumer Price Index, Australia, September 2026",
+      "releaseDate": "2026-10-28",
       "table": "Table 17. CPI: Quarterly All Groups, Index numbers and Percentage change",
-      "pageUrl": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia/jun-2026",
+      "pageUrl": "https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia/sep-2026",
       "seriesId": "A2325846C",
       "seriesDescription": "Index Numbers ; All groups CPI ; Australia ;",
       "seriesType": "Original",
       "indexReferencePeriod": "September month 2025 = 100.00",
-      "sourceWorkbook": "data/sources/abs-cpi-table-17-jun-2026.xlsx",
-      "sourceSha256": "742C7159D8A0A5CF7C357F418D2BA467209D3547AA1583E80A9FF1DD4478CB9F",
+      "sourceWorkbook": "data/sources/abs-cpi-table-17-sep-2026.xlsx",
+      "sourceSha256": "59C89BF477CEC8075DFA80F1C29F97654F16F148B11427BED35FBAD869EB7D47",
       "scope": "Australia; All groups CPI; weighted average of eight capital cities"
     },
     "wpi": {
